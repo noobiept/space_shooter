@@ -30,7 +30,43 @@ class Player extends Game.Bitmap
         }
 
 
+    fire()
+        {
+        var bulletShape = new Game.Bitmap({
+                image: Game.Preload.get( 'laser1' )
+            });
+        var bullet = new Game.Bullet({
+                x: this.x,
+                y: this.y,
+                angleOrTarget: -Math.PI / 2,
+                movement_speed: 100,
+                angleOffset: -Math.PI / 2
+            });
+        bullet.addChild( bulletShape );
+
+        Game.addElement( bullet );
+        }
+
+
     logic( deltaTime: number )
+        {
+        this._movement_logic( deltaTime );
+        this._fire_logic( deltaTime );
+        }
+
+
+    _fire_logic( deltaTime: number )
+        {
+        var keysHeld = Input.KEYS_HELD;
+
+        if ( keysHeld.space )
+            {
+            this.fire();
+            }
+        }
+
+
+    _movement_logic( deltaTime: number )
         {
         var keysHeld = Input.KEYS_HELD;
         var move;

@@ -4,7 +4,8 @@ export var KEYS_HELD = {
     leftArrow: false,
     rightArrow: false,
     upArrow: false,
-    downArrow: false
+    downArrow: false,
+    space: false
 };
 
 
@@ -31,6 +32,10 @@ export function init()
             case keyCode.downArrow:
                 KEYS_HELD.downArrow = true;
                 break;
+
+            case keyCode.space:
+                KEYS_HELD.space = true;
+                break;
             }
         });
     window.addEventListener( 'keyup', function( event )
@@ -53,6 +58,10 @@ export function init()
 
             case keyCode.downArrow:
                 KEYS_HELD.downArrow = false;
+                break;
+
+            case keyCode.space:
+                KEYS_HELD.space = false;
                 break;
             }
         });

@@ -10,7 +10,8 @@ var assets = '../assets/';
 
 var manifest = [
         { id: 'background', path: 'backgrounds/darkPurple.png' },
-        { id: 'player', path: 'png/playerShip1_blue.png' }
+        { id: 'player', path: 'png/playerShip1_blue.png' },
+        { id: 'laser1', path: 'png/lasers/laserBlue01.png' }
     ];
 preload.addEventListener( 'complete', start );
 preload.loadManifest( manifest, assets );
@@ -28,7 +29,7 @@ var background = new Game.ScrollingBitmap({
         image: Game.Preload.get( 'background' ),
         direction: Game.ScrollingBitmapArgs.Direction.top,
         step: 1,
-       interval: 1
+       interval: 0.3
     });
 Game.addElement( background );
 

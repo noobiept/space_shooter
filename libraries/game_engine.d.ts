@@ -222,14 +222,16 @@ declare module Game {
 }
 declare module Game {
     interface BulletArgs extends ContainerArgs {
-        movement_speed: number;
         angleOrTarget: number | Element;
+        movement_speed: number;
+        angleOffset?: number;
     }
     class Bullet extends Container {
         movement_speed: number;
         protected _move_x: number;
         protected _move_y: number;
         protected _target: Element;
+        protected _angle_offset: number;
         constructor(args: BulletArgs);
         fixedLogic(deltaTime: number): void;
         targetLogic(deltaTime: number): void;
