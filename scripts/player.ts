@@ -70,6 +70,9 @@ class Player extends Game.Bitmap
         {
         var keysHeld = Input.KEYS_HELD;
         var move;
+        var nextX = this.x;
+        var nextY = this.y;
+
 
         if ( keysHeld.leftArrow )
             {
@@ -77,21 +80,21 @@ class Player extends Game.Bitmap
                 {
                 move = this.movement_speed * deltaTime * Player._trig_pi_4;
 
-                this.x -= move;
-                this.y -= move;
+                nextX -= move;
+                nextY -= move;
                 }
 
             else if ( keysHeld.downArrow )
                 {
                 move = this.movement_speed * deltaTime * Player._trig_pi_4;
 
-                this.x -= move;
-                this.y += move;
+                nextX -= move;
+                nextY += move;
                 }
 
             else
                 {
-                this.x -= this.movement_speed * deltaTime;
+                nextX -= this.movement_speed * deltaTime;
                 }
             }
 
@@ -101,32 +104,57 @@ class Player extends Game.Bitmap
                 {
                 move = this.movement_speed * deltaTime * Player._trig_pi_4;
 
-                this.x += move;
-                this.y -= move;
+                nextX += move;
+                nextY -= move;
                 }
 
             else if ( keysHeld.downArrow )
                 {
                 move = this.movement_speed * deltaTime * Player._trig_pi_4;
 
-                this.x += move;
-                this.y += move;
+                nextX += move;
+                nextY += move;
                 }
 
             else
                 {
-                this.x += this.movement_speed * deltaTime;
+                nextX += this.movement_speed * deltaTime;
                 }
             }
 
         else if ( keysHeld.upArrow )
             {
-            this.y -= this.movement_speed * deltaTime;
+            nextY -= this.movement_speed * deltaTime;
             }
 
         else if ( keysHeld.downArrow )
             {
-            this.y += this.movement_speed * deltaTime;
+            nextY += this.movement_speed * deltaTime;
             }
+
+
+            // make sure the player doesn't get out of the canvas bounds
+        if ( nextX - this._half_width < 0 )
+            {
+            nextX = this._half_width;
+            }
+
+        else if ( nextX + this._half_width > Main.CANVAS_WIDTH )
+            {
+            nextX = Main.CANVAS_WIDTH - this._half_width;
+            }
+
+        if ( nextY - this._half_height < 0 )
+            {
+            nextY = this._half_height;
+            }
+
+        else if ( nextY + this._half_height > Main.CANVAS_HEIGHT )
+            {
+            nextY = Main.CANVAS_HEIGHT - this._half_height;
+            }
+
+        this.x = nextX;
+        this.y = nextY;
         }
     }
