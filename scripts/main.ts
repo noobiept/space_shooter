@@ -24,6 +24,10 @@ export const CANVAS_WIDTH = 768;
 export const CANVAS_HEIGHT = 700;
 
 
+var UNITS: Game.Container;
+var BULLETS: Game.Container;
+
+
 export function start()
     {
     Game.init( document.body, CANVAS_WIDTH, CANVAS_HEIGHT );
@@ -41,11 +45,34 @@ export function start()
     Game.addElement( background );
 
 
+        // will contain all the units/bullets
+    UNITS = new Game.Container();
+    BULLETS = new Game.Container();
+
+    Game.addElement( BULLETS );
+    Game.addElement( UNITS );
+
+
     var player = new Player({
             x: CANVAS_WIDTH / 2,
             y: CANVAS_HEIGHT - 100
         });
-    Game.addElement( player );
+    Main.addUnit( player );
+
+    player.addWeapon( new Weapon() );
+    player.addWeapon( new WeaponSide() );
+    }
+
+
+export function addUnit( element: Game.Element )
+    {
+    UNITS.addChild( element );
+    }
+
+
+export function addBullet( bullet: Game.Bullet )
+    {
+    BULLETS.addChild( bullet );
     }
 }
 

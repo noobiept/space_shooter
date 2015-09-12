@@ -11,6 +11,7 @@ interface PlayerArgs
 class Player extends Game.Bitmap
     {
     movement_speed: number;
+    weapons: Weapon[];
 
         // used for the diagonal directions
         // Math.cos() has the same value as Math.sin()
@@ -27,29 +28,23 @@ class Player extends Game.Bitmap
 
         this._has_logic = true;
         this.movement_speed = 100;
+        this.weapons = [];
         }
 
 
-    fire()
+    addWeapon( weapon: Weapon )
         {
-        var bulletShape = new Game.Bitmap({
-                image: Game.Preload.get( 'laser1' )
-            });
-        var bullet = new Game.Bullet({
-                x: this.x,
-                y: this.y,
-                angleOrTarget: -Math.PI / 2,
-                movement_speed: 100,
-                angleOffset: -Math.PI / 2
-            });
-        bullet.addChild( bulletShape );
-
-        Game.addElement( bullet );
+        this.weapons.push( weapon );
         }
 
 
     logic( deltaTime: number )
         {
+        for (var a = this.weapons.length - 1 ; a >= 0 ; a--)
+            {
+            this.weapons[ a ].logic( deltaTime );
+            }
+
         this._movement_logic( deltaTime );
         this._fire_logic( deltaTime );
         }
@@ -61,7 +56,10 @@ class Player extends Game.Bitmap
 
         if ( keysHeld.space )
             {
-            this.fire();
+            for (var a = this.weapons.length - 1 ; a >= 0 ; a--)
+                {
+                this.weapons[ a ].fire( this );
+                }
             }
         }
 
