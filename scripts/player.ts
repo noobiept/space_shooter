@@ -8,11 +8,8 @@ interface PlayerArgs
     }
 
 
-class Player extends Game.Bitmap
+class Player extends Game.Unit
     {
-    movement_speed: number;
-    weapons: Weapon[];
-
         // used for the diagonal directions
         // Math.cos() has the same value as Math.sin()
     static _trig_pi_4 = Math.cos( Math.PI / 4 );
@@ -20,30 +17,41 @@ class Player extends Game.Bitmap
 
     constructor( args: PlayerArgs )
         {
+        var shape = new Game.Bitmap({
+            image: Game.Preload.get( 'player' )
+        });
+
         super({
                 x: args.x,
                 y: args.y,
-                image: Game.Preload.get( 'player' )
+                children: shape,
+                movement_speed: 100
             });
 
-        this._has_logic = true;
-        this.movement_speed = 100;
-        this.weapons = [];
-        }
+
+        var weapon = new Game.Weapon({
+                bulletContainer: Main.getBulletContainer(),
+                fireInterval: 0.5
+            });
+        this.addWeapon( weapon );
 
 
-    addWeapon( weapon: Weapon )
-        {
-        this.weapons.push( weapon );
+        var bulletShape = new Game.Bitmap({
+                    image: Game.Preload.get( 'laser1' )
+                });
+        var bullet = new Game.Bullet({
+                children: bulletShape,
+                angleOrTarget: -Math.PI / 2,
+                movement_speed: 200,
+                angleOffset: -Math.PI / 2
+            });
+        weapon.addBulletType( bullet );
         }
 
 
     logic( deltaTime: number )
         {
-        for (var a = this.weapons.length - 1 ; a >= 0 ; a--)
-            {
-            this.weapons[ a ].logic( deltaTime );
-            }
+        super.logic( deltaTime );
 
         this._movement_logic( deltaTime );
         this._fire_logic( deltaTime );
@@ -56,9 +64,11 @@ class Player extends Game.Bitmap
 
         if ( keysHeld.space )
             {
-            for (var a = this.weapons.length - 1 ; a >= 0 ; a--)
+            var weapons = this.getAllWeapons();
+
+            for (var a = weapons.length - 1 ; a >= 0 ; a--)
                 {
-                this.weapons[ a ].fire( this );
+                weapons[ a ].fire( -Math.PI / 2, 1 );
                 }
             }
         }

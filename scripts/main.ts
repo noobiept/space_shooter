@@ -11,7 +11,12 @@ var assets = '../assets/';
 var manifest = [
         { id: 'background', path: 'backgrounds/darkPurple.png' },
         { id: 'player', path: 'png/playerShip1_blue.png' },
-        { id: 'laser1', path: 'png/lasers/laserBlue01.png' }
+        { id: 'laser1', path: 'png/lasers/laserBlue01.png' },
+        { id: 'enemy1', path: 'png/enemies/enemyRed1.png' },
+        { id: 'enemy2', path: 'png/enemies/enemyRed2.png' },
+        { id: 'enemy3', path: 'png/enemies/enemyRed3.png' },
+        { id: 'enemy4', path: 'png/enemies/enemyRed4.png' },
+        { id: 'enemy5', path: 'png/enemies/enemyRed5.png' }
     ];
 preload.addEventListener( 'complete', Main.start );
 preload.loadManifest( manifest, assets );
@@ -53,14 +58,34 @@ export function start()
     Game.addElement( UNITS );
 
 
+    Player.collidesWith = [ <any>Enemy ];
+
     var player = new Player({
             x: CANVAS_WIDTH / 2,
             y: CANVAS_HEIGHT - 100
         });
+
+    player.addEventListener( 'collision', function( data )
+        {
+            // hit an enemy with a bullet
+        if ( data.bullet )
+            {
+            data.collidedWith.remove();
+            console.log( 'Hit!' );
+            }
+
+        else
+            {
+            console.log( 'Got hit!' );
+            }
+        });
     Main.addUnit( player );
 
-    player.addWeapon( new Weapon() );
-    player.addWeapon( new WeaponSide() );
+    var enemy = new Enemy({
+            x: CANVAS_WIDTH / 2,
+            y: 40
+        });
+    Main.addUnit( enemy );
     }
 
 
@@ -74,6 +99,10 @@ export function addBullet( bullet: Game.Bullet )
     {
     BULLETS.addChild( bullet );
     }
+
+
+export function getBulletContainer()
+    {
+    return BULLETS;
+    }
 }
-
-

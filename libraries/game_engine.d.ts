@@ -233,6 +233,8 @@ declare module Game {
         protected _target: Element;
         protected _angle_offset: number;
         constructor(args: BulletArgs);
+        setAngle(angle: number): void;
+        setTarget(target: Element): void;
         fixedLogic(deltaTime: number): void;
         targetLogic(deltaTime: number): void;
         logic(deltaTime: number): void;
@@ -744,12 +746,7 @@ declare module Game {
 declare module Game {
     interface UnitArgs extends ContainerArgs {
         movement_speed?: number;
-        bullet_movement_speed?: number;
         health?: number;
-        bullet_shape?: {
-            classRef: (args: any) => void;
-            args: Object;
-        };
         bullet_container?: Container | Canvas;
     }
     enum UnitMovement {
@@ -762,7 +759,6 @@ declare module Game {
         static _all: Unit[];
         static collidesWith: Unit[];
         movement_speed: number;
-        bullet_movement_speed: number;
         health: number;
         protected _movement_type: UnitMovement;
         protected _is_moving: boolean;
@@ -779,16 +775,12 @@ declare module Game {
             callback?: () => any;
         }[];
         protected _loop_path_position: number;
-        protected _bullet_interval: number;
-        protected _bullet_interval_count: number;
-        protected _angle_or_target: number | Element;
-        protected _bullets: Bullet[];
-        protected _bullet_shape: {
-            classRef: (args: any) => void;
-            args: Object;
-        };
-        protected _bullet_container: Container | Canvas;
+        protected _weapons: Weapon[];
         constructor(args: UnitArgs);
+        addWeapon(weapon: Weapon): number;
+        removeWeapon(weaponId: number): Weapon;
+        getWeapon(weaponId: number): Weapon;
+        getAllWeapons(): Weapon[];
         remove(animationDuration?: number): void;
         protected _removeNow(): void;
         moveTo(x: number, y: number, callback?: () => any): void;
@@ -801,15 +793,44 @@ declare module Game {
             callback?: () => any;
         }[]): void;
         moveAngle(angle: number, degrees?: boolean, callback?: () => any): void;
-        fireBullet(angleOrTarget?: number | Element, interval?: number): void;
-        stopFiring(): void;
-        protected _fire(angleOrTarget?: number | Element): void;
         protected movementLogic(delta: number): void;
         protected movementAngleLogic(delta: number): void;
         protected movementPathLogic(delta: number): void;
-        protected firingLogic(delta: number): void;
         protected collisionLogic(delta: number): void;
         logic(delta: number): void;
         clone(): Unit;
+    }
+}
+declare module Game {
+    interface WeaponArgs {
+        bulletContainer: Container | Canvas;
+        fireInterval?: number;
+        damage?: number;
+    }
+    class Weapon {
+        element: Element;
+        damage: number;
+        fire_interval: number;
+        protected _is_ready: boolean;
+        protected _fire_count: number;
+        protected _bullet_types: Bullet[];
+        protected _bullet_intervals: {
+            count: number;
+            bulletId: number;
+            interval: number;
+            angleOrTarget: number | Element;
+        }[];
+        protected _bullets: Bullet[];
+        protected _bullet_container: Container | Canvas;
+        constructor(args: WeaponArgs);
+        addBulletType(bullet: Bullet): number;
+        stopFiring(): void;
+        fire(angleOrTarget?: number | Element, bulletId?: number): boolean;
+        forceFire(angleOrTarget?: number | Element, bulletId?: number, interval?: number): boolean;
+        protected _fire(angleOrTarget: number | Element, bulletId: number): boolean;
+        logic(deltaTime: number): void;
+        checkCollision(element: Element): boolean;
+        isReady(): boolean;
+        clone(): Weapon;
     }
 }
