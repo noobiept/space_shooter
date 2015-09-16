@@ -825,6 +825,7 @@ declare module Game {
         constructor(args: WeaponArgs);
         addBulletType(bullet: Bullet): number;
         stopFiring(): void;
+        firingPattern(angleOrTarget: number | Element, bulletId: number): boolean;
         fire(angleOrTarget?: number | Element, bulletId?: number): boolean;
         forceFire(angleOrTarget?: number | Element, bulletId?: number, interval?: number): boolean;
         protected _fire(angleOrTarget: number | Element, bulletId: number): boolean;

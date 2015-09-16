@@ -27,25 +27,6 @@ class Player extends Game.Unit
                 children: shape,
                 movement_speed: 100
             });
-
-
-        var weapon = new Game.Weapon({
-                bulletContainer: Main.getBulletContainer(),
-                fireInterval: 0.5
-            });
-        this.addWeapon( weapon );
-
-
-        var bulletShape = new Game.Bitmap({
-                    image: Game.Preload.get( 'laser1' )
-                });
-        var bullet = new Game.Bullet({
-                children: bulletShape,
-                angleOrTarget: -Math.PI / 2,
-                movement_speed: 200,
-                angleOffset: -Math.PI / 2
-            });
-        weapon.addBulletType( bullet );
         }
 
 
@@ -68,7 +49,7 @@ class Player extends Game.Unit
 
             for (var a = weapons.length - 1 ; a >= 0 ; a--)
                 {
-                weapons[ a ].fire( -Math.PI / 2, 1 );
+                weapons[ a ].fire( -Math.PI / 2 );
                 }
             }
         }

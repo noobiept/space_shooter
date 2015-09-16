@@ -65,6 +65,19 @@ export function start()
             y: CANVAS_HEIGHT - 100
         });
 
+    var singleWeapon = new WeaponSingle({
+            bulletContainer: BULLETS,
+            fireInterval: 0.5
+        });
+    var sideWeapon = new WeaponSide({
+            bulletContainer: BULLETS,
+            fireInterval: 0.5
+        });
+
+    player.addWeapon( singleWeapon );
+    player.addWeapon( sideWeapon );
+
+
     player.addEventListener( 'collision', function( data )
         {
             // hit an enemy with a bullet

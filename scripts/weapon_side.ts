@@ -1,33 +1,32 @@
-class WeaponSide extends Weapon
+class WeaponSide extends Game.Weapon
     {
-    fire( player: Player )
+    constructor( args )
         {
-        if ( this._is_ready )
-            {
-            this._fire_count = 0;
-            this._is_ready = false;
+        super( args );
 
-            var bulletShape = new Game.Bitmap({
-                    image: Game.Preload.get( 'laser1' )
-                });
-            var bullet1 = new Game.Bullet({
-                    x: player.x,
-                    y: player.y,
-                    children: bulletShape,
-                    angleOrTarget: -Math.PI / 4,
-                    movement_speed: 150,
-                    angleOffset: -Math.PI / 2
-                });
-            var bullet2 = new Game.Bullet({
-                    x: player.x,
-                    y: player.y,
-                    children: bulletShape,
-                    angleOrTarget: -3 * Math.PI / 4,
-                    movement_speed: 150,
-                    angleOffset: -Math.PI / 2
-                });
-            Main.addBullet( bullet1 );
-            Main.addBullet( bullet2 );
+            // add other bullet shapes
+        var bulletShape = new Game.Bitmap({
+                image: Game.Preload.get( 'laser1' )
+            });
+        var bullet = new Game.Bullet({
+                children: bulletShape,
+                angleOrTarget: -Math.PI / 2,
+                movement_speed: 200,
+                angleOffset: -Math.PI / 2
+            });
+        this.addBulletType( bullet );
+        }
+
+
+    firingPattern( angle: number )
+        {
+        var fired = this._fire( angle - Math.PI / 4, 1 );
+
+        if ( !fired )
+            {
+            return fired;
             }
+
+        return this._fire( angle + Math.PI / 4, 1 );
         }
     }
