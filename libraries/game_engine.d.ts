@@ -189,11 +189,13 @@ declare module Game {
 declare module Game {
     interface BitmapArgs extends ElementArgs {
         image: HTMLImageElement;
+        angleOffset?: number;
     }
     class Bitmap extends Element {
         protected _image: HTMLImageElement;
         protected _source_x: number;
         protected _source_y: number;
+        protected _angle_offset: number;
         constructor(args: BitmapArgs);
         drawElement(ctx: any): void;
         clone(): Bitmap;
@@ -224,14 +226,12 @@ declare module Game {
     interface BulletArgs extends ContainerArgs {
         angleOrTarget: number | Element;
         movement_speed: number;
-        angleOffset?: number;
     }
     class Bullet extends Container {
         movement_speed: number;
         protected _move_x: number;
         protected _move_y: number;
         protected _target: Element;
-        protected _angle_offset: number;
         constructor(args: BulletArgs);
         setAngle(angle: number): void;
         setTarget(target: Element): void;
