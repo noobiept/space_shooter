@@ -25,7 +25,7 @@ class Player extends Game.Unit
                 x: args.x,
                 y: args.y,
                 children: shape,
-                movement_speed: 100
+                movementSpeed: 100
             });
         }
 

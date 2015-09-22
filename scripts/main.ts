@@ -4,7 +4,7 @@
 window.addEventListener( 'load', function()
 {
 var preload = new Game.Preload({
-        save_global: true
+        saveGlobal: true
     });
 var assets = '../assets/';
 

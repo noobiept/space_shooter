@@ -6,13 +6,12 @@ class WeaponSide extends Game.Weapon
 
             // add other bullet shapes
         var bulletShape = new Game.Bitmap({
-                image: Game.Preload.get( 'laser1' ),
-                angleOffset: -Math.PI / 2
+                image: Game.Preload.get( 'laser1' )
             });
         var bullet = new Game.Bullet({
                 children: bulletShape,
                 angleOrTarget: -Math.PI / 2,
-                movement_speed: 200
+                movementSpeed: 200
             });
         this.addBulletType( bullet );
         }

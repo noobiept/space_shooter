@@ -1,10 +1,6 @@
 declare module Game {
     module Utilities {
         function shuffle(array: any[]): any[];
-        function boxBoxCollision(oneX: number, oneY: number, oneWidth: number, oneHeight: number, twoX: number, twoY: number, twoWidth: number, twoHeight: number): boolean;
-        function circleCircleCollision(x1: number, y1: number, radius1: number, x2: number, y2: number, radius2: number): boolean;
-        function circlePointCollision(circleX: number, circleY: number, circleRadius: number, pointX: number, pointY: number): boolean;
-        function pointBoxCollision(pointX: number, pointY: number, boxX: number, boxY: number, boxWidth: number, boxHeight: number): boolean;
         var KEY_CODE: {
             "0": number;
             "1": number;
@@ -150,6 +146,7 @@ declare module Game {
     class Element extends EventDispatcher {
         x: number;
         y: number;
+        vertices: CollisionDetection.Vertices;
         opacity: number;
         visible: boolean;
         scaleX: number;
@@ -160,7 +157,7 @@ declare module Game {
         _height: number;
         _half_width: number;
         _half_height: number;
-        protected _rotation: number;
+        _rotation: number;
         _container: Container;
         _has_logic: boolean;
         protected _removed: boolean;
@@ -184,18 +181,21 @@ declare module Game {
         remove(): void;
         isRemoved(): boolean;
         clone(): Element;
+        updateVertices(x: number, y: number, scaleX: number, scaleY: number, rotation: number): void;
+        getVertices(): {
+            x: number;
+            y: number;
+        }[][];
     }
 }
 declare module Game {
     interface BitmapArgs extends ElementArgs {
         image: HTMLImageElement;
-        angleOffset?: number;
     }
     class Bitmap extends Element {
         protected _image: HTMLImageElement;
         protected _source_x: number;
         protected _source_y: number;
-        protected _angle_offset: number;
         constructor(args: BitmapArgs);
         drawElement(ctx: any): void;
         clone(): Bitmap;
@@ -219,20 +219,22 @@ declare module Game {
         mouseClickEvents(x: any, y: any, event: any): boolean;
         calculateDimensions(): void;
         logic(deltaTime: number): void;
+        updateVertices(x: any, y: any, scaleX: any, scaleY: any, rotation: any): void;
+        getVertices(): any[];
         clone(): Container;
     }
 }
 declare module Game {
     interface BulletArgs extends ContainerArgs {
-        angleOrTarget: number | Element;
-        movement_speed: number;
+        angleOrTarget?: number | Element;
+        movementSpeed?: number;
     }
     class Bullet extends Container {
         movement_speed: number;
         protected _move_x: number;
         protected _move_y: number;
         protected _target: Element;
-        constructor(args: BulletArgs);
+        constructor(args?: BulletArgs);
         setAngle(angle: number): void;
         setTarget(target: Element): void;
         fixedLogic(deltaTime: number): void;
@@ -259,6 +261,7 @@ declare module Game {
         addChild(args: any): void;
         removeChild(args: any): boolean;
         getChildrenIn(x: number, y: number): any[];
+        updateVertices(): void;
         logic(deltaTime: number): void;
         draw(): void;
         mouseClickEvents(event: MouseEvent): void;
@@ -287,6 +290,21 @@ declare module Game {
         radius: number;
         drawElement(ctx: CanvasRenderingContext2D): void;
         clone(): Circle;
+    }
+}
+declare module Game {
+    module CollisionDetection {
+        type Vertices = {
+            x: number;
+            y: number;
+        }[];
+        function polygonPolygon(one: Vertices, two: Vertices): boolean;
+        function polygonPolygonList(list1: Vertices[], list2: Vertices[]): boolean;
+        function polygonPoint(vertices: Vertices, point: any): boolean;
+        function boxBox(oneX: number, oneY: number, oneWidth: number, oneHeight: number, twoX: number, twoY: number, twoWidth: number, twoHeight: number): boolean;
+        function circleCircle(x1: number, y1: number, radius1: number, x2: number, y2: number, radius2: number): boolean;
+        function circlePoint(circleX: number, circleY: number, circleRadius: number, pointX: number, pointY: number): boolean;
+        function pointBox(pointX: number, pointY: number, boxX: number, boxY: number, boxWidth: number, boxHeight: number): boolean;
     }
 }
 declare module Game {
@@ -546,7 +564,7 @@ interface Window {
 }
 declare module Game {
     interface PreloadArgs extends EventDispatcherArgs {
-        save_global?: boolean;
+        saveGlobal?: boolean;
     }
     class Preload extends EventDispatcher {
         save_global: boolean;
@@ -745,9 +763,8 @@ declare module Game {
 }
 declare module Game {
     interface UnitArgs extends ContainerArgs {
-        movement_speed?: number;
+        movementSpeed?: number;
         health?: number;
-        bullet_container?: Container | Canvas;
     }
     enum UnitMovement {
         stop = 0,
@@ -776,7 +793,7 @@ declare module Game {
         }[];
         protected _loop_path_position: number;
         protected _weapons: Weapon[];
-        constructor(args: UnitArgs);
+        constructor(args?: UnitArgs);
         addWeapon(weapon: Weapon): number;
         removeWeapon(weaponId: number): Weapon;
         getWeapon(weaponId: number): Weapon;
@@ -799,6 +816,48 @@ declare module Game {
         protected collisionLogic(delta: number): void;
         logic(delta: number): void;
         clone(): Unit;
+    }
+}
+declare module Game {
+    module Vector {
+        interface Vector {
+            x: number;
+            y: number;
+        }
+        function add(one: Vector, two: Vector): {
+            x: number;
+            y: number;
+        };
+        function subtract(one: Vector, two: Vector): {
+            x: number;
+            y: number;
+        };
+        function magnitude(vector: Vector): number;
+        function multiply(vector: Vector, scalar: number): {
+            x: number;
+            y: number;
+        };
+        function dotProduct(one: Vector, two: Vector): number;
+        function rotate(center: Vector, vector: Vector, angle: number): {
+            x: number;
+            y: number;
+        };
+        function normalLeft(vector: Vector): {
+            x: number;
+            y: number;
+        };
+        function normalRight(vector: Vector): {
+            x: number;
+            y: number;
+        };
+        function normalize(vector: Vector): {
+            x: number;
+            y: number;
+        };
+        function projection(one: Vector, two: Vector): {
+            x: number;
+            y: number;
+        };
     }
 }
 declare module Game {
@@ -830,7 +889,7 @@ declare module Game {
         forceFire(angleOrTarget?: number | Element, bulletId?: number, interval?: number): boolean;
         protected _fire(angleOrTarget: number | Element, bulletId: number): boolean;
         logic(deltaTime: number): void;
-        checkCollision(element: Element): boolean;
+        checkCollision(element: Element, vertices: CollisionDetection.Vertices[]): boolean;
         isReady(): boolean;
         clone(): Weapon;
     }
