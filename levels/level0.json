@@ -1,0 +1,16 @@
+{
+    "spawn": [
+        {
+            "className": "Enemy",
+            "time": 1
+        },
+        {
+            "className": "Enemy",
+            "time": 2
+        },
+        {
+            "className": "Enemy",
+            "time": 4
+        }
+    ]
+}

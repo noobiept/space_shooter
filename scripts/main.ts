@@ -6,9 +6,8 @@ window.addEventListener( 'load', function()
 var preload = new Game.Preload({
         saveGlobal: true
     });
-var assets = '../assets/';
 
-var manifest = [
+var assetsManifest = [
         { id: 'background', path: 'backgrounds/darkPurple.png' },
         { id: 'player', path: 'png/playerShip1_blue.png' },
         { id: 'laser1', path: 'png/lasers/laserBlue01.png' },
@@ -16,10 +15,16 @@ var manifest = [
         { id: 'enemy2', path: 'png/enemies/enemyRed2.png' },
         { id: 'enemy3', path: 'png/enemies/enemyRed3.png' },
         { id: 'enemy4', path: 'png/enemies/enemyRed4.png' },
-        { id: 'enemy5', path: 'png/enemies/enemyRed5.png' }
+        { id: 'enemy5', path: 'png/enemies/enemyRed5.png' },
     ];
+var levelsManifest = [
+        { id: 'level0', path: 'level0.json' }
+    ];
+
+
 preload.addEventListener( 'complete', Main.start );
-preload.loadManifest( manifest, assets );
+preload.loadManifest( assetsManifest, '../assets/' );
+preload.loadManifest( levelsManifest, '../levels/' );
 });
 
 
@@ -77,13 +82,13 @@ export function start()
     player.addWeapon( singleWeapon );
     player.addWeapon( sideWeapon );
 
-
     player.addEventListener( 'collision', function( data )
         {
             // hit an enemy with a bullet
         if ( data.bullet )
             {
             data.collidedWith.remove();
+            data.bullet.remove();
             console.log( 'Hit!' );
             }
 
@@ -94,11 +99,8 @@ export function start()
         });
     Main.addUnit( player );
 
-    var enemy = new Enemy({
-            x: CANVAS_WIDTH / 2,
-            y: 40
-        });
-    Main.addUnit( enemy );
+
+    Level.start( 0 );
     }
 
 
