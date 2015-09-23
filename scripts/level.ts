@@ -48,13 +48,18 @@ function spawnEnemy( info: SpawnInfo )
     {
         // get the class constructor/function
     var classFunc = window[ info.className ];
+    var spawnCount = 2;
 
-        // add the unit to the game
-    var enemy = new classFunc({
-            x: Game.Utilities.getRandomInt( 0, Main.CANVAS_WIDTH ),
-            y: 0
-        });
-    Main.addUnit( enemy );
+
+    for (var a = 0 ; a < spawnCount ; a++)
+        {
+            // add the unit to the game
+        var enemy = new classFunc({
+                x: Game.Utilities.getRandomInt( 0, Main.CANVAS_WIDTH ),
+                y: 0
+            });
+        Main.addUnit( enemy );
+        }
     }
 
 

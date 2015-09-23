@@ -25,7 +25,7 @@ class Player extends Game.Unit
                 x: args.x,
                 y: args.y,
                 children: shape,
-                movementSpeed: 100
+                movementSpeed: 200
             });
         this.rotation = -Math.PI / 2;
         }

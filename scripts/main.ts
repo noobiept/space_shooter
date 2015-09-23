@@ -16,6 +16,10 @@ var assetsManifest = [
         { id: 'enemy3', path: 'png/enemies/enemyRed3.png' },
         { id: 'enemy4', path: 'png/enemies/enemyRed4.png' },
         { id: 'enemy5', path: 'png/enemies/enemyRed5.png' },
+        { id: 'meteor1', path: 'png/meteors/meteorBrown_big1.png' },
+        { id: 'meteor2', path: 'png/meteors/meteorBrown_big2.png' },
+        { id: 'meteor3', path: 'png/meteors/meteorBrown_big3.png' },
+        { id: 'meteor4', path: 'png/meteors/meteorBrown_big4.png' }
     ];
 var levelsManifest = [
         { id: 'level0', path: 'level0.json' }
@@ -53,7 +57,7 @@ export function start()
             image: Game.Preload.get( 'background' ),
             direction: Game.ScrollingBitmapArgs.Direction.top,
             step: 1,
-        interval: 0.3
+        interval: 0.1
         });
     Game.addElement( background );
 
@@ -66,7 +70,7 @@ export function start()
     Game.addElement( UNITS );
 
 
-    Player.collidesWith = [ <any>EnemyLine, <any>EnemyFollow ];
+    Player.collidesWith = [ <any>EnemyLine, <any>EnemyFollow, <any>EnemyMeteor ];
 
     PLAYER = new Player({
             x: CANVAS_WIDTH / 2,
