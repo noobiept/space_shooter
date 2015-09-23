@@ -51,8 +51,8 @@ function spawnEnemy( info: SpawnInfo )
 
         // add the unit to the game
     var enemy = new classFunc({
-            x: Main.CANVAS_WIDTH / 2,
-            y: 40
+            x: Game.Utilities.getRandomInt( 0, Main.CANVAS_WIDTH ),
+            y: 0
         });
     Main.addUnit( enemy );
     }

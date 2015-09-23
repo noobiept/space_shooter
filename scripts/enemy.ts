@@ -4,6 +4,8 @@ interface EnemyArgs
     {
     x: number;
     y: number;
+    movementSpeed: number;
+    imageId: string;
     }
 
 class Enemy extends Game.Unit
@@ -11,7 +13,7 @@ class Enemy extends Game.Unit
     constructor( args: EnemyArgs )
         {
         var shape = new Game.Bitmap({
-                image: Game.Preload.get( 'enemy1' )
+                image: Game.Preload.get( args.imageId )
             });
 
         super({
@@ -20,8 +22,8 @@ class Enemy extends Game.Unit
                 children: shape
             });
 
-        this.movement_speed = 100;
-        this.moveTo( args.x, Main.CANVAS_HEIGHT + this._half_height );
+        this.movement_speed = args.movementSpeed;
+        this.rotation = Math.PI / 2;
         }
 
 

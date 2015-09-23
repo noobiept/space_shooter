@@ -1,15 +1,15 @@
 {
     "spawn": [
         {
-            "className": "Enemy",
+            "className": "EnemyFollow",
             "time": 1
         },
         {
-            "className": "Enemy",
+            "className": "EnemyLine",
             "time": 2
         },
         {
-            "className": "Enemy",
+            "className": "EnemyLine",
             "time": 4
         }
     ]

@@ -771,6 +771,7 @@ declare module Game {
         angle = 1,
         destination = 2,
         loop = 3,
+        follow = 4,
     }
     class Unit extends Container {
         static _all: Unit[];
@@ -792,6 +793,7 @@ declare module Game {
             callback?: () => any;
         }[];
         protected _loop_path_position: number;
+        protected _follow_target: Element;
         protected _weapons: Weapon[];
         constructor(args?: UnitArgs);
         addWeapon(weapon: Weapon): number;
@@ -810,7 +812,9 @@ declare module Game {
             callback?: () => any;
         }[]): void;
         moveAngle(angle: number, degrees?: boolean, callback?: () => any): void;
+        follow(element: Element): void;
         protected movementLogic(delta: number): void;
+        protected movementFollowLogic(delta: number): void;
         protected movementAngleLogic(delta: number): void;
         protected movementPathLogic(delta: number): void;
         protected collisionLogic(delta: number): void;

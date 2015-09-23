@@ -38,6 +38,9 @@ var UNITS: Game.Container;
 var BULLETS: Game.Container;
 
 
+var PLAYER: Player;
+
+
 export function start()
     {
     Game.init( document.body, CANVAS_WIDTH, CANVAS_HEIGHT );
@@ -63,9 +66,9 @@ export function start()
     Game.addElement( UNITS );
 
 
-    Player.collidesWith = [ <any>Enemy ];
+    Player.collidesWith = [ <any>EnemyLine, <any>EnemyFollow ];
 
-    var player = new Player({
+    PLAYER = new Player({
             x: CANVAS_WIDTH / 2,
             y: CANVAS_HEIGHT - 100
         });
@@ -79,15 +82,14 @@ export function start()
             fireInterval: 0.5
         });
 
-    player.addWeapon( singleWeapon );
-    player.addWeapon( sideWeapon );
+    PLAYER.addWeapon( singleWeapon );
+    PLAYER.addWeapon( sideWeapon );
 
-    player.addEventListener( 'collision', function( data )
+    PLAYER.addEventListener( 'collision', function( data )
         {
             // hit an enemy with a bullet
         if ( data.bullet )
             {
-            data.collidedWith.remove();
             data.bullet.remove();
             console.log( 'Hit!' );
             }
@@ -96,8 +98,10 @@ export function start()
             {
             console.log( 'Got hit!' );
             }
+
+        data.collidedWith.remove();
         });
-    Main.addUnit( player );
+    Main.addUnit( PLAYER );
 
 
     Level.start( 0 );
@@ -119,5 +123,11 @@ export function addBullet( bullet: Game.Bullet )
 export function getBulletContainer()
     {
     return BULLETS;
+    }
+
+
+export function getPlayer()
+    {
+    return PLAYER;
     }
 }
