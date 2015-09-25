@@ -5,3 +5,28 @@ body
     text-align: center;
     background-color: black;
     }
+
+.Game-Button
+    {
+    cursor: pointer;
+    color: lightblue;
+    }
+
+.Game-Button:hover
+    {
+    color: rgb(133, 184, 230);
+    }
+
+
+    /* ---- Menu ---- */
+
+#Menu
+    {
+    color: white;
+    }
+
+#Menu > div
+    {
+    display: inline-block;
+    margin: 0 10px;
+    }

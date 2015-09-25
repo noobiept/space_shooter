@@ -45,10 +45,14 @@ var BULLETS: Game.Container;
 var PLAYER: Player;
 
 
+var HEALTH_MENU: Game.Html.Value;
+
+
 export function start()
     {
     Game.init( document.body, CANVAS_WIDTH, CANVAS_HEIGHT );
     Input.init();
+    initMenu();
 
 
     var background = new Game.ScrollingBitmap({
@@ -74,7 +78,8 @@ export function start()
 
     PLAYER = new Player({
             x: CANVAS_WIDTH / 2,
-            y: CANVAS_HEIGHT - 100
+            y: CANVAS_HEIGHT - 100,
+            health: 100
         });
 
     var singleWeapon = new WeaponSingle({
@@ -100,7 +105,14 @@ export function start()
 
         else
             {
-            console.log( 'Got hit!' );
+            var survived = PLAYER.tookDamage( data.collidedWith.damage );
+            updateStatusBar();
+
+                // game over
+            if ( !survived )
+                {
+                gameOver();
+                }
             }
 
         data.collidedWith.remove();
@@ -109,6 +121,34 @@ export function start()
 
 
     Level.start( 0 );
+    updateStatusBar();
+    }
+
+
+function initMenu()
+    {
+    var menu = new Game.Html.HtmlContainer({
+            cssId: 'Menu'
+        });
+
+    HEALTH_MENU = new Game.Html.Value({
+            preText: 'Health: ',
+            value: 0
+        });
+    var restart = new Game.Html.Button({
+            value: 'Restart',
+            callback: restart
+        });
+    menu.addChild( HEALTH_MENU );
+    menu.addChild( restart );
+
+    document.body.appendChild( menu.container );
+    }
+
+
+export function updateStatusBar()
+    {
+    HEALTH_MENU.setValue( PLAYER.health );
     }
 
 
@@ -133,5 +173,18 @@ export function getBulletContainer()
 export function getPlayer()
     {
     return PLAYER;
+    }
+
+
+function restart()
+    {
+
+    }
+
+
+function gameOver()
+    {
+    console.log( 'Game Over!' );
+    restart();
     }
 }

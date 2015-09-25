@@ -5,6 +5,7 @@ interface PlayerArgs
     {
     x: number;
     y: number;
+    health: number;
     }
 
 
@@ -24,10 +25,28 @@ class Player extends Game.Unit
         super({
                 x: args.x,
                 y: args.y,
+                health: args.health,
                 children: shape,
                 movementSpeed: 200
             });
         this.rotation = -Math.PI / 2;
+        }
+
+
+    /**
+     * Update the player's health based on the damage taken.
+     * Return whether the player survived the damage or not.
+     */
+    tookDamage( damage: number )
+        {
+        this.health -= damage;
+
+        if ( this.health > 0 )
+            {
+            return true;
+            }
+
+        return false;
         }
 
 

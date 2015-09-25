@@ -6,10 +6,13 @@ interface EnemyArgs
     y: number;
     movementSpeed: number;
     imageId: string;
+    damage: number;
     }
 
 class Enemy extends Game.Unit
     {
+    damage: number;
+
     constructor( args: EnemyArgs )
         {
         var shape = new Game.Bitmap({
@@ -22,6 +25,7 @@ class Enemy extends Game.Unit
                 children: shape
             });
 
+        this.damage = args.damage;
         this.movement_speed = args.movementSpeed;
         this.rotation = Math.PI / 2;
         }

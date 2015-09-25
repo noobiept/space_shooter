@@ -5,6 +5,7 @@ class EnemyLine extends Enemy
         {
         args.imageId = 'enemy1';
         args.movementSpeed = 100;
+        args.damage = 10;
 
         super( args );
 

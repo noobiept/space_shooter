@@ -8,14 +8,15 @@ class EnemyMeteor extends Enemy
 
         args.imageId = EnemyMeteor.ImageIds[ randomPosition ];
         args.movementSpeed = 75;
+        args.damage = 20;
 
         super( args );
 
-        var angle = Game.Utilities.getRandomInt( 20, 89 );
+        var angle = Game.Utilities.getRandomInt( 45, 90 );
 
         if ( args.x > Main.CANVAS_WIDTH / 2 )
             {
-            angle += 90;
+            angle += 45;
             }
 
         this.moveAngle( angle, true );
