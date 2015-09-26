@@ -26,7 +26,7 @@ var levelsManifest = [
     ];
 
 
-preload.addEventListener( 'complete', Main.start );
+preload.addEventListener( 'complete', Main.init );
 preload.loadManifest( assetsManifest, '../assets/' );
 preload.loadManifest( levelsManifest, '../levels/' );
 });
@@ -48,12 +48,11 @@ var PLAYER: Player;
 var HEALTH_MENU: Game.Html.Value;
 
 
-export function start()
+export function init()
     {
     Game.init( document.body, CANVAS_WIDTH, CANVAS_HEIGHT );
     Input.init();
     initMenu();
-
 
     var background = new Game.ScrollingBitmap({
             x: CANVAS_WIDTH / 2,
@@ -76,6 +75,13 @@ export function start()
 
     Player.collidesWith = [ <any>EnemyLine, <any>EnemyFollow, <any>EnemyMeteor ];
 
+
+    start();
+    }
+
+
+export function start()
+    {
     PLAYER = new Player({
             x: CANVAS_WIDTH / 2,
             y: CANVAS_HEIGHT - 100,
@@ -125,6 +131,18 @@ export function start()
     }
 
 
+function clear()
+    {
+    Level.clear();
+
+    PLAYER.remove();
+    PLAYER = null;
+
+    UNITS.removeAllChildren();
+    BULLETS.removeAllChildren();
+    }
+
+
 function initMenu()
     {
     var menu = new Game.Html.HtmlContainer({
@@ -135,12 +153,12 @@ function initMenu()
             preText: 'Health: ',
             value: 0
         });
-    var restart = new Game.Html.Button({
+    var restartButton = new Game.Html.Button({
             value: 'Restart',
             callback: restart
         });
     menu.addChild( HEALTH_MENU );
-    menu.addChild( restart );
+    menu.addChild( restartButton );
 
     document.body.appendChild( menu.container );
     }
@@ -178,7 +196,8 @@ export function getPlayer()
 
 function restart()
     {
-
+    clear();
+    start();
     }
 
 

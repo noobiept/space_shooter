@@ -225,26 +225,6 @@ declare module Game {
     }
 }
 declare module Game {
-    interface BulletArgs extends ContainerArgs {
-        angleOrTarget?: number | Element;
-        movementSpeed?: number;
-    }
-    class Bullet extends Container {
-        movement_speed: number;
-        protected _move_x: number;
-        protected _move_y: number;
-        protected _target: Element;
-        constructor(args?: BulletArgs);
-        setAngle(angle: number): void;
-        setTarget(target: Element): void;
-        fixedLogic(deltaTime: number): void;
-        targetLogic(deltaTime: number): void;
-        logic(deltaTime: number): void;
-        remove(): void;
-        clone(): Bullet;
-    }
-}
-declare module Game {
     interface CanvasArgs {
         width: number;
         height: number;
@@ -279,6 +259,52 @@ declare module Game {
     }
 }
 declare module Game {
+    module Sound {
+        function init(): void;
+        function decodeAudio(data: ArrayBuffer, callback: (decodedData: AudioBuffer) => any): void;
+        function play(audioBuffer: AudioBuffer): void;
+    }
+}
+declare module Game {
+    function init(htmlContainer: HTMLElement, canvasWidth: number, canvasHeight: number): void;
+    function startGameLoop(): void;
+    function stopGameLoop(): void;
+    function activateMouseMoveEvents(interval: number): void;
+    function disableMouseMoveEvents(): void;
+    function getCanvas(id?: number): Canvas;
+    function addCanvas(canvas: Game.Canvas, position?: number): number;
+    function addElement(element: Element | Element[], id?: number): void;
+    function removeElement(element: Element | Element[]): boolean;
+    function addToGameLoop(callback: () => any, delay: number, isInterval?: boolean): boolean;
+    function removeFromGameLoop(callback: () => any): boolean;
+    function removeAllCallbacks(): void;
+    function getCanvasContainer(): HTMLDivElement;
+    function getMousePosition(): {
+        x: number;
+        y: number;
+    };
+}
+declare module Game {
+    interface BulletArgs extends ContainerArgs {
+        angleOrTarget?: number | Element;
+        movementSpeed?: number;
+    }
+    class Bullet extends Container {
+        movement_speed: number;
+        protected _move_x: number;
+        protected _move_y: number;
+        protected _target: Element;
+        constructor(args?: BulletArgs);
+        setAngle(angle: number): void;
+        setTarget(target: Element): void;
+        fixedLogic(deltaTime: number): void;
+        targetLogic(deltaTime: number): void;
+        logic(deltaTime: number): void;
+        remove(): void;
+        clone(): Bullet;
+    }
+}
+declare module Game {
     interface CircleArgs extends ElementArgs {
         radius: number;
         color: string;
@@ -290,6 +316,48 @@ declare module Game {
         radius: number;
         drawElement(ctx: CanvasRenderingContext2D): void;
         clone(): Circle;
+    }
+}
+declare module Game {
+    module Vector {
+        interface Vector {
+            x: number;
+            y: number;
+        }
+        function add(one: Vector, two: Vector): {
+            x: number;
+            y: number;
+        };
+        function subtract(one: Vector, two: Vector): {
+            x: number;
+            y: number;
+        };
+        function magnitude(vector: Vector): number;
+        function multiply(vector: Vector, scalar: number): {
+            x: number;
+            y: number;
+        };
+        function dotProduct(one: Vector, two: Vector): number;
+        function rotate(center: Vector, vector: Vector, angle: number): {
+            x: number;
+            y: number;
+        };
+        function normalLeft(vector: Vector): {
+            x: number;
+            y: number;
+        };
+        function normalRight(vector: Vector): {
+            x: number;
+            y: number;
+        };
+        function normalize(vector: Vector): {
+            x: number;
+            y: number;
+        };
+        function projection(one: Vector, two: Vector): {
+            x: number;
+            y: number;
+        };
     }
 }
 declare module Game {
@@ -337,6 +405,63 @@ declare module Game {
     }
 }
 declare module Game {
+    interface RectangleArgs extends ElementArgs {
+        width: number;
+        height: number;
+        color: string;
+        fill?: boolean;
+    }
+    class Rectangle extends Element {
+        color: string;
+        fill: boolean;
+        constructor(args: RectangleArgs);
+        drawElement(ctx: CanvasRenderingContext2D): void;
+        clone(): Rectangle;
+    }
+}
+declare module Game {
+    enum TweenAction {
+        properties = 0,
+        wait = 1,
+        call = 2,
+    }
+    interface TweenStep {
+        action: TweenAction;
+        duration?: number;
+        end_properties?: Object;
+        ease?: (value: number) => number;
+        callback?: () => any;
+    }
+    class Tween {
+        static _tweens: Tween[];
+        protected _element: Object;
+        protected _steps: TweenStep[];
+        protected _current_step: TweenStep;
+        protected _start_properties: Object;
+        protected _count: number;
+        protected _update: (delta: number) => any;
+        constructor(element: Object);
+        start(): void;
+        to(properties: Object, duration: number, ease?: (value: number) => number): Tween;
+        wait(duration: number): Tween;
+        call(callback: () => any): Tween;
+        remove(): void;
+        nextStep(): void;
+        protected waitUpdate(deltaTime: number): void;
+        protected propertiesUpdate(deltaTime: any): void;
+        static getTween(element: Object): Tween;
+        static removeTweens(element: Object): void;
+        static removeAll(): void;
+        static update(deltaTime: number): void;
+    }
+    module Tween {
+        module Ease {
+            function linear(value: number): number;
+            function quadraticIn(value: number): number;
+        }
+    }
+}
+declare module Game {
     interface ElementGridArgs extends EventDispatcherArgs, GridArgs {
         squareSize: number;
         refX?: number;
@@ -373,25 +498,6 @@ declare module Game {
         };
         clear(): void;
     }
-}
-declare module Game {
-    function init(htmlContainer: HTMLElement, canvasWidth: number, canvasHeight: number): void;
-    function startGameLoop(): void;
-    function stopGameLoop(): void;
-    function activateMouseMoveEvents(interval: number): void;
-    function disableMouseMoveEvents(): void;
-    function getCanvas(id?: number): Canvas;
-    function addCanvas(canvas: Game.Canvas, position?: number): number;
-    function addElement(element: Element | Element[], id?: number): void;
-    function removeElement(element: Element | Element[]): boolean;
-    function addToGameLoop(callback: () => any, delay: number, isInterval?: boolean): boolean;
-    function removeFromGameLoop(callback: () => any): boolean;
-    function removeAllCallbacks(): void;
-    function getCanvasContainer(): HTMLDivElement;
-    function getMousePosition(): {
-        x: number;
-        y: number;
-    };
 }
 declare module Game {
     module HighScore {
@@ -552,13 +658,6 @@ declare module Game {
         }): any[];
     }
 }
-declare module Game {
-    module Sound {
-        function init(): void;
-        function decodeAudio(data: ArrayBuffer, callback: (decodedData: AudioBuffer) => any): void;
-        function play(audioBuffer: AudioBuffer): void;
-    }
-}
 interface Window {
     URL: any;
 }
@@ -609,21 +708,6 @@ declare module Game {
         var DATA: {};
         function get(id: string): any;
         function getType(file: string): any;
-    }
-}
-declare module Game {
-    interface RectangleArgs extends ElementArgs {
-        width: number;
-        height: number;
-        color: string;
-        fill?: boolean;
-    }
-    class Rectangle extends Element {
-        color: string;
-        fill: boolean;
-        constructor(args: RectangleArgs);
-        drawElement(ctx: CanvasRenderingContext2D): void;
-        clone(): Rectangle;
     }
 }
 declare module Game {
@@ -720,45 +804,38 @@ declare module Game {
     }
 }
 declare module Game {
-    enum TweenAction {
-        properties = 0,
-        wait = 1,
-        call = 2,
+    interface WeaponArgs {
+        bulletContainer: Container | Canvas;
+        fireInterval?: number;
+        damage?: number;
     }
-    interface TweenStep {
-        action: TweenAction;
-        duration?: number;
-        end_properties?: Object;
-        ease?: (value: number) => number;
-        callback?: () => any;
-    }
-    class Tween {
-        static _tweens: Tween[];
-        protected _element: Object;
-        protected _steps: TweenStep[];
-        protected _current_step: TweenStep;
-        protected _start_properties: Object;
-        protected _count: number;
-        protected _update: (delta: number) => any;
-        constructor(element: Object);
-        start(): void;
-        to(properties: Object, duration: number, ease?: (value: number) => number): Tween;
-        wait(duration: number): Tween;
-        call(callback: () => any): Tween;
+    class Weapon {
+        element: Element;
+        damage: number;
+        fire_interval: number;
+        protected _is_ready: boolean;
+        protected _fire_count: number;
+        protected _bullet_types: Bullet[];
+        protected _bullet_intervals: {
+            count: number;
+            bulletId: number;
+            interval: number;
+            angleOrTarget: number | Element;
+        }[];
+        protected _bullets: Bullet[];
+        protected _bullet_container: Container | Canvas;
+        constructor(args: WeaponArgs);
+        addBulletType(bullet: Bullet): number;
+        stopFiring(): void;
+        firingPattern(angleOrTarget: number | Element, bulletId: number): boolean;
+        fire(angleOrTarget?: number | Element, bulletId?: number): boolean;
+        forceFire(angleOrTarget?: number | Element, bulletId?: number, interval?: number): boolean;
+        protected _fire(angleOrTarget: number | Element, bulletId: number): boolean;
+        logic(deltaTime: number): void;
+        checkCollision(element: Element, vertices: CollisionDetection.Vertices[]): boolean;
+        isReady(): boolean;
+        clone(): Weapon;
         remove(): void;
-        nextStep(): void;
-        protected waitUpdate(deltaTime: number): void;
-        protected propertiesUpdate(deltaTime: any): void;
-        static getTween(element: Object): Tween;
-        static removeTweens(element: Object): void;
-        static removeAll(): void;
-        static update(deltaTime: number): void;
-    }
-    module Tween {
-        module Ease {
-            function linear(value: number): number;
-            function quadraticIn(value: number): number;
-        }
     }
 }
 declare module Game {
@@ -820,81 +897,5 @@ declare module Game {
         protected collisionLogic(delta: number): void;
         logic(delta: number): void;
         clone(): Unit;
-    }
-}
-declare module Game {
-    module Vector {
-        interface Vector {
-            x: number;
-            y: number;
-        }
-        function add(one: Vector, two: Vector): {
-            x: number;
-            y: number;
-        };
-        function subtract(one: Vector, two: Vector): {
-            x: number;
-            y: number;
-        };
-        function magnitude(vector: Vector): number;
-        function multiply(vector: Vector, scalar: number): {
-            x: number;
-            y: number;
-        };
-        function dotProduct(one: Vector, two: Vector): number;
-        function rotate(center: Vector, vector: Vector, angle: number): {
-            x: number;
-            y: number;
-        };
-        function normalLeft(vector: Vector): {
-            x: number;
-            y: number;
-        };
-        function normalRight(vector: Vector): {
-            x: number;
-            y: number;
-        };
-        function normalize(vector: Vector): {
-            x: number;
-            y: number;
-        };
-        function projection(one: Vector, two: Vector): {
-            x: number;
-            y: number;
-        };
-    }
-}
-declare module Game {
-    interface WeaponArgs {
-        bulletContainer: Container | Canvas;
-        fireInterval?: number;
-        damage?: number;
-    }
-    class Weapon {
-        element: Element;
-        damage: number;
-        fire_interval: number;
-        protected _is_ready: boolean;
-        protected _fire_count: number;
-        protected _bullet_types: Bullet[];
-        protected _bullet_intervals: {
-            count: number;
-            bulletId: number;
-            interval: number;
-            angleOrTarget: number | Element;
-        }[];
-        protected _bullets: Bullet[];
-        protected _bullet_container: Container | Canvas;
-        constructor(args: WeaponArgs);
-        addBulletType(bullet: Bullet): number;
-        stopFiring(): void;
-        firingPattern(angleOrTarget: number | Element, bulletId: number): boolean;
-        fire(angleOrTarget?: number | Element, bulletId?: number): boolean;
-        forceFire(angleOrTarget?: number | Element, bulletId?: number, interval?: number): boolean;
-        protected _fire(angleOrTarget: number | Element, bulletId: number): boolean;
-        logic(deltaTime: number): void;
-        checkCollision(element: Element, vertices: CollisionDetection.Vertices[]): boolean;
-        isReady(): boolean;
-        clone(): Weapon;
     }
 }
