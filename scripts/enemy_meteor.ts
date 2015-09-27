@@ -9,6 +9,7 @@ class EnemyMeteor extends Enemy
         args.imageId = EnemyMeteor.ImageIds[ randomPosition ];
         args.movementSpeed = 75;
         args.damage = 20;
+        args.health = 30;
 
         super( args );
 

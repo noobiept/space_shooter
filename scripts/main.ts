@@ -46,6 +46,8 @@ var BULLETS: Game.Container;
 var POWER_UPS: Game.Container;
 
 var HEALTH_MENU: Game.Html.Value;
+var DAMAGE_MENU: Game.Html.Value;
+var SPEED_MENU: Game.Html.Value;
 
 var PLAYER: Player;
 var POWER_UP_SPAWN_COUNT = 0;
@@ -93,6 +95,8 @@ export function start()
         });
     PLAYER.addEventListener( 'collision', playerCollisions );
     PLAYER.addEventListener( 'health_change', updateStatusBar );
+    PLAYER.addEventListener( 'damage_change', updateStatusBar );
+    PLAYER.addEventListener( 'speed_change', updateStatusBar );
 
     Main.addUnit( PLAYER );
 
@@ -106,6 +110,7 @@ function playerCollisions( data )
     var player = data.element;
     var element = data.collidedWith;
     var bullet = data.bullet;
+    var survived;
 
         // collided with a power up
     if ( element instanceof PowerUp )
@@ -125,33 +130,48 @@ function playerCollisions( data )
         if ( data.bullet )
             {
             data.bullet.remove();
-            console.log( 'Hit!' );
+            survived = element.tookDamage( player.damage );
+
+            if ( !survived )
+                {
+                spawnPowerUp( element.x, element.y );
+                }
             }
 
             // collision with the enemy element
         else
             {
-            var survived = PLAYER.tookDamage( element.damage );
+                // takes double damage if collided directly with the enemy
+            survived = PLAYER.tookDamage( element.damage * 2 );
+
+            spawnPowerUp( element.x, element.y );
+
+                // enemy is removed regardless of what health he may have
+            element.remove();
 
             if ( !survived )
                 {
                 gameOver();
                 }
             }
+        }
+    }
 
-            // add a power-up after a certain number of enemy kills
-            // it spawns where the enemy died
-        POWER_UP_SPAWN_COUNT++;
 
-        if ( POWER_UP_SPAWN_COUNT >= POWER_UP_SPAWN_RATE )
-            {
-            POWER_UP_SPAWN_COUNT = 0;
+/**
+ * Add a power-up after a certain number of enemy kills.
+ * It spawns where the enemy died.
+ */
+function spawnPowerUp( x, y )
+    {
+    POWER_UP_SPAWN_COUNT++;
 
-            var powerUp = PowerUp.createRandom( element.x, element.y );
-            POWER_UPS.addChild( powerUp );
-            }
+    if ( POWER_UP_SPAWN_COUNT >= POWER_UP_SPAWN_RATE )
+        {
+        POWER_UP_SPAWN_COUNT = 0;
 
-        element.remove();
+        var powerUp = PowerUp.createRandom( x, y );
+        POWER_UPS.addChild( powerUp );
         }
     }
 
@@ -179,11 +199,21 @@ function initMenu()
             preText: 'Health: ',
             value: 0
         });
+    DAMAGE_MENU = new Game.Html.Value({
+            preText: 'Damage: ',
+            value: 0
+        });
+    SPEED_MENU = new Game.Html.Value({
+            preText: 'Speed: ',
+            value: 0
+        });
     var restartButton = new Game.Html.Button({
             value: 'Restart',
             callback: restart
         });
     menu.addChild( HEALTH_MENU );
+    menu.addChild( DAMAGE_MENU );
+    menu.addChild( SPEED_MENU );
     menu.addChild( restartButton );
 
     document.body.appendChild( menu.container );
@@ -193,6 +223,8 @@ function initMenu()
 export function updateStatusBar()
     {
     HEALTH_MENU.setValue( PLAYER.health );
+    DAMAGE_MENU.setValue( PLAYER.damage );
+    SPEED_MENU.setValue( PLAYER.movement_speed );
     }
 
 

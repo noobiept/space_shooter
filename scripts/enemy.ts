@@ -7,6 +7,7 @@ interface EnemyArgs
     movementSpeed: number;
     imageId: string;
     damage: number;
+    health: number;
     }
 
 class Enemy extends Game.Unit
@@ -25,11 +26,28 @@ class Enemy extends Game.Unit
                 children: shape
             });
 
+        this.health = args.health;
         this.damage = args.damage;
         this.movement_speed = args.movementSpeed;
         this.rotation = Math.PI / 2;
         }
 
+
+    /**
+     * Returns whether the enemy survived the attack or not.
+     */
+    tookDamage( damage: number )
+        {
+        this.health -= damage;
+
+        if ( this.health <= 0 )
+            {
+            this.remove();
+            return false;
+            }
+
+        return true;
+        }
 
     logic( deltaTime: number )
         {

@@ -24,6 +24,8 @@ interface PlayerArgs
  * Added events:
  *
  * - `health_change` -- Whenever there's a change to the health of the player.
+ * - `damage_change` -- When there's a change to the damage.
+ * - `speed_change` -- When there's a change to the movement speed.
  */
 class Player extends Game.Unit
     {
@@ -229,11 +231,13 @@ class Player extends Game.Unit
         if ( powerUp.damage )
             {
             this.setDamage( this.damage + powerUp.damage );
+            this.dispatchEvent( 'damage_change' );
             }
 
         if ( powerUp.speed )
             {
             this.movement_speed += powerUp.speed;
+            this.dispatchEvent( 'speed_change' );
             }
 
         if ( powerUp.weapon )
@@ -261,11 +265,13 @@ class Player extends Game.Unit
         if ( powerUp.damage )
             {
             this.setDamage( this.damage - powerUp.damage );
+            this.dispatchEvent( 'damage_change' );
             }
 
         if ( powerUp.speed )
             {
             this.movement_speed -= powerUp.speed;
+            this.dispatchEvent( 'speed_change' );
             }
 
         if ( powerUp.weapon )
