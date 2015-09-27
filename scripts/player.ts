@@ -1,6 +1,16 @@
 /// <reference path="../libraries/game_engine.d.ts" />
 
 
+interface PlayerPowerUp
+    {
+    duration: number;       // duration of the power up in seconds
+    count?: number;         // count until the duration
+    speed?: number;         // speed increase
+    damage?: number;        // damage increase
+    weapon?: Game.Weapon;   // extra weapon
+    }
+
+
 interface PlayerArgs
     {
     x: number;
@@ -14,6 +24,8 @@ class Player extends Game.Unit
         // used for the diagonal directions
         // Math.cos() has the same value as Math.sin()
     static _trig_pi_4 = Math.cos( Math.PI / 4 );
+    _power_ups: PlayerPowerUp[];
+    damage: number;
 
 
     constructor( args: PlayerArgs )
@@ -30,6 +42,15 @@ class Player extends Game.Unit
                 movementSpeed: 200
             });
         this.rotation = -Math.PI / 2;
+        this._power_ups = [];
+
+        var singleWeapon = new WeaponSingle({
+                bulletContainer: Main.getBulletContainer(),
+                fireInterval: 0.5
+            });
+        this.addWeapon( singleWeapon );
+
+        this.setDamage( 10 );
         }
 
 
@@ -50,12 +71,24 @@ class Player extends Game.Unit
         }
 
 
+    setDamage( damage: number )
+        {
+        this.damage = damage;
+
+        for (var a = this._weapons.length - 1 ; a >= 0 ; a--)
+            {
+            this._weapons[ a ].damage = damage;
+            }
+        }
+
+
     logic( deltaTime: number )
         {
         super.logic( deltaTime );
 
         this._movement_logic( deltaTime );
         this._fire_logic( deltaTime );
+        this._power_up_logic( deltaTime );
         }
 
 
@@ -165,5 +198,68 @@ class Player extends Game.Unit
 
         this.x = nextX;
         this.y = nextY;
+        }
+
+
+    _power_up_logic( deltaTime: number )
+        {
+        for (var a = this._power_ups.length - 1 ; a >= 0 ; a--)
+            {
+            var powerUp = this._power_ups[ a ];
+
+            powerUp.count += deltaTime;
+
+            if ( powerUp.count >= powerUp.duration )
+                {
+                this.removePowerUp( powerUp );
+                }
+            }
+        }
+
+
+    addPowerUp( powerUp: PlayerPowerUp )
+        {
+        powerUp.count = 0;
+
+        if ( powerUp.damage )
+            {
+            this.setDamage( this.damage + powerUp.damage );
+            }
+
+        if ( powerUp.speed )
+            {
+            this.movement_speed += powerUp.speed;
+            }
+
+        if ( powerUp.weapon )
+            {
+            this.addWeapon( powerUp.weapon );
+            }
+
+        this._power_ups.push( powerUp );
+        }
+
+
+    removePowerUp( powerUp: PlayerPowerUp )
+        {
+        if ( powerUp.damage )
+            {
+            this.setDamage( this.damage - powerUp.damage );
+            }
+
+        if ( powerUp.speed )
+            {
+            this.movement_speed -= powerUp.speed;
+            }
+
+        if ( powerUp.weapon )
+            {
+            var weapon = this.removeWeapon( powerUp.weapon );
+            weapon.remove();
+            }
+
+        var index = this._power_ups.indexOf( powerUp );
+
+        this._power_ups.splice( index, 1 );
         }
     }

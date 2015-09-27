@@ -874,7 +874,7 @@ declare module Game {
         protected _weapons: Weapon[];
         constructor(args?: UnitArgs);
         addWeapon(weapon: Weapon): number;
-        removeWeapon(weaponId: number): Weapon;
+        removeWeapon(weaponOrId: any): Weapon;
         getWeapon(weaponId: number): Weapon;
         getAllWeapons(): Weapon[];
         remove(animationDuration?: number): void;

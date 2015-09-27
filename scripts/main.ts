@@ -19,7 +19,10 @@ var assetsManifest = [
         { id: 'meteor1', path: 'png/meteors/meteorBrown_big1.png' },
         { id: 'meteor2', path: 'png/meteors/meteorBrown_big2.png' },
         { id: 'meteor3', path: 'png/meteors/meteorBrown_big3.png' },
-        { id: 'meteor4', path: 'png/meteors/meteorBrown_big4.png' }
+        { id: 'meteor4', path: 'png/meteors/meteorBrown_big4.png' },
+        { id: 'power_up_damage', path: 'png/power-ups/pill_yellow.png' },
+        { id: 'power_up_speed', path: 'png/power-ups/bolt_gold.png' },
+        { id: 'power_up_weapon', path: 'png/power-ups/star_gold.png' }
     ];
 var levelsManifest = [
         { id: 'level0', path: 'level0.json' }
@@ -37,15 +40,15 @@ module Main
 export const CANVAS_WIDTH = 768;
 export const CANVAS_HEIGHT = 700;
 
-
 var UNITS: Game.Container;
 var BULLETS: Game.Container;
-
-
-var PLAYER: Player;
-
+var POWER_UPS: Game.Container;
 
 var HEALTH_MENU: Game.Html.Value;
+
+var PLAYER: Player;
+var POWER_UP_SPAWN_COUNT = 0;
+var POWER_UP_SPAWN_RATE = 1;    // spawn a power up for every 'value' enemy kills
 
 
 export function init()
@@ -65,15 +68,16 @@ export function init()
     Game.addElement( background );
 
 
-        // will contain all the units/bullets
+        // will contain all the units/bullets/etc
     UNITS = new Game.Container();
     BULLETS = new Game.Container();
+    POWER_UPS = new Game.Container();
 
+    Game.addElement( POWER_UPS );
     Game.addElement( BULLETS );
     Game.addElement( UNITS );
 
-
-    Player.collidesWith = [ <any>EnemyLine, <any>EnemyFollow, <any>EnemyMeteor ];
+    Player.collidesWith = [ <any>EnemyLine, <any>EnemyFollow, <any>EnemyMeteor, <any>PowerUp ];
 
 
     start();
@@ -87,20 +91,34 @@ export function start()
             y: CANVAS_HEIGHT - 100,
             health: 100
         });
+    PLAYER.addEventListener( 'collision', playerCollisions );
+    Main.addUnit( PLAYER );
 
-    var singleWeapon = new WeaponSingle({
-            bulletContainer: BULLETS,
-            fireInterval: 0.5
-        });
-    var sideWeapon = new WeaponSide({
-            bulletContainer: BULLETS,
-            fireInterval: 0.5
-        });
 
-    PLAYER.addWeapon( singleWeapon );
-    PLAYER.addWeapon( sideWeapon );
+    Level.start( 0 );
+    updateStatusBar();
+    }
 
-    PLAYER.addEventListener( 'collision', function( data )
+
+function playerCollisions( data )
+    {
+    var player = data.element;
+    var element = data.collidedWith;
+    var bullet = data.bullet;
+
+        // collided with a power up
+    if ( element instanceof PowerUp )
+        {
+            // can't pick up power up with bullets
+        if ( !bullet )
+            {
+            player.addPowerUp( element.power_up );
+            element.remove();
+            }
+        }
+
+        // its an enemy
+    else
         {
             // hit an enemy with a bullet
         if ( data.bullet )
@@ -109,25 +127,32 @@ export function start()
             console.log( 'Hit!' );
             }
 
+            // collision with the enemy element
         else
             {
-            var survived = PLAYER.tookDamage( data.collidedWith.damage );
+            var survived = PLAYER.tookDamage( element.damage );
             updateStatusBar();
 
-                // game over
             if ( !survived )
                 {
                 gameOver();
                 }
             }
 
-        data.collidedWith.remove();
-        });
-    Main.addUnit( PLAYER );
+            // add a power-up after a certain number of enemy kills
+            // it spawns where the enemy died
+        POWER_UP_SPAWN_COUNT++;
 
+        if ( POWER_UP_SPAWN_COUNT >= POWER_UP_SPAWN_RATE )
+            {
+            POWER_UP_SPAWN_COUNT = 0;
 
-    Level.start( 0 );
-    updateStatusBar();
+            var powerUp = PowerUp.createRandom( element.x, element.y );
+            POWER_UPS.addChild( powerUp );
+            }
+
+        element.remove();
+        }
     }
 
 
@@ -140,6 +165,7 @@ function clear()
 
     UNITS.removeAllChildren();
     BULLETS.removeAllChildren();
+    POWER_UPS.removeAllChildren();
     }
 
 
