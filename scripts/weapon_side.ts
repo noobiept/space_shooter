@@ -11,7 +11,7 @@ class WeaponSide extends Game.Weapon
         var bullet = new Game.Bullet({
                 children: bulletShape,
                 angleOrTarget: -Math.PI / 2,
-                movementSpeed: 200
+                movementSpeed: 300
             });
         this.addBulletType( bullet );
         }

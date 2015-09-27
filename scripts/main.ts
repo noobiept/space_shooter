@@ -22,7 +22,8 @@ var assetsManifest = [
         { id: 'meteor4', path: 'png/meteors/meteorBrown_big4.png' },
         { id: 'power_up_damage', path: 'png/power-ups/pill_yellow.png' },
         { id: 'power_up_speed', path: 'png/power-ups/bolt_gold.png' },
-        { id: 'power_up_weapon', path: 'png/power-ups/star_gold.png' }
+        { id: 'power_up_weapon', path: 'png/power-ups/star_gold.png' },
+        { id: 'power_up_health', path: 'png/power-ups/shield_gold.png' }
     ];
 var levelsManifest = [
         { id: 'level0', path: 'level0.json' }
@@ -61,7 +62,7 @@ export function init()
             x: CANVAS_WIDTH / 2,
             y: CANVAS_HEIGHT / 2,
             image: Game.Preload.get( 'background' ),
-            direction: Game.ScrollingBitmapArgs.Direction.top,
+            direction: Game.ScrollingBitmapArgs.Direction.bottom,
             step: 1,
         interval: 0.1
         });
@@ -79,7 +80,6 @@ export function init()
 
     Player.collidesWith = [ <any>EnemyLine, <any>EnemyFollow, <any>EnemyMeteor, <any>PowerUp ];
 
-
     start();
     }
 
@@ -92,8 +92,9 @@ export function start()
             health: 100
         });
     PLAYER.addEventListener( 'collision', playerCollisions );
-    Main.addUnit( PLAYER );
+    PLAYER.addEventListener( 'health_change', updateStatusBar );
 
+    Main.addUnit( PLAYER );
 
     Level.start( 0 );
     updateStatusBar();
@@ -131,7 +132,6 @@ function playerCollisions( data )
         else
             {
             var survived = PLAYER.tookDamage( element.damage );
-            updateStatusBar();
 
             if ( !survived )
                 {

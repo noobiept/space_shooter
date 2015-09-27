@@ -3,9 +3,10 @@
 
 interface PlayerPowerUp
     {
-    duration: number;       // duration of the power up in seconds
+    duration?: number;      // duration of the power up in seconds
     count?: number;         // count until the duration
     speed?: number;         // speed increase
+    health?: number;        // health increase
     damage?: number;        // damage increase
     weapon?: Game.Weapon;   // extra weapon
     }
@@ -19,6 +20,11 @@ interface PlayerArgs
     }
 
 
+/**
+ * Added events:
+ *
+ * - `health_change` -- Whenever there's a change to the health of the player.
+ */
 class Player extends Game.Unit
     {
         // used for the diagonal directions
@@ -61,6 +67,7 @@ class Player extends Game.Unit
     tookDamage( damage: number )
         {
         this.health -= damage;
+        this.dispatchEvent( 'health_change' );
 
         if ( this.health > 0 )
             {
@@ -219,8 +226,6 @@ class Player extends Game.Unit
 
     addPowerUp( powerUp: PlayerPowerUp )
         {
-        powerUp.count = 0;
-
         if ( powerUp.damage )
             {
             this.setDamage( this.damage + powerUp.damage );
@@ -236,7 +241,18 @@ class Player extends Game.Unit
             this.addWeapon( powerUp.weapon );
             }
 
-        this._power_ups.push( powerUp );
+        if ( powerUp.health )
+            {
+            this.health += powerUp.health;
+            this.dispatchEvent( 'health_change' );
+            }
+
+            // the power up will be removed after the duration has passed
+        if ( powerUp.duration )
+            {
+            powerUp.count = 0;
+            this._power_ups.push( powerUp );
+            }
         }
 
 
