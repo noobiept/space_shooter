@@ -10,7 +10,10 @@ var preload = new Game.Preload({
 var assetsManifest = [
         { id: 'background', path: 'backgrounds/darkPurple.png' },
         { id: 'player', path: 'png/playerShip1_blue.png' },
-        { id: 'laser1', path: 'png/lasers/laserBlue01.png' },
+        { id: 'laser1-blue', path: 'png/lasers/laserBlue01.png' },
+        { id: 'laser1-red', path: 'png/lasers/laserRed01.png' },
+        { id: 'laser3-blue', path: 'png/lasers/laserBlue03.png' },
+        { id: 'laser3-red', path: 'png/lasers/laserRed03.png' },
         { id: 'enemy1', path: 'png/enemies/enemyRed1.png' },
         { id: 'enemy2', path: 'png/enemies/enemyRed2.png' },
         { id: 'enemy3', path: 'png/enemies/enemyRed3.png' },
@@ -81,6 +84,7 @@ export function init()
     Game.addElement( UNITS );
 
     Player.collidesWith = [ <any>EnemyLine, <any>EnemyFollow, <any>EnemyMeteor, <any>PowerUp ];
+    EnemyLine.collidesWith = [ <any>Player ];
 
     start();
     }

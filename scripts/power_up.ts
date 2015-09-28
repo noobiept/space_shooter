@@ -56,7 +56,7 @@ class PowerUp extends Game.Unit
 
 module PowerUp
     {
-    var ALL = [ damage, speed, health, sideWeapon ];
+    var ALL = [ damage, speed, health, sideWeapon, aroundWeapon ];
 
 
     export function createRandom( x: number, y: number )
@@ -102,13 +102,29 @@ module PowerUp
         {
         var sideWeapon = new WeaponSide({
                 bulletContainer: Main.getBulletContainer(),
-                fireInterval: 0.5
+                fireInterval: 0.5,
+                imageId: 'laser1-blue'
             });
 
         return {
                 imageId: 'power_up_weapon',
                 duration: 5,
                 weapon: sideWeapon
+            };
+        }
+
+    function aroundWeapon()
+        {
+        var aroundWeapon = new WeaponAround({
+                bulletContainer: Main.getBulletContainer(),
+                fireInterval: 2,
+                imageId: 'laser3-blue'
+            });
+
+        return {
+                imageId: 'power_up_weapon',
+                duration: 10,
+                weapon: aroundWeapon
             };
         }
     }

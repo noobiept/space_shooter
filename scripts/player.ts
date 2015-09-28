@@ -56,7 +56,8 @@ class Player extends Game.Unit
 
         var singleWeapon = new WeaponSingle({
                 bulletContainer: Main.getBulletContainer(),
-                fireInterval: 0.5
+                fireInterval: 0.5,
+                imageId: 'laser1-blue'
             });
         this.addWeapon( singleWeapon );
 

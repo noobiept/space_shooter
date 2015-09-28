@@ -1,12 +1,17 @@
+interface WeaponSideArgs extends Game.WeaponArgs
+    {
+    imageId: string;
+    }
+
 class WeaponSide extends Game.Weapon
     {
-    constructor( args )
+    constructor( args: WeaponSideArgs )
         {
         super( args );
 
             // add other bullet shapes
         var bulletShape = new Game.Bitmap({
-                image: Game.Preload.get( 'laser1' )
+                image: Game.Preload.get( args.imageId )
             });
         var bullet = new Game.Bullet({
                 children: bulletShape,
