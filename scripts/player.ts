@@ -35,6 +35,8 @@ class Player extends Game.Unit
     _power_ups: PlayerPowerUp[];
     damage: number;
 
+    rotated_half_width: number;
+    rotated_half_height: number;
 
     constructor( args: PlayerArgs )
         {
@@ -59,6 +61,15 @@ class Player extends Game.Unit
         this.addWeapon( singleWeapon );
 
         this.setDamage( 10 );
+
+            // calculate the rotated half width/height
+            // since the player won't be rotated later on, we don't need to calculate this after
+        this.updateVertices( 0, 0, 1, 1, 0 );
+
+        var rect = this.toAxisAligned();
+
+        this.rotated_half_width = (rect.maxX - rect.minX) / 2;
+        this.rotated_half_height = (rect.maxY - rect.minY) / 2;
         }
 
 
@@ -185,24 +196,24 @@ class Player extends Game.Unit
 
 
             // make sure the player doesn't get out of the canvas bounds
-        if ( nextX - this._half_width < 0 )
+        if ( nextX - this.rotated_half_width < 0 )
             {
-            nextX = this._half_width;
+            nextX = this.rotated_half_width;
             }
 
-        else if ( nextX + this._half_width > Main.CANVAS_WIDTH )
+        else if ( nextX + this.rotated_half_width > Main.CANVAS_WIDTH )
             {
-            nextX = Main.CANVAS_WIDTH - this._half_width;
+            nextX = Main.CANVAS_WIDTH - this.rotated_half_width;
             }
 
-        if ( nextY - this._half_height < 0 )
+        if ( nextY - this.rotated_half_height < 0 )
             {
-            nextY = this._half_height;
+            nextY = this.rotated_half_height;
             }
 
-        else if ( nextY + this._half_height > Main.CANVAS_HEIGHT )
+        else if ( nextY + this.rotated_half_height > Main.CANVAS_HEIGHT )
             {
-            nextY = Main.CANVAS_HEIGHT - this._half_height;
+            nextY = Main.CANVAS_HEIGHT - this.rotated_half_height;
             }
 
         this.x = nextX;

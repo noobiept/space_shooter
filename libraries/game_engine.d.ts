@@ -176,6 +176,12 @@ declare module Game {
         setWidth(width: number): void;
         setHeight(height: number): void;
         setDimensions(width: number, height: number): void;
+        toAxisAligned(): {
+            minX: number;
+            maxX: number;
+            minY: number;
+            maxY: number;
+        };
         rotation: number;
         rotate(angle: number, degrees?: boolean): void;
         remove(): void;
@@ -218,6 +224,12 @@ declare module Game {
         intersect(x: number, y: number): any[];
         mouseClickEvents(x: any, y: any, event: any): boolean;
         calculateDimensions(): void;
+        toAxisAligned(): {
+            minX: number;
+            maxX: number;
+            minY: number;
+            maxY: number;
+        };
         logic(deltaTime: number): void;
         updateVertices(x: any, y: any, scaleX: any, scaleY: any, rotation: any): void;
         getVertices(): any[];
@@ -266,6 +278,48 @@ declare module Game {
     }
 }
 declare module Game {
+    enum TweenAction {
+        properties = 0,
+        wait = 1,
+        call = 2,
+    }
+    interface TweenStep {
+        action: TweenAction;
+        duration?: number;
+        end_properties?: Object;
+        ease?: (value: number) => number;
+        callback?: () => any;
+    }
+    class Tween {
+        static _tweens: Tween[];
+        protected _element: Object;
+        protected _steps: TweenStep[];
+        protected _current_step: TweenStep;
+        protected _start_properties: Object;
+        protected _count: number;
+        protected _update: (delta: number) => any;
+        constructor(element: Object);
+        start(): void;
+        to(properties: Object, duration: number, ease?: (value: number) => number): Tween;
+        wait(duration: number): Tween;
+        call(callback: () => any): Tween;
+        remove(): void;
+        nextStep(): void;
+        protected waitUpdate(deltaTime: number): void;
+        protected propertiesUpdate(deltaTime: any): void;
+        static getTween(element: Object): Tween;
+        static removeTweens(element: Object): void;
+        static removeAll(): void;
+        static update(deltaTime: number): void;
+    }
+    module Tween {
+        module Ease {
+            function linear(value: number): number;
+            function quadraticIn(value: number): number;
+        }
+    }
+}
+declare module Game {
     function init(htmlContainer: HTMLElement, canvasWidth: number, canvasHeight: number): void;
     function startGameLoop(): void;
     function stopGameLoop(): void;
@@ -275,6 +329,7 @@ declare module Game {
     function addCanvas(canvas: Game.Canvas, position?: number): number;
     function addElement(element: Element | Element[], id?: number): void;
     function removeElement(element: Element | Element[]): boolean;
+    function safeRemove(args: any): void;
     function addToGameLoop(callback: () => any, delay: number, isInterval?: boolean): boolean;
     function removeFromGameLoop(callback: () => any): boolean;
     function removeAllCallbacks(): void;
@@ -417,48 +472,6 @@ declare module Game {
         constructor(args: RectangleArgs);
         drawElement(ctx: CanvasRenderingContext2D): void;
         clone(): Rectangle;
-    }
-}
-declare module Game {
-    enum TweenAction {
-        properties = 0,
-        wait = 1,
-        call = 2,
-    }
-    interface TweenStep {
-        action: TweenAction;
-        duration?: number;
-        end_properties?: Object;
-        ease?: (value: number) => number;
-        callback?: () => any;
-    }
-    class Tween {
-        static _tweens: Tween[];
-        protected _element: Object;
-        protected _steps: TweenStep[];
-        protected _current_step: TweenStep;
-        protected _start_properties: Object;
-        protected _count: number;
-        protected _update: (delta: number) => any;
-        constructor(element: Object);
-        start(): void;
-        to(properties: Object, duration: number, ease?: (value: number) => number): Tween;
-        wait(duration: number): Tween;
-        call(callback: () => any): Tween;
-        remove(): void;
-        nextStep(): void;
-        protected waitUpdate(deltaTime: number): void;
-        protected propertiesUpdate(deltaTime: any): void;
-        static getTween(element: Object): Tween;
-        static removeTweens(element: Object): void;
-        static removeAll(): void;
-        static update(deltaTime: number): void;
-    }
-    module Tween {
-        module Ease {
-            function linear(value: number): number;
-            function quadraticIn(value: number): number;
-        }
     }
 }
 declare module Game {
