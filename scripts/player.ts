@@ -1,22 +1,16 @@
 /// <reference path="../libraries/game_engine.d.ts" />
 
-
-interface PlayerPowerUp
-    {
-    duration?: number;      // duration of the power up in seconds
-    count?: number;         // count until the duration
-    speed?: number;         // speed increase
-    health?: number;        // health increase
-    damage?: number;        // damage increase
-    weapon?: Game.Weapon;   // extra weapon
-    }
-
-
 interface PlayerArgs
     {
     x: number;
     y: number;
     health: number;
+    }
+
+interface PlayerPowerUpInfo extends PowerUpInfo
+    {
+    count?: number;         // count until the duration
+    weapon?: Game.Weapon;   // reference to the weapon object
     }
 
 
@@ -32,7 +26,7 @@ class Player extends Game.Unit
         // used for the diagonal directions
         // Math.cos() has the same value as Math.sin()
     static _trig_pi_4 = Math.cos( Math.PI / 4 );
-    _power_ups: PlayerPowerUp[];
+    _power_ups: PlayerPowerUpInfo[];
     damage: number;
 
     rotated_half_width: number;
@@ -238,8 +232,19 @@ class Player extends Game.Unit
         }
 
 
-    addPowerUp( powerUp: PlayerPowerUp )
+    addPowerUp( powerUp: PlayerPowerUpInfo )
         {
+            // check if there's a power-up of the same type already
+            // if there is, increase its duration
+        var existingPowerUp = this.powerUpExists( powerUp );
+
+        if ( existingPowerUp )
+            {
+            existingPowerUp.duration += powerUp.duration;
+            return;
+            }
+
+
         if ( powerUp.damage )
             {
             this.setDamage( this.damage + powerUp.damage );
@@ -252,9 +257,12 @@ class Player extends Game.Unit
             this.dispatchEvent( 'speed_change' );
             }
 
-        if ( powerUp.weapon )
+        if ( powerUp.weaponClass )
             {
-            this.addWeapon( powerUp.weapon );
+            var weapon = new powerUp.weaponClass( powerUp.weaponArgs );
+            powerUp.weapon = weapon;
+
+            this.addWeapon( weapon );
             }
 
         if ( powerUp.health )
@@ -272,7 +280,7 @@ class Player extends Game.Unit
         }
 
 
-    removePowerUp( powerUp: PlayerPowerUp )
+    removePowerUp( powerUp: PlayerPowerUpInfo )
         {
         if ( powerUp.damage )
             {
@@ -295,5 +303,25 @@ class Player extends Game.Unit
         var index = this._power_ups.indexOf( powerUp );
 
         this._power_ups.splice( index, 1 );
+        }
+
+
+    /**
+     * Check if there's an power-up of the same type already active.
+     * Return it if found.
+     */
+    powerUpExists( powerUp: PowerUpInfo )
+        {
+        for (var a = this._power_ups.length - 1 ; a >= 0 ; a--)
+            {
+            var existingPowerUp = this._power_ups[ a ];
+
+            if ( existingPowerUp.type === powerUp.type )
+                {
+                return existingPowerUp;
+                }
+            }
+
+        return null;
         }
     }

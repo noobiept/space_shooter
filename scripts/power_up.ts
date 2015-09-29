@@ -1,14 +1,31 @@
+enum PowerUpType
+    {
+    damage, speed, health,
+    sideWeapon, aroundWeapon, semiCircleWeapon
+    }
+
+interface PowerUpInfo
+    {
+    type: PowerUpType;
+    imageId: string;        // image used by the power up element
+    duration?: number;      // duration of the power up in seconds
+    speed?: number;         // speed increase
+    health?: number;        // health increase
+    damage?: number;        // damage increase
+    weaponClass?: new (args:WeaponArgs) => Game.Weapon;   // extra weapon
+    weaponArgs?: WeaponArgs;
+    }
+
 interface PowerUpArgs
     {
     x: number;
     y: number;
-    powerUp: PlayerPowerUp;
-    imageId: string;
+    powerUp: PowerUpInfo;
     }
 
 class PowerUp extends Game.Unit
     {
-    power_up: PlayerPowerUp;
+    power_up: PowerUpInfo;
     _rotate_count: number;
     _rotate_interval: number;   // rotate the element in this interval
     _duration: number;
@@ -17,7 +34,7 @@ class PowerUp extends Game.Unit
     constructor( args: PowerUpArgs )
         {
         var shape = new Game.Bitmap({
-                image: Game.Preload.get( args.imageId )
+                image: Game.Preload.get( args.powerUp.imageId )
             });
 
         super({
@@ -54,6 +71,7 @@ class PowerUp extends Game.Unit
         }
     }
 
+
 module PowerUp
     {
     var ALL = [ damage, speed, health, sideWeapon, aroundWeapon, semiCircleWeapon ];
@@ -67,79 +85,81 @@ module PowerUp
         return new PowerUp({
                 x: x,
                 y: y,
-                powerUp: <PlayerPowerUp>powerUp,
-                imageId: powerUp.imageId
+                powerUp: powerUp
             });
         }
 
-    function damage()
+    function damage(): PowerUpInfo
         {
         return {
+                type: PowerUpType.damage,
                 imageId: 'power_up_damage',
                 duration: 5,
-                damage: 10
+                damage: 20
             };
         }
 
-    function speed()
+    function speed(): PowerUpInfo
         {
         return {
+                type: PowerUpType.speed,
                 imageId: 'power_up_speed',
                 duration: 5,
-                speed: 50
+                speed: 100
             };
         }
 
-    function health()
+    function health(): PowerUpInfo
         {
         return {
+                type: PowerUpType.health,
                 imageId: 'power_up_health',
                 health: 25
             };
         }
 
-    function sideWeapon()
+    function sideWeapon(): PowerUpInfo
         {
-        var sideWeapon = new WeaponSide({
-                bulletContainer: Main.getBulletContainer(),
-                fireInterval: 0.5,
-                imageId: 'laser1-blue'
-            });
-
         return {
+                type: PowerUpType.sideWeapon,
                 imageId: 'power_up_weapon',
                 duration: 5,
-                weapon: sideWeapon
+                weaponClass: WeaponSide,
+                weaponArgs: {
+                    bulletContainer: Main.getBulletContainer(),
+                    fireInterval: 0.5,
+                    imageId: 'laser1-blue'
+                }
             };
         }
 
-    function aroundWeapon()
+    function aroundWeapon(): PowerUpInfo
         {
-        var aroundWeapon = new WeaponAround({
-                bulletContainer: Main.getBulletContainer(),
-                fireInterval: 2,
-                imageId: 'laser3-blue'
-            });
-
         return {
+                type: PowerUpType.aroundWeapon,
                 imageId: 'power_up_weapon',
-                duration: 10,
-                weapon: aroundWeapon
+                duration: 5,
+                weaponClass: WeaponAround,
+                weaponArgs: {
+                    bulletContainer: Main.getBulletContainer(),
+                    fireInterval: 2,
+                    imageId: 'laser3-blue'
+                }
             };
         }
 
-    function semiCircleWeapon()
+    function semiCircleWeapon(): PowerUpInfo
         {
-        var weapon = new WeaponSemiCircle({
-                bulletContainer: Main.getBulletContainer(),
-                fireInterval: 1.5,
-                imageId: 'laser2-blue'
-            });
-
         return {
+                type: PowerUpType.semiCircleWeapon,
                 imageId: 'power_up_weapon',
-                duration: 10,
-                weapon: weapon
+                duration: 5,
+                weaponClass: WeaponSemiCircle,
+                weaponArgs: {
+                    bulletContainer: Main.getBulletContainer(),
+                    fireInterval: 1.5,
+                    imageId: 'laser2-blue'
+                }
             };
         }
     }
