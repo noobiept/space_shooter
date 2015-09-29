@@ -11,8 +11,10 @@ var assetsManifest = [
         { id: 'background', path: 'backgrounds/darkPurple.png' },
         { id: 'player', path: 'png/playerShip1_blue.png' },
         { id: 'laser1-blue', path: 'png/lasers/laserBlue01.png' },
-        { id: 'laser1-red', path: 'png/lasers/laserRed01.png' },
+        { id: 'laser2-blue', path: 'png/lasers/laserBlue02.png' },
         { id: 'laser3-blue', path: 'png/lasers/laserBlue03.png' },
+        { id: 'laser1-red', path: 'png/lasers/laserRed01.png' },
+        { id: 'laser2-red', path: 'png/lasers/laserRed02.png' },
         { id: 'laser3-red', path: 'png/lasers/laserRed03.png' },
         { id: 'enemy1', path: 'png/enemies/enemyRed1.png' },
         { id: 'enemy2', path: 'png/enemies/enemyRed2.png' },
@@ -37,6 +39,12 @@ preload.addEventListener( 'complete', Main.init );
 preload.loadManifest( assetsManifest, '../assets/' );
 preload.loadManifest( levelsManifest, '../levels/' );
 });
+
+
+interface WeaponArgs extends Game.WeaponArgs
+    {
+    imageId: string;
+    }
 
 
 module Main
@@ -83,8 +91,9 @@ export function init()
     Game.addElement( BULLETS );
     Game.addElement( UNITS );
 
-    Player.collidesWith = [ <any>EnemyLine, <any>EnemyFollow, <any>EnemyMeteor, <any>PowerUp ];
+    Player.collidesWith = [ <any>EnemyTop, <any>EnemyLine, <any>EnemyFollow, <any>EnemyMeteor, <any>PowerUp ];
     EnemyLine.collidesWith = [ <any>Player ];
+    EnemyTop.collidesWith = [ <any>Player ];
 
     start();
     }
@@ -123,7 +132,7 @@ function playerCollisions( data )
         if ( !bullet )
             {
             player.addPowerUp( element.power_up );
-            element.remove();
+            Game.safeRemove( element );
             }
         }
 
@@ -133,7 +142,7 @@ function playerCollisions( data )
             // hit an enemy with a bullet
         if ( data.bullet )
             {
-            data.bullet.remove();
+            Game.safeRemove( data.bullet );
             survived = element.tookDamage( player.damage );
 
             if ( !survived )
@@ -151,12 +160,27 @@ function playerCollisions( data )
             spawnPowerUp( element.x, element.y );
 
                 // enemy is removed regardless of what health he may have
-            element.remove();
+            Game.safeRemove( element );
 
             if ( !survived )
                 {
                 gameOver();
                 }
+            }
+        }
+    }
+
+
+export function enemyBulletCollisions( data )
+    {
+    if ( data.bullet )
+        {
+        Game.safeRemove( data.bullet );
+        var survived = data.collidedWith.tookDamage( data.element.damage );
+
+        if ( !survived )
+            {
+            gameOver();
             }
         }
     }

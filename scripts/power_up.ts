@@ -46,7 +46,7 @@ class PowerUp extends Game.Unit
 
         if ( this._duration_count >= this._duration )
             {
-            this.remove();
+            Game.safeRemove( this );
             return;
             }
 
@@ -56,7 +56,7 @@ class PowerUp extends Game.Unit
 
 module PowerUp
     {
-    var ALL = [ damage, speed, health, sideWeapon, aroundWeapon ];
+    var ALL = [ damage, speed, health, sideWeapon, aroundWeapon, semiCircleWeapon ];
 
 
     export function createRandom( x: number, y: number )
@@ -125,6 +125,21 @@ module PowerUp
                 imageId: 'power_up_weapon',
                 duration: 10,
                 weapon: aroundWeapon
+            };
+        }
+
+    function semiCircleWeapon()
+        {
+        var weapon = new WeaponSemiCircle({
+                bulletContainer: Main.getBulletContainer(),
+                fireInterval: 1.5,
+                imageId: 'laser2-blue'
+            });
+
+        return {
+                imageId: 'power_up_weapon',
+                duration: 10,
+                weapon: weapon
             };
         }
     }

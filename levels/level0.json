@@ -19,6 +19,10 @@
         {
             "className": "EnemyMeteor",
             "time": 6
+        },
+        {
+            "className": "EnemyTop",
+            "time": 7
         }
     ]
 }

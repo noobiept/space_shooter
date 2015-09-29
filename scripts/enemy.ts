@@ -42,7 +42,7 @@ class Enemy extends Game.Unit
 
         if ( this.health <= 0 )
             {
-            this.remove();
+            Game.safeRemove( this );
             return false;
             }
 
@@ -57,7 +57,7 @@ class Enemy extends Game.Unit
             // if it is, then we'll remove the unit
         if ( !Game.getCanvas().isInCanvas( this.x, this.y ) )
             {
-            this.remove();
+            Game.safeRemove( this );
             }
         }
     }

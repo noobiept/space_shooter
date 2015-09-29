@@ -13,17 +13,10 @@ class EnemyLine extends Enemy
                 bulletContainer: Main.getBulletContainer(),
                 imageId: 'laser1-red'
             });
-        weapon.forceFire( Math.PI / 2, 0, 2 );
+        weapon.forceFire( Math.PI / 2, 1, 2 );
 
         this.addWeapon( weapon );
-        this.addEventListener( 'collision', function( data )
-            {
-            if ( data.bullet )
-                {
-                data.collidedWith.tookDamage( data.element.damage );
-                data.bullet.remove();
-                }
-            });
+        this.addEventListener( 'collision', Main.enemyBulletCollisions );
         this.moveTo( args.x, Main.CANVAS_HEIGHT + this._half_height );
         }
     }

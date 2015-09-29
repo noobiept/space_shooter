@@ -1,11 +1,6 @@
-interface WeaponSideArgs extends Game.WeaponArgs
-    {
-    imageId: string;
-    }
-
 class WeaponSide extends Game.Weapon
     {
-    constructor( args: WeaponSideArgs )
+    constructor( args: WeaponArgs )
         {
         super( args );
 
