@@ -289,7 +289,8 @@ function restart()
 
 function gameOver()
     {
-    console.log( 'Game Over!' );
-    restart();
+        // this might get called in the middle of a logic function, so can't start clearing the elements just yet
+        // do it at the start of the next game loop
+    Game.addToGameLoop( restart, 0, false );
     }
 }

@@ -28,8 +28,10 @@ class PowerUp extends Game.Unit
     power_up: PowerUpInfo;
     _rotate_count: number;
     _rotate_interval: number;   // rotate the element in this interval
-    _duration: number;
-    _duration_count: number;    // remove the element after this duration has passed
+    _duration_count: number;
+    _duration: number;          // remove the element after this duration has passed
+    _blink_count: number;
+    _blink_interval: number;     // blink the shape in the last seconds (to tell its close to being removed)
 
     constructor( args: PowerUpArgs )
         {
@@ -40,6 +42,7 @@ class PowerUp extends Game.Unit
         super({
                 x: args.x,
                 y: args.y,
+                movementSpeed: 50,
                 children: shape
             });
 
@@ -48,6 +51,10 @@ class PowerUp extends Game.Unit
         this._rotate_interval = 0.8;
         this._duration_count = 0;
         this._duration = 6;
+        this._blink_count = 0;
+        this._blink_interval = 0.5;
+
+        this.moveTo( args.x, Main.CANVAS_HEIGHT );
         }
 
     logic( deltaTime: number )
@@ -59,6 +66,18 @@ class PowerUp extends Game.Unit
             {
             this._rotate_count = 0;
             this.rotation += Math.PI / 24;
+            }
+
+            // blink the shape in the last 3 seconds
+        if ( this._duration_count >= this._duration - 3 )
+            {
+            this._blink_count += deltaTime;
+
+            if ( this._blink_count >= this._blink_interval )
+                {
+                this._blink_count = 0;
+                this.visible = !this.visible;
+                }
             }
 
         if ( this._duration_count >= this._duration )

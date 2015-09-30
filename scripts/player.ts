@@ -297,7 +297,7 @@ class Player extends Game.Unit
         if ( powerUp.weapon )
             {
             var weapon = this.removeWeapon( powerUp.weapon );
-            weapon.remove();
+            Game.safeRemove( weapon );
             }
 
         var index = this._power_ups.indexOf( powerUp );
