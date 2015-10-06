@@ -15,6 +15,8 @@ Assets
 
 - http://opengameart.org/content/space-shooter-redux
     - license: Public Domain
+- http://opengameart.org/content/a-walk-in-the-sky-2-loop
+    - license: Creative Commons Attribution
     
     
 Build

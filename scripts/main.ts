@@ -28,14 +28,36 @@ var assetsManifest = [
         { id: 'power_up_damage', path: 'png/power-ups/pill_yellow.png' },
         { id: 'power_up_speed', path: 'png/power-ups/bolt_gold.png' },
         { id: 'power_up_weapon', path: 'png/power-ups/star_gold.png' },
-        { id: 'power_up_health', path: 'png/power-ups/shield_gold.png' }
+        { id: 'power_up_health', path: 'png/power-ups/shield_gold.png' },
+        { id: 'laser_sound', path: 'sounds/sfx_laser1.ogg' },
+        { id: 'music', path: 'sounds/walk_in_the_sky_2.ogg' }
     ];
 var levelsManifest = [
         { id: 'level0', path: 'level0.json' }
     ];
 
 
-preload.addEventListener( 'complete', Main.init );
+    // need to initialize the sound now, otherwise the preloaded sounds won't be decoded
+Game.Sound.init();
+
+    // add a loading message with the current progress of the assets pre-loading
+var loading = document.createElement( 'div' );
+loading.id = 'Loading';
+loading.innerHTML = 'Loading..';
+
+document.body.appendChild( loading );
+
+
+preload.addEventListener( 'progress', function( progress )
+    {
+    loading.innerHTML = 'Loading.. ' + progress + '%';
+    });
+preload.addEventListener( 'complete', function()
+    {
+    document.body.removeChild( loading );
+
+    Main.init();
+    });
 preload.loadManifest( assetsManifest, '../assets/' );
 preload.loadManifest( levelsManifest, '../levels/' );
 });
@@ -102,6 +124,8 @@ export function init()
     Game.addElement( POWER_UPS );
     Game.addElement( BULLETS );
     Game.addElement( UNITS );
+
+    Game.Sound.play( Game.Preload.get( 'music' ), true );
 
     start();
     }

@@ -17,6 +17,15 @@ body
     color: rgb(133, 184, 230);
     }
 
+#Loading
+    {
+    color: white;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    }
+
 
     /* ---- Menu ---- */
 

@@ -123,10 +123,19 @@ class Player extends Game.Bitmap
         if ( keysHeld.space )
             {
             var weapons = this._weapons;
+            var fired = false;
 
             for (var a = weapons.length - 1 ; a >= 0 ; a--)
                 {
-                weapons[ a ].fire( -Math.PI / 2 );
+                if ( weapons[ a ].fire( -Math.PI / 2 ) )
+                    {
+                    fired = true;
+                    }
+                }
+
+            if ( fired )
+                {
+                Game.Sound.play( Game.Preload.get( 'laser_sound' ) );
                 }
             }
         }
