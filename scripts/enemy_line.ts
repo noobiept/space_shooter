@@ -16,6 +16,6 @@ class EnemyLine extends Enemy
             });
         this.weapon.forceFire( Math.PI / 2, 1, 2 );
 
-        this.movement.moveTo( args.x, Main.CANVAS_HEIGHT + this._half_height );
+        this.movement.moveTo( args.x, Main.CANVAS_HEIGHT + this.half_height );
         }
     }

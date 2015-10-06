@@ -48,6 +48,7 @@ class PowerUp extends Game.Bitmap
                 movementSpeed: 50
             });
 
+        this._has_logic = true;
         this.power_up = args.powerUp;
         this._rotate_count = 0;
         this._rotate_interval = 0.8;
@@ -61,6 +62,10 @@ class PowerUp extends Game.Bitmap
 
     logic( deltaTime: number )
         {
+        super.logic( deltaTime );
+
+        this.movement.logic( deltaTime );
+
         this._rotate_count += deltaTime;
         this._duration_count += deltaTime;
 
@@ -85,10 +90,7 @@ class PowerUp extends Game.Bitmap
         if ( this._duration_count >= this._duration )
             {
             Game.safeRemove( this );
-            return;
             }
-
-        super.logic( deltaTime );
         }
     }
 
@@ -115,7 +117,7 @@ module PowerUp
         return {
                 type: PowerUpType.damage,
                 imageId: 'power_up_damage',
-                duration: 5,
+                duration: 10,
                 damage: 20
             };
         }
@@ -125,7 +127,7 @@ module PowerUp
         return {
                 type: PowerUpType.speed,
                 imageId: 'power_up_speed',
-                duration: 5,
+                duration: 10,
                 speed: 100
             };
         }
@@ -144,7 +146,7 @@ module PowerUp
         return {
                 type: PowerUpType.sideWeapon,
                 imageId: 'power_up_weapon',
-                duration: 5,
+                duration: 10,
                 weaponClass: WeaponSide,
                 weaponArgs: {
                     element: null,
@@ -160,12 +162,12 @@ module PowerUp
         return {
                 type: PowerUpType.aroundWeapon,
                 imageId: 'power_up_weapon',
-                duration: 5,
+                duration: 10,
                 weaponClass: WeaponAround,
                 weaponArgs: {
                     element: null,
                     bulletContainer: Main.getBulletContainer(),
-                    fireInterval: 2,
+                    fireInterval: 1.5,
                     imageId: 'laser3-blue'
                 }
             };
@@ -176,7 +178,7 @@ module PowerUp
         return {
                 type: PowerUpType.semiCircleWeapon,
                 imageId: 'power_up_weapon',
-                duration: 5,
+                duration: 10,
                 weaponClass: WeaponSemiCircle,
                 weaponArgs: {
                     element: null,

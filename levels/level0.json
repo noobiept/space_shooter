@@ -9,20 +9,24 @@
             "time": 3
         },
         {
-            "className": "EnemyFollow",
+            "className": "EnemyAround",
             "time": 4
         },
         {
-            "className": "EnemyLine",
+            "className": "EnemyFollow",
             "time": 5
         },
         {
-            "className": "EnemyMeteor",
+            "className": "EnemyLine",
             "time": 6
         },
         {
-            "className": "EnemyTop",
+            "className": "EnemyMeteor",
             "time": 7
+        },
+        {
+            "className": "EnemyTop",
+            "time": 8
         }
     ]
 }
