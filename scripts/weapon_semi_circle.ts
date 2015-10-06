@@ -17,6 +17,7 @@ class WeaponSemiCircle extends Game.Weapon
         this.addBulletType( bullet );
 
         this._bullet_queue = [];
+        this.damage = 10;
         }
 
 

@@ -14,6 +14,7 @@ class WeaponSingle extends Game.Weapon
                 movementSpeed: 300
             });
         this.addBulletType( bullet );
+        this.damage = 10;
         }
 
 

@@ -426,10 +426,13 @@ declare module Game {
 declare module Game {
     interface BulletArgs extends ContainerArgs {
         angleOrTarget?: number | Element;
+        damage?: number;
         movementSpeed: number;
     }
     class Bullet extends Container {
         movement: Movement;
+        damage: number;
+        element: Element;
         constructor(args: BulletArgs);
         setAngle(angle: number): void;
         setTarget(target: Element): void;

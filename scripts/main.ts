@@ -122,36 +122,37 @@ export function start()
 function playerCollisions( data )
     {
     var player = data.element;
-    var element = data.collidedWith;
+    var collidedWith = data.collidedWith;
     var bullet = data.bullet;
     var survived;
 
         // collided with a power up
-    if ( element instanceof PowerUp )
+    if ( collidedWith instanceof PowerUp )
         {
             // can't pick up power up with bullets
         if ( !bullet )
             {
-            player.addPowerUp( element.power_up );
-            Game.safeRemove( element );
+            player.addPowerUp( collidedWith.power_up );
+            Game.safeRemove( collidedWith );
             }
         }
 
         // collided with an enemy bullet
-    else if ( element instanceof Game.Bullet )
+    else if ( collidedWith instanceof Game.Bullet )
         {
             // hit with a bullet
             // just remove both bullets
-        if ( data.bullet )
+        if ( bullet )
             {
-            Game.safeRemove( element );
-            Game.safeRemove( data.bullet );
+            Game.safeRemove( collidedWith );
+            Game.safeRemove( bullet );
             }
 
             // take damage from enemy bullet
         else
             {
-            survived = player.tookDamage( 1 ); //HERE need the damage from the bullet
+            survived = player.tookDamage( collidedWith.damage );
+            Game.safeRemove( collidedWith );
 
             if ( !survived )
                 {
@@ -167,11 +168,11 @@ function playerCollisions( data )
         if ( data.bullet )
             {
             Game.safeRemove( data.bullet );
-            survived = element.tookDamage( player.damage );
+            survived = collidedWith.tookDamage( player.damage );
 
             if ( !survived )
                 {
-                spawnPowerUp( element.x, element.y );
+                spawnPowerUp( collidedWith.x, collidedWith.y );
                 }
             }
 
@@ -179,12 +180,12 @@ function playerCollisions( data )
         else
             {
                 // takes double damage if collided directly with the enemy
-            survived = PLAYER.tookDamage( element.damage * 2 );
+            survived = PLAYER.tookDamage( collidedWith.damage * 2 );
 
-            spawnPowerUp( element.x, element.y );
+            spawnPowerUp( collidedWith.x, collidedWith.y );
 
                 // enemy is removed regardless of what health he may have
-            Game.safeRemove( element );
+            Game.safeRemove( collidedWith );
 
             if ( !survived )
                 {

@@ -12,6 +12,7 @@ class WeaponAround extends Game.Weapon
                 movementSpeed: 250
             });
         this.addBulletType( bullet );
+        this.damage = 10;
         }
 
 
