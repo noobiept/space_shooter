@@ -9,14 +9,13 @@ class EnemyLine extends Enemy
 
         super( args );
 
-        var weapon = new WeaponSingle({
+        this.weapon = new WeaponSingle({
+                element: this,
                 bulletContainer: Main.getBulletContainer(),
                 imageId: 'laser1-red'
             });
-        weapon.forceFire( Math.PI / 2, 1, 2 );
+        this.weapon.forceFire( Math.PI / 2, 1, 2 );
 
-        this.addWeapon( weapon );
-        this.addEventListener( 'collision', Main.enemyBulletCollisions );
-        this.moveTo( args.x, Main.CANVAS_HEIGHT + this._half_height );
+        this.movement.moveTo( args.x, Main.CANVAS_HEIGHT + this._half_height );
         }
     }

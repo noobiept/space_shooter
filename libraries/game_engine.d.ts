@@ -139,101 +139,73 @@ declare module Game {
     }
 }
 declare module Game {
-    interface ElementArgs extends EventDispatcherArgs {
-        x?: number;
-        y?: number;
-    }
-    class Element extends EventDispatcher {
-        x: number;
-        y: number;
-        vertices: CollisionDetection.Vertices;
-        opacity: number;
-        visible: boolean;
-        scaleX: number;
-        scaleY: number;
-        column: number;
-        line: number;
-        _width: number;
-        _height: number;
-        _half_width: number;
-        _half_height: number;
-        _rotation: number;
-        _container: Container;
-        _has_logic: boolean;
-        protected _removed: boolean;
-        constructor(args?: ElementArgs);
-        drawElement(ctx: CanvasRenderingContext2D): void;
-        draw(ctx: CanvasRenderingContext2D): void;
-        logic(deltaTime: number): void;
-        intersect(refX: number, refY: number): any[];
-        mouseClickEvents(x: any, y: any, event: any): boolean;
-        dispatchMouseOverEvent(): void;
-        dispatchMouseOutEvent(): void;
-        dispatchMouseMoveEvent(): void;
-        dispatchMouseClickEvent(event: MouseEvent): void;
-        getWidth(): number;
-        getHeight(): number;
-        setWidth(width: number): void;
-        setHeight(height: number): void;
-        setDimensions(width: number, height: number): void;
-        toAxisAligned(): {
-            minX: number;
-            maxX: number;
-            minY: number;
-            maxY: number;
-        };
-        rotation: number;
-        rotate(angle: number, degrees?: boolean): void;
-        remove(): void;
-        isRemoved(): boolean;
-        clone(): Element;
-        updateVertices(x: number, y: number, scaleX: number, scaleY: number, rotation: number): void;
-        getVertices(): {
+    module Vector {
+        interface Vector {
             x: number;
             y: number;
-        }[][];
-    }
-}
-declare module Game {
-    interface BitmapArgs extends ElementArgs {
-        image: HTMLImageElement;
-    }
-    class Bitmap extends Element {
-        protected _image: HTMLImageElement;
-        protected _source_x: number;
-        protected _source_y: number;
-        constructor(args: BitmapArgs);
-        drawElement(ctx: any): void;
-        clone(): Bitmap;
-        image: HTMLImageElement;
-    }
-}
-declare module Game {
-    interface ContainerArgs extends ElementArgs {
-        children?: Element | Element[];
-    }
-    class Container extends Element {
-        protected _children: Element[];
-        constructor(args?: ContainerArgs);
-        addChild(elements: any): void;
-        removeChild(args: any): void;
-        removeAllChildren(): void;
-        remove(): void;
-        draw(ctx: CanvasRenderingContext2D): void;
-        drawElement(ctx: CanvasRenderingContext2D): void;
-        intersect(x: number, y: number): any[];
-        mouseClickEvents(x: any, y: any, event: any): boolean;
-        calculateDimensions(): void;
-        toAxisAligned(): {
-            minX: number;
-            maxX: number;
-            minY: number;
-            maxY: number;
+        }
+        function add(one: Vector, two: Vector): {
+            x: number;
+            y: number;
         };
-        logic(deltaTime: number): void;
-        updateVertices(x: any, y: any, scaleX: any, scaleY: any, rotation: any): void;
-        getVertices(): any[];
-        clone(): Container;
+        function subtract(one: Vector, two: Vector): {
+            x: number;
+            y: number;
+        };
+        function magnitude(vector: Vector): number;
+        function multiply(vector: Vector, scalar: number): {
+            x: number;
+            y: number;
+        };
+        function dotProduct(one: Vector, two: Vector): number;
+        function rotate(center: Vector, vector: Vector, angle: number): {
+            x: number;
+            y: number;
+        };
+        function normalLeft(vector: Vector): {
+            x: number;
+            y: number;
+        };
+        function normalRight(vector: Vector): {
+            x: number;
+            y: number;
+        };
+        function normalize(vector: Vector): {
+            x: number;
+            y: number;
+        };
+        function projection(one: Vector, two: Vector): {
+            x: number;
+            y: number;
+        };
+    }
+}
+declare module Game {
+    interface CollisionDetectionAlgorithm {
+        checkCollision(): any;
+        add(element: Element): any;
+        remove(element: Element): any;
+        update(element: Element): any;
+        clear(): any;
+    }
+    module CollisionDetection {
+        type Vertices = {
+            x: number;
+            y: number;
+        }[];
+        function init(collision?: CollisionDetectionAlgorithm): void;
+        function addElement(element: Element): void;
+        function removeElement(element: Element): void;
+        function updateElement(element: Element): void;
+        function checkCollision(): void;
+        function clear(): void;
+        function polygonPolygon(one: Vertices, two: Vertices): boolean;
+        function polygonPolygonList(list1: Vertices[], list2: Vertices[]): boolean;
+        function polygonPoint(vertices: Vertices, point: any): boolean;
+        function boxBox(oneX: number, oneY: number, oneWidth: number, oneHeight: number, twoX: number, twoY: number, twoWidth: number, twoHeight: number): boolean;
+        function circleCircle(x1: number, y1: number, radius1: number, x2: number, y2: number, radius2: number): boolean;
+        function circlePoint(circleX: number, circleY: number, circleRadius: number, pointX: number, pointY: number): boolean;
+        function pointBox(pointX: number, pointY: number, boxX: number, boxY: number, boxWidth: number, boxHeight: number): boolean;
     }
 }
 declare module Game {
@@ -320,7 +292,7 @@ declare module Game {
     }
 }
 declare module Game {
-    function init(htmlContainer: HTMLElement, canvasWidth: number, canvasHeight: number): void;
+    function init(htmlContainer: HTMLElement, canvasWidth: number, canvasHeight: number, collision?: CollisionDetectionAlgorithm): void;
     function startGameLoop(): void;
     function stopGameLoop(): void;
     function activateMouseMoveEvents(interval: number): void;
@@ -340,20 +312,127 @@ declare module Game {
     };
 }
 declare module Game {
+    interface ElementArgs extends EventDispatcherArgs {
+        x?: number;
+        y?: number;
+        category?: number;
+        collidesWith?: number;
+    }
+    abstract class Element extends EventDispatcher {
+        vertices: CollisionDetection.Vertices;
+        opacity: number;
+        visible: boolean;
+        scaleX: number;
+        scaleY: number;
+        category: number;
+        collidesWith: number;
+        grid_data: any;
+        collision_data: any;
+        protected _x: number;
+        protected _y: number;
+        protected _width: number;
+        protected _height: number;
+        protected _half_width: number;
+        protected _half_height: number;
+        protected _rotation: number;
+        _container: Container;
+        _has_logic: boolean;
+        protected _removed: boolean;
+        constructor(args?: ElementArgs);
+        abstract drawElement(ctx: CanvasRenderingContext2D): any;
+        draw(ctx: CanvasRenderingContext2D): void;
+        logic(deltaTime: number): void;
+        intersect(refX: number, refY: number): any[];
+        checkCollision(other: Element): boolean;
+        mouseClickEvents(x: any, y: any, event: any): boolean;
+        dispatchMouseOverEvent(): void;
+        dispatchMouseOutEvent(): void;
+        dispatchMouseMoveEvent(): void;
+        dispatchMouseClickEvent(event: MouseEvent): void;
+        getWidth(): number;
+        getHeight(): number;
+        setWidth(width: number): void;
+        setHeight(height: number): void;
+        setDimensions(width: number, height: number): void;
+        toAxisAligned(): {
+            minX: number;
+            maxX: number;
+            minY: number;
+            maxY: number;
+        };
+        rotation: number;
+        rotate(angle: number, degrees?: boolean): void;
+        remove(): void;
+        isRemoved(): boolean;
+        abstract clone(): Element;
+        updateVertices(x: number, y: number, scaleX: number, scaleY: number, rotation: number): void;
+        getVertices(): {
+            x: number;
+            y: number;
+        }[][];
+        setPosition(x: number, y: number): void;
+        addToPosition(x: number, y: number): void;
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+        half_width: number;
+        half_height: number;
+    }
+}
+declare module Game {
+    interface BitmapArgs extends ElementArgs {
+        image: HTMLImageElement;
+    }
+    class Bitmap extends Element {
+        protected _image: HTMLImageElement;
+        protected _source_x: number;
+        protected _source_y: number;
+        constructor(args: BitmapArgs);
+        drawElement(ctx: any): void;
+        clone(): Bitmap;
+        image: HTMLImageElement;
+    }
+}
+declare module Game {
+    interface ContainerArgs extends ElementArgs {
+        children?: Element | Element[];
+    }
+    class Container extends Element {
+        protected _children: Element[];
+        constructor(args?: ContainerArgs);
+        addChild(elements: any): void;
+        removeChild(args: any): void;
+        removeAllChildren(): void;
+        getAllChildren(): Element[];
+        remove(): void;
+        draw(ctx: CanvasRenderingContext2D): void;
+        drawElement(ctx: CanvasRenderingContext2D): void;
+        intersect(x: number, y: number): any[];
+        mouseClickEvents(x: any, y: any, event: any): boolean;
+        calculateDimensions(): void;
+        toAxisAligned(): {
+            minX: number;
+            maxX: number;
+            minY: number;
+            maxY: number;
+        };
+        logic(deltaTime: number): void;
+        updateVertices(x: any, y: any, scaleX: any, scaleY: any, rotation: any): void;
+        getVertices(): any[];
+        clone(): Container;
+    }
+}
+declare module Game {
     interface BulletArgs extends ContainerArgs {
         angleOrTarget?: number | Element;
-        movementSpeed?: number;
+        movementSpeed: number;
     }
     class Bullet extends Container {
-        movement_speed: number;
-        protected _move_x: number;
-        protected _move_y: number;
-        protected _target: Element;
-        constructor(args?: BulletArgs);
+        movement: Movement;
+        constructor(args: BulletArgs);
         setAngle(angle: number): void;
         setTarget(target: Element): void;
-        fixedLogic(deltaTime: number): void;
-        targetLogic(deltaTime: number): void;
         logic(deltaTime: number): void;
         remove(): void;
         clone(): Bullet;
@@ -374,60 +453,38 @@ declare module Game {
     }
 }
 declare module Game {
-    module Vector {
-        interface Vector {
-            x: number;
-            y: number;
+    module CollisionDetection {
+        class CheckAll implements CollisionDetectionAlgorithm {
+            _elements: Element[];
+            constructor();
+            add(element: Element): void;
+            update(element: Element): void;
+            remove(element: Element): void;
+            checkCollision(): void;
+            clear(): void;
         }
-        function add(one: Vector, two: Vector): {
-            x: number;
-            y: number;
-        };
-        function subtract(one: Vector, two: Vector): {
-            x: number;
-            y: number;
-        };
-        function magnitude(vector: Vector): number;
-        function multiply(vector: Vector, scalar: number): {
-            x: number;
-            y: number;
-        };
-        function dotProduct(one: Vector, two: Vector): number;
-        function rotate(center: Vector, vector: Vector, angle: number): {
-            x: number;
-            y: number;
-        };
-        function normalLeft(vector: Vector): {
-            x: number;
-            y: number;
-        };
-        function normalRight(vector: Vector): {
-            x: number;
-            y: number;
-        };
-        function normalize(vector: Vector): {
-            x: number;
-            y: number;
-        };
-        function projection(one: Vector, two: Vector): {
-            x: number;
-            y: number;
-        };
     }
 }
 declare module Game {
     module CollisionDetection {
-        type Vertices = {
-            x: number;
-            y: number;
-        }[];
-        function polygonPolygon(one: Vertices, two: Vertices): boolean;
-        function polygonPolygonList(list1: Vertices[], list2: Vertices[]): boolean;
-        function polygonPoint(vertices: Vertices, point: any): boolean;
-        function boxBox(oneX: number, oneY: number, oneWidth: number, oneHeight: number, twoX: number, twoY: number, twoWidth: number, twoHeight: number): boolean;
-        function circleCircle(x1: number, y1: number, radius1: number, x2: number, y2: number, radius2: number): boolean;
-        function circlePoint(circleX: number, circleY: number, circleRadius: number, pointX: number, pointY: number): boolean;
-        function pointBox(pointX: number, pointY: number, boxX: number, boxY: number, boxWidth: number, boxHeight: number): boolean;
+        interface SpatialPartitionArgs {
+            canvasWidth: number;
+            canvasHeight: number;
+            partitions: number;
+        }
+        class SpatialPartition implements CollisionDetectionAlgorithm {
+            _grid: Element[][];
+            _grid_size: number;
+            _partition_width: number;
+            _partition_height: number;
+            constructor(args: SpatialPartitionArgs);
+            add(element: Element): void;
+            update(element: Element): void;
+            remove(element: Element): void;
+            checkCollision(): void;
+            checkElement(element: Element, other: Element): void;
+            clear(): void;
+        }
     }
 }
 declare module Game {
@@ -661,6 +718,56 @@ declare module Game {
     }
 }
 declare module Game {
+    interface MovementArgs {
+        element: Element;
+        movementSpeed: number;
+    }
+    enum MovementState {
+        stop = 0,
+        angle = 1,
+        destination = 2,
+        loop = 3,
+        follow = 4,
+    }
+    class Movement {
+        movement_speed: number;
+        protected _element: Element;
+        protected _movement_state: MovementState;
+        protected _is_moving: boolean;
+        protected _move_x: number;
+        protected _move_y: number;
+        protected _move_callback: () => any;
+        protected _destination_x: number;
+        protected _destination_y: number;
+        protected _is_destination_x_diff_positive: boolean;
+        protected _is_destination_y_diff_positive: boolean;
+        protected _path: {
+            x: number;
+            y: number;
+            callback?: () => any;
+        }[];
+        protected _loop_path_position: number;
+        protected _follow_target: Element;
+        constructor(args: MovementArgs);
+        moveTo(x: number, y: number, callback?: () => any): void;
+        moveToNext(): boolean;
+        stop(): void;
+        queueMoveTo(x: number, y: number, callback?: () => any): void;
+        moveLoop(path: {
+            x: number;
+            y: number;
+            callback?: () => any;
+        }[]): void;
+        moveAngle(angle: number, degrees?: boolean, callback?: () => any): void;
+        follow(element: Element, callback?: () => any): void;
+        protected movementFollowLogic(delta: number): void;
+        protected movementAngleLogic(delta: number): void;
+        protected movementPathLogic(delta: number): void;
+        logic(delta: number): void;
+        remove(): void;
+    }
+}
+declare module Game {
     module PathFinding {
         function breadthFirstSearch(map: number[][], destination: {
             column: number;
@@ -670,9 +777,6 @@ declare module Game {
             blocked: number;
         }): any[];
     }
-}
-interface Window {
-    URL: any;
 }
 declare module Game {
     interface PreloadArgs extends EventDispatcherArgs {
@@ -818,6 +922,7 @@ declare module Game {
 }
 declare module Game {
     interface WeaponArgs {
+        element: Element;
         bulletContainer: Container | Canvas;
         fireInterval?: number;
         damage?: number;
@@ -845,70 +950,8 @@ declare module Game {
         forceFire(angleOrTarget?: number | Element, bulletId?: number, interval?: number): boolean;
         protected _fire(angleOrTarget: number | Element, bulletId: number): boolean;
         logic(deltaTime: number): void;
-        checkCollision(element: Element, vertices: CollisionDetection.Vertices[]): boolean;
         isReady(): boolean;
         clone(): Weapon;
         remove(): void;
-    }
-}
-declare module Game {
-    interface UnitArgs extends ContainerArgs {
-        movementSpeed?: number;
-        health?: number;
-    }
-    enum UnitMovement {
-        stop = 0,
-        angle = 1,
-        destination = 2,
-        loop = 3,
-        follow = 4,
-    }
-    class Unit extends Container {
-        static _all: Unit[];
-        static collidesWith: Unit[];
-        movement_speed: number;
-        health: number;
-        protected _movement_type: UnitMovement;
-        protected _is_moving: boolean;
-        protected _move_x: number;
-        protected _move_y: number;
-        protected _move_callback: () => any;
-        protected _destination_x: number;
-        protected _destination_y: number;
-        protected _is_destination_x_diff_positive: boolean;
-        protected _is_destination_y_diff_positive: boolean;
-        protected _path: {
-            x: number;
-            y: number;
-            callback?: () => any;
-        }[];
-        protected _loop_path_position: number;
-        protected _follow_target: Element;
-        protected _weapons: Weapon[];
-        constructor(args?: UnitArgs);
-        addWeapon(weapon: Weapon): number;
-        removeWeapon(weaponOrId: any): Weapon;
-        getWeapon(weaponId: number): Weapon;
-        getAllWeapons(): Weapon[];
-        remove(animationDuration?: number): void;
-        protected _removeNow(): void;
-        moveTo(x: number, y: number, callback?: () => any): void;
-        moveToNext(): boolean;
-        stop(): void;
-        queueMoveTo(x: number, y: number, callback?: () => any): void;
-        moveLoop(path: {
-            x: number;
-            y: number;
-            callback?: () => any;
-        }[]): void;
-        moveAngle(angle: number, degrees?: boolean, callback?: () => any): void;
-        follow(element: Element): void;
-        protected movementLogic(delta: number): void;
-        protected movementFollowLogic(delta: number): void;
-        protected movementAngleLogic(delta: number): void;
-        protected movementPathLogic(delta: number): void;
-        protected collisionLogic(delta: number): void;
-        logic(delta: number): void;
-        clone(): Unit;
     }
 }

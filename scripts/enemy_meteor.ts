@@ -20,6 +20,6 @@ class EnemyMeteor extends Enemy
             angle += 45;
             }
 
-        this.moveAngle( angle, true );
+        this.movement.moveAngle( angle, true );
         }
     }

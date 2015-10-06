@@ -9,6 +9,6 @@ class EnemyFollow extends Enemy
 
         super( args );
 
-        this.follow( Main.getPlayer() );
+        this.movement.follow( Main.getPlayer() );
         }
     }

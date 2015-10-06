@@ -4,7 +4,6 @@ interface PlayerArgs
     {
     x: number;
     y: number;
-    health: number;
     }
 
 interface PlayerPowerUpInfo extends PowerUpInfo
@@ -21,39 +20,44 @@ interface PlayerPowerUpInfo extends PowerUpInfo
  * - `damage_change` -- When there's a change to the damage.
  * - `speed_change` -- When there's a change to the movement speed.
  */
-class Player extends Game.Unit
+class Player extends Game.Bitmap
     {
         // used for the diagonal directions
         // Math.cos() has the same value as Math.sin()
     static _trig_pi_4 = Math.cos( Math.PI / 4 );
     _power_ups: PlayerPowerUpInfo[];
+    _weapons: Game.Weapon[];
     damage: number;
+    health: number;
+    movement_speed: number;
 
     rotated_half_width: number;
     rotated_half_height: number;
 
     constructor( args: PlayerArgs )
         {
-        var shape = new Game.Bitmap({
-            image: Game.Preload.get( 'player' )
-        });
-
         super({
                 x: args.x,
                 y: args.y,
-                health: args.health,
-                children: shape,
-                movementSpeed: 200
+                category: Main.CATEGORIES.player,
+                collidesWith: Main.CATEGORIES.enemy | Main.CATEGORIES.powerUp,
+                image: Game.Preload.get( 'player' )
             });
+
+        this._has_logic = true;
+        this.health = 100;
         this.rotation = -Math.PI / 2;
         this._power_ups = [];
+        this._weapons = [];
+        this.movement_speed = 200;
 
         var singleWeapon = new WeaponSingle({
+                element: this,
                 bulletContainer: Main.getBulletContainer(),
                 fireInterval: 0.5,
                 imageId: 'laser1-blue'
             });
-        this.addWeapon( singleWeapon );
+        this._weapons.push( singleWeapon );
 
         this.setDamage( 10 );
 
@@ -101,6 +105,11 @@ class Player extends Game.Unit
         {
         super.logic( deltaTime );
 
+        for (var a = this._weapons.length - 1 ; a >= 0 ; a--)
+            {
+            this._weapons[ a ].logic( deltaTime );
+            }
+
         this._movement_logic( deltaTime );
         this._fire_logic( deltaTime );
         this._power_up_logic( deltaTime );
@@ -113,7 +122,7 @@ class Player extends Game.Unit
 
         if ( keysHeld.space )
             {
-            var weapons = this.getAllWeapons();
+            var weapons = this._weapons;
 
             for (var a = weapons.length - 1 ; a >= 0 ; a--)
                 {
@@ -211,8 +220,7 @@ class Player extends Game.Unit
             nextY = Main.CANVAS_HEIGHT - this.rotated_half_height;
             }
 
-        this.x = nextX;
-        this.y = nextY;
+        this.setPosition( nextX, nextY );
         }
 
 
@@ -259,10 +267,12 @@ class Player extends Game.Unit
 
         if ( powerUp.weaponClass )
             {
+            powerUp.weaponArgs.element = this;
+
             var weapon = new powerUp.weaponClass( powerUp.weaponArgs );
             powerUp.weapon = weapon;
 
-            this.addWeapon( weapon );
+            this._weapons.push( weapon );
             }
 
         if ( powerUp.health )
@@ -296,8 +306,10 @@ class Player extends Game.Unit
 
         if ( powerUp.weapon )
             {
-            var weapon = this.removeWeapon( powerUp.weapon );
-            Game.safeRemove( weapon );
+            var index = this._weapons.indexOf( powerUp.weapon );
+
+            this._weapons.splice( index, 1 );
+            Game.safeRemove( powerUp.weapon );
             }
 
         var index = this._power_ups.indexOf( powerUp );

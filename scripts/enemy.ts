@@ -10,25 +10,30 @@ interface EnemyArgs
     health: number;
     }
 
-class Enemy extends Game.Unit
+class Enemy extends Game.Bitmap
     {
     damage: number;
+    health: number;
+    movement: Game.Movement;
+    weapon: Game.Weapon;
 
     constructor( args: EnemyArgs )
         {
-        var shape = new Game.Bitmap({
-                image: Game.Preload.get( args.imageId )
-            });
-
         super({
                 x: args.x,
                 y: args.y,
-                children: shape
+                image: Game.Preload.get( args.imageId ),
+                category: Main.CATEGORIES.enemy
             });
 
+        this.movement = new Game.Movement({
+                element: this,
+                movementSpeed: args.movementSpeed
+            });
+        this.weapon = null;
+        this._has_logic = true;
         this.health = args.health;
         this.damage = args.damage;
-        this.movement_speed = args.movementSpeed;
         this.rotation = Math.PI / 2;
         }
 
@@ -52,6 +57,13 @@ class Enemy extends Game.Unit
     logic( deltaTime: number )
         {
         super.logic( deltaTime );
+
+        this.movement.logic( deltaTime );
+
+        if ( this.weapon )
+            {
+            this.weapon.logic( deltaTime );
+            }
 
             // check if the unit is out of bounds
             // if it is, then we'll remove the unit

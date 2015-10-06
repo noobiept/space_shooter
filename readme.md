@@ -20,6 +20,6 @@ Assets
 Build
 =====
 
-Uses typescript `1.5`.
+Uses typescript `1.6`.
 
 Run the `tsc` command in the `scripts` directory.

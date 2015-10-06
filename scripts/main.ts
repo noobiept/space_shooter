@@ -64,6 +64,12 @@ var PLAYER: Player;
 var POWER_UP_SPAWN_COUNT = 0;
 var POWER_UP_SPAWN_RATE = 1;    // spawn a power up for every 'value' enemy kills
 
+export const CATEGORIES = {
+    player: 1,
+    enemy: 2,
+    powerUp: 4
+};
+
 
 export function init()
     {
@@ -91,10 +97,6 @@ export function init()
     Game.addElement( BULLETS );
     Game.addElement( UNITS );
 
-    Player.collidesWith = [ <any>EnemyTop, <any>EnemyLine, <any>EnemyFollow, <any>EnemyMeteor, <any>PowerUp ];
-    EnemyLine.collidesWith = [ <any>Player ];
-    EnemyTop.collidesWith = [ <any>Player ];
-
     start();
     }
 
@@ -103,8 +105,7 @@ export function start()
     {
     PLAYER = new Player({
             x: CANVAS_WIDTH / 2,
-            y: CANVAS_HEIGHT - 100,
-            health: 100
+            y: CANVAS_HEIGHT - 100
         });
     PLAYER.addEventListener( 'collision', playerCollisions );
     PLAYER.addEventListener( 'health_change', updateStatusBar );
@@ -133,6 +134,29 @@ function playerCollisions( data )
             {
             player.addPowerUp( element.power_up );
             Game.safeRemove( element );
+            }
+        }
+
+        // collided with an enemy bullet
+    else if ( element instanceof Game.Bullet )
+        {
+            // hit with a bullet
+            // just remove both bullets
+        if ( data.bullet )
+            {
+            Game.safeRemove( element );
+            Game.safeRemove( data.bullet );
+            }
+
+            // take damage from enemy bullet
+        else
+            {
+            survived = player.tookDamage( 1 ); //HERE need the damage from the bullet
+
+            if ( !survived )
+                {
+                gameOver();
+                }
             }
         }
 
@@ -166,21 +190,6 @@ function playerCollisions( data )
                 {
                 gameOver();
                 }
-            }
-        }
-    }
-
-
-export function enemyBulletCollisions( data )
-    {
-    if ( data.bullet )
-        {
-        Game.safeRemove( data.bullet );
-        var survived = data.collidedWith.tookDamage( data.element.damage );
-
-        if ( !survived )
-            {
-            gameOver();
             }
         }
     }

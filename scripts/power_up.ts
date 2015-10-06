@@ -23,8 +23,9 @@ interface PowerUpArgs
     powerUp: PowerUpInfo;
     }
 
-class PowerUp extends Game.Unit
+class PowerUp extends Game.Bitmap
     {
+    movement: Game.Movement;
     power_up: PowerUpInfo;
     _rotate_count: number;
     _rotate_interval: number;   // rotate the element in this interval
@@ -35,15 +36,16 @@ class PowerUp extends Game.Unit
 
     constructor( args: PowerUpArgs )
         {
-        var shape = new Game.Bitmap({
-                image: Game.Preload.get( args.powerUp.imageId )
-            });
-
         super({
                 x: args.x,
                 y: args.y,
-                movementSpeed: 50,
-                children: shape
+                image: Game.Preload.get( args.powerUp.imageId ),
+                category: Main.CATEGORIES.powerUp
+            });
+
+        this.movement = new Game.Movement({
+                element: this,
+                movementSpeed: 50
             });
 
         this.power_up = args.powerUp;
@@ -54,7 +56,7 @@ class PowerUp extends Game.Unit
         this._blink_count = 0;
         this._blink_interval = 0.5;
 
-        this.moveTo( args.x, Main.CANVAS_HEIGHT );
+        this.movement.moveTo( args.x, Main.CANVAS_HEIGHT );
         }
 
     logic( deltaTime: number )
@@ -145,6 +147,7 @@ module PowerUp
                 duration: 5,
                 weaponClass: WeaponSide,
                 weaponArgs: {
+                    element: null,
                     bulletContainer: Main.getBulletContainer(),
                     fireInterval: 0.5,
                     imageId: 'laser1-blue'
@@ -160,6 +163,7 @@ module PowerUp
                 duration: 5,
                 weaponClass: WeaponAround,
                 weaponArgs: {
+                    element: null,
                     bulletContainer: Main.getBulletContainer(),
                     fireInterval: 2,
                     imageId: 'laser3-blue'
@@ -175,6 +179,7 @@ module PowerUp
                 duration: 5,
                 weaponClass: WeaponSemiCircle,
                 weaponArgs: {
+                    element: null,
                     bulletContainer: Main.getBulletContainer(),
                     fireInterval: 1.5,
                     imageId: 'laser2-blue'
