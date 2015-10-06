@@ -1,8 +1,12 @@
 {
     "spawn": [
         {
-            "className": "EnemyMeteor",
+            "className": "EnemyRandom",
             "time": 1
+        },
+        {
+            "className": "EnemyMeteor",
+            "time": 2
         },
         {
             "className": "EnemyLine",
