@@ -27,6 +27,10 @@
         {
             "className": "EnemyTop",
             "time": 8
+        },
+        {
+            "className": "EnemyRandom",
+            "time": 9
         }
     ]
 }

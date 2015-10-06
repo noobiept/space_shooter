@@ -1,7 +1,7 @@
 enum PowerUpType
     {
     damage, speed, health,
-    sideWeapon, aroundWeapon, semiCircleWeapon
+    sideWeapon, aroundWeapon, semiCircleWeapon, randomWeapon
     }
 
 interface PowerUpInfo
@@ -97,7 +97,7 @@ class PowerUp extends Game.Bitmap
 
 module PowerUp
     {
-    var ALL = [ damage, speed, health, sideWeapon, aroundWeapon, semiCircleWeapon ];
+    var ALL = [ damage, speed, health, sideWeapon, aroundWeapon, semiCircleWeapon, randomWeapon ];
 
 
     export function createRandom( x: number, y: number )
@@ -167,7 +167,7 @@ module PowerUp
                 weaponArgs: {
                     element: null,
                     bulletContainer: Main.getBulletContainer(),
-                    fireInterval: 1.5,
+                    fireInterval: 1,
                     imageId: 'laser3-blue'
                 }
             };
@@ -185,6 +185,22 @@ module PowerUp
                     bulletContainer: Main.getBulletContainer(),
                     fireInterval: 1.5,
                     imageId: 'laser2-blue'
+                }
+            };
+        }
+
+    function randomWeapon(): PowerUpInfo
+        {
+        return {
+                type: PowerUpType.randomWeapon,
+                imageId: 'power_up_weapon',
+                duration: 10,
+                weaponClass: WeaponRandom,
+                weaponArgs: {
+                    element: null,
+                    bulletContainer: Main.getBulletContainer(),
+                    fireInterval: 0.1,
+                    imageId: 'laser3-blue'
                 }
             };
         }

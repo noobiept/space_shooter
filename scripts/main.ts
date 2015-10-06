@@ -73,7 +73,13 @@ export const CATEGORIES = {
 
 export function init()
     {
-    Game.init( document.body, CANVAS_WIDTH, CANVAS_HEIGHT );
+    var collision = new Game.CollisionDetection.SpatialPartition({
+            canvasWidth: CANVAS_WIDTH,
+            canvasHeight: CANVAS_HEIGHT,
+            partitions: 7
+        });
+
+    Game.init( document.body, CANVAS_WIDTH, CANVAS_HEIGHT, collision );
     Input.init();
     initMenu();
 
