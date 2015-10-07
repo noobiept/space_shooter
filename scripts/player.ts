@@ -318,7 +318,7 @@ class Player extends Game.Bitmap
             var index = this._weapons.indexOf( powerUp.weapon );
 
             this._weapons.splice( index, 1 );
-            Game.safeRemove( powerUp.weapon );
+            powerUp.weapon.remove();
             }
 
         var index = this._power_ups.indexOf( powerUp );
@@ -344,5 +344,33 @@ class Player extends Game.Bitmap
             }
 
         return null;
+        }
+
+
+    remove()
+        {
+        super.remove();
+
+        var a;
+
+            // remove all weapons
+        for (a = this._weapons.length - 1 ; a >= 0 ; a--)
+            {
+            this._weapons[ a ].remove();
+            }
+        this._weapons.length = 0;
+
+            // remove all the power ups
+        for (a = this._power_ups.length - 1 ; a >= 0 ; a--)
+            {
+            var powerUp = this._power_ups[ a ];
+
+            if ( powerUp.weapon )
+                {
+                powerUp.weapon.remove();
+                powerUp.weapon = null;
+                }
+            }
+        this._power_ups.length = 0;
         }
     }

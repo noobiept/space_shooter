@@ -47,7 +47,7 @@ class Enemy extends Game.Bitmap
 
         if ( this.health <= 0 )
             {
-            Game.safeRemove( this );
+            this.remove();
             return false;
             }
 
@@ -69,7 +69,7 @@ class Enemy extends Game.Bitmap
             // if it is, then we'll remove the unit
         if ( !Game.getCanvas().isInCanvas( this.x, this.y ) )
             {
-            Game.safeRemove( this );
+            this.remove();
             }
         }
     }

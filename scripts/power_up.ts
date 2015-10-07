@@ -89,7 +89,7 @@ class PowerUp extends Game.Bitmap
 
         if ( this._duration_count >= this._duration )
             {
-            Game.safeRemove( this );
+            this.remove();
             }
         }
     }

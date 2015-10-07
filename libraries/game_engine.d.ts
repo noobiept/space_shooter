@@ -301,7 +301,7 @@ declare module Game {
     function addCanvas(canvas: Game.Canvas, position?: number): number;
     function addElement(element: Element | Element[], id?: number): void;
     function removeElement(element: Element | Element[]): boolean;
-    function safeRemove(args: any): void;
+    function _safeRemove(element: Element): void;
     function addToGameLoop(callback: () => any, delay: number, isInterval?: boolean): boolean;
     function removeFromGameLoop(callback: () => any): boolean;
     function removeAllCallbacks(): void;
@@ -363,6 +363,7 @@ declare module Game {
         rotation: number;
         rotate(angle: number, degrees?: boolean): void;
         remove(): void;
+        _removeNow(): void;
         isRemoved(): boolean;
         abstract clone(): Element;
         updateVertices(x: number, y: number, scaleX: number, scaleY: number, rotation: number): void;

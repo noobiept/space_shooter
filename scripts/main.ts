@@ -163,7 +163,7 @@ function playerCollisions( data )
         if ( !bullet )
             {
             player.addPowerUp( collidedWith.power_up );
-            Game.safeRemove( collidedWith );
+            collidedWith.remove();
             }
         }
 
@@ -174,15 +174,15 @@ function playerCollisions( data )
             // just remove both bullets
         if ( bullet )
             {
-            Game.safeRemove( collidedWith );
-            Game.safeRemove( bullet );
+            collidedWith.remove();
+            bullet.remove();
             }
 
             // take damage from enemy bullet
         else
             {
             survived = player.tookDamage( collidedWith.damage );
-            Game.safeRemove( collidedWith );
+            collidedWith.remove();
 
             if ( !survived )
                 {
@@ -197,7 +197,7 @@ function playerCollisions( data )
             // hit an enemy with a bullet
         if ( data.bullet )
             {
-            Game.safeRemove( data.bullet );
+            data.bullet.remove();
             survived = collidedWith.tookDamage( player.damage );
 
             if ( !survived )
@@ -215,7 +215,7 @@ function playerCollisions( data )
             spawnPowerUp( collidedWith.x, collidedWith.y );
 
                 // enemy is removed regardless of what health he may have
-            Game.safeRemove( collidedWith );
+            collidedWith.remove();
 
             if ( !survived )
                 {
