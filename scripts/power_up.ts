@@ -83,7 +83,16 @@ class PowerUp extends Game.Bitmap
             if ( this._blink_count >= this._blink_interval )
                 {
                 this._blink_count = 0;
-                this.visible = !this.visible;
+
+                if ( this.opacity === 1 )
+                    {
+                    this.opacity = 0.5;
+                    }
+
+                else
+                    {
+                    this.opacity = 1;
+                    }
                 }
             }
 
@@ -199,7 +208,7 @@ module PowerUp
                 weaponArgs: {
                     element: null,
                     bulletContainer: Main.getBulletContainer(),
-                    fireInterval: 0.1,
+                    fireInterval: 0.5,
                     imageId: 'laser3-blue'
                 }
             };

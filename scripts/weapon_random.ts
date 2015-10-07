@@ -18,9 +18,14 @@ class WeaponRandom extends Game.Weapon
 
     firingPattern( refAngle: number )
         {
-        var angle = Game.Utilities.getRandomFloat( 0, 2 * Math.PI );
+        var limit = 5;
 
-        this._fire( angle, 1 );
+        for (var a = 0 ; a < limit ; a++)
+            {
+            var angle = Game.Utilities.getRandomFloat( 0, 2 * Math.PI );
+
+            this._fire( angle, 1 );
+            }
 
         return true;
         }

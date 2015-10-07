@@ -19,7 +19,7 @@ class EnemyRandom extends Enemy
                 bulletContainer: Main.getBulletContainer(),
                 imageId: 'laser3-red'
             });
-        this.weapon.forceFire( 0, 1, 0.1 );
+        this.weapon.forceFire( 0, 1, 0.5 );
 
         this.movement_speed = 100;
         this.angle = Math.PI / 2;
