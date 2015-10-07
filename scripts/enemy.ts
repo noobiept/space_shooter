@@ -4,14 +4,17 @@ interface EnemyArgs
     {
     x: number;
     y: number;
-    movementSpeed: number;
     imageId: string;
-    damage: number;
-    health: number;
     }
 
 class Enemy extends Game.Bitmap
     {
+        // these will be set in the initialization part of the game, and are set independently per derived class (see the 'initGameInfo()' function)
+        // only declaring them here for documentation purposes
+    static movementSpeed: number;
+    static health: number;
+    static damage: number;
+
     damage: number;
     health: number;
     movement: Game.Movement;
@@ -26,14 +29,16 @@ class Enemy extends Game.Bitmap
                 category: Main.CATEGORIES.enemy
             });
 
+        var constructor = <any>this.constructor;
+
         this.movement = new Game.Movement({
                 element: this,
-                movementSpeed: args.movementSpeed
+                movementSpeed: constructor.movementSpeed
             });
         this.weapon = null;
         this._has_logic = true;
-        this.health = args.health;
-        this.damage = args.damage;
+        this.health = constructor.health;
+        this.damage = constructor.damage;
         this.rotation = Math.PI / 2;
         }
 

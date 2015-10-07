@@ -4,6 +4,8 @@ class WeaponSingle extends Game.Weapon
         {
         super( args );
 
+        var constructor = <any>this.constructor;
+
             // add other bullet shapes
         var bulletShape = new Game.Bitmap({
                 image: Game.Preload.get( args.imageId )
@@ -11,10 +13,9 @@ class WeaponSingle extends Game.Weapon
         var bullet = new Game.Bullet({
                 children: bulletShape,
                 angleOrTarget: -Math.PI / 2,
-                movementSpeed: 300
+                movementSpeed: constructor.bulletSpeed
             });
         this.addBulletType( bullet );
-        this.damage = 10;
         }
 
 

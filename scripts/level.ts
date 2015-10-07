@@ -50,7 +50,6 @@ function spawnEnemy( info: SpawnInfo )
     var classFunc = window[ info.className ];
     var spawnCount = 2;
 
-
     for (var a = 0 ; a < spawnCount ; a++)
         {
             // add the unit to the game

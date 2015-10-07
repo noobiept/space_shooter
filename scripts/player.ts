@@ -280,6 +280,7 @@ class Player extends Game.Bitmap
 
             var weapon = new powerUp.weaponClass( powerUp.weaponArgs );
             powerUp.weapon = weapon;
+            weapon.damage = this.damage;
 
             this._weapons.push( weapon );
             }

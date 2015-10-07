@@ -1,6 +1,5 @@
 class EnemyRandom extends Enemy
     {
-    movement_speed: number;
     angle: number;
     angle_change: number;
 
@@ -8,9 +7,6 @@ class EnemyRandom extends Enemy
     constructor( args: EnemyArgs )
         {
         args.imageId = 'enemy5';
-        args.movementSpeed = 75;
-        args.damage = 10;
-        args.health = 30;
 
         super( args );
 
@@ -19,9 +15,9 @@ class EnemyRandom extends Enemy
                 bulletContainer: Main.getBulletContainer(),
                 imageId: 'laser3-red'
             });
+        this.weapon.damage = this.damage;
         this.weapon.forceFire( 0, 1, 0.5 );
 
-        this.movement_speed = 100;
         this.angle = Math.PI / 2;
 
             // how much its movement is changed
@@ -42,8 +38,8 @@ class EnemyRandom extends Enemy
 
         this.angle += this.angle_change * deltaTime;
 
-        var x = this.movement_speed * deltaTime * Math.cos( this.angle );
-        var y = this.movement_speed * deltaTime * Math.sin( this.angle );
+        var x = this.movement.movement_speed * deltaTime * Math.cos( this.angle );
+        var y = this.movement.movement_speed * deltaTime * Math.sin( this.angle );
 
         this.rotation = this.angle;
         this.addToPosition( x, y );

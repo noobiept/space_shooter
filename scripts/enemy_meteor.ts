@@ -7,9 +7,6 @@ class EnemyMeteor extends Enemy
         var randomPosition = Game.Utilities.getRandomInt( 0, EnemyMeteor.ImageIds.length - 1 );
 
         args.imageId = EnemyMeteor.ImageIds[ randomPosition ];
-        args.movementSpeed = 75;
-        args.damage = 20;
-        args.health = 30;
 
         super( args );
 

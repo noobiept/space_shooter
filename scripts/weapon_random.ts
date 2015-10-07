@@ -4,15 +4,16 @@ class WeaponRandom extends Game.Weapon
         {
         super( args );
 
+        var constructor = <any>this.constructor;
+
         var bulletShape = new Game.Bitmap({
                 image: Game.Preload.get( args.imageId )
             });
         var bullet = new Game.Bullet({
                 children: bulletShape,
-                movementSpeed: 275
+                movementSpeed: constructor.bulletSpeed
             });
         this.addBulletType( bullet );
-        this.damage = 10;
         }
 
 

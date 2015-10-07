@@ -4,15 +4,16 @@ class WeaponAround extends Game.Weapon
         {
         super( args );
 
+        var constructor = <any>this.constructor;
+
         var bulletShape = new Game.Bitmap({
                 image: Game.Preload.get( args.imageId )
             });
         var bullet = new Game.Bullet({
                 children: bulletShape,
-                movementSpeed: 250
+                movementSpeed: constructor.bulletSpeed
             });
         this.addBulletType( bullet );
-        this.damage = 10;
         }
 
 
@@ -20,7 +21,7 @@ class WeaponAround extends Game.Weapon
         {
         var end = 2 * Math.PI;
 
-        for (var angle = 0 ; angle < end ; angle += Math.PI / 4)
+        for (var angle = 0 ; angle < end ; angle += Math.PI / 8)
             {
             this._fire( angle, 1 );
             }

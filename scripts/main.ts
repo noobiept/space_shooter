@@ -32,8 +32,9 @@ var assetsManifest = [
         { id: 'laser_sound', path: 'sounds/sfx_laser1.ogg' },
         { id: 'music', path: 'sounds/walk_in_the_sky_2.ogg' }
     ];
-var levelsManifest = [
-        { id: 'level0', path: 'level0.json' }
+var info = [
+        { id: 'level0', path: 'level0.json' },
+        { id: 'game_info', path: 'game_info.json' }
     ];
 
 
@@ -59,13 +60,31 @@ preload.addEventListener( 'complete', function()
     Main.init();
     });
 preload.loadManifest( assetsManifest, '../assets/' );
-preload.loadManifest( levelsManifest, '../levels/' );
+preload.loadManifest( info, '../info/' );
 });
 
 
 interface WeaponArgs extends Game.WeaponArgs
     {
     imageId: string;
+    }
+
+interface GameInfo
+    {
+    enemies: { [className: string]: EnemyInfo };
+    weapons: { [className: string]: WeaponInfo };
+    }
+
+interface WeaponInfo
+    {
+    bulletSpeed: number;
+    }
+
+interface EnemyInfo
+    {
+    movementSpeed: number;
+    damage: number;
+    health: number;
     }
 
 
@@ -104,6 +123,7 @@ export function init()
     Game.init( document.body, CANVAS_WIDTH, CANVAS_HEIGHT, collision );
     Input.init();
     initMenu();
+    initGameInfo();
 
     var background = new Game.ScrollingBitmap({
             x: CANVAS_WIDTH / 2,
@@ -298,6 +318,40 @@ function initMenu()
     menu.addChild( restartButton );
 
     document.body.appendChild( menu.container );
+    }
+
+
+/**
+ * Will update the enemies movement speed/damage/etc to be used in the game.
+ * The values are added as a static property of the class constructor.
+ * For example `EnemyRandom.damage = 10;`.
+ */
+function initGameInfo()
+    {
+    var info: GameInfo = Game.Preload.get( 'game_info' );
+
+    var applyValues = function( infoDictionary )
+        {
+        for (var weaponClassName in infoDictionary)
+            {
+            if ( infoDictionary.hasOwnProperty( weaponClassName ) )
+                {
+                var classInfo = infoDictionary[ weaponClassName ];
+                var classFunc = window[ weaponClassName ];
+
+                for (var propertyName in classInfo)
+                    {
+                    if ( classInfo.hasOwnProperty( propertyName ) )
+                        {
+                        classFunc[ propertyName ] = classInfo[ propertyName ];
+                        }
+                    }
+                }
+            }
+        };
+
+    applyValues( info.enemies );
+    applyValues( info.weapons );
     }
 
 

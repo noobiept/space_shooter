@@ -1,0 +1,52 @@
+{
+    "enemies": {
+        "EnemyAround": {
+            "movementSpeed": 80,
+            "damage": 7,
+            "health": 20
+        },
+        "EnemyFollow": {
+            "movementSpeed": 100,
+            "damage": 8,
+            "health": 20
+        },
+        "EnemyLine": {
+            "movementSpeed": 60,
+            "damage": 10,
+            "health": 20
+        },
+        "EnemyMeteor": {
+            "movementSpeed": 50,
+            "damage": 15,
+            "health": 30
+        },
+        "EnemyRandom": {
+            "movementSpeed": 110,
+            "damage": 9,
+            "health": 20
+        },
+        "EnemyTop": {
+            "movementSpeed": 50,
+            "damage": 5,
+            "health": 10
+        }
+    },
+
+    "weapons": {
+        "WeaponAround": {
+            "bulletSpeed": 250
+        },
+        "WeaponRandom": {
+            "bulletSpeed": 300
+        },
+        "WeaponSemiCircle": {
+            "bulletSpeed": 250
+        },
+        "WeaponSide": {
+            "bulletSpeed": 500
+        },
+        "WeaponSingle": {
+            "bulletSpeed": 500
+        }
+    }
+}
