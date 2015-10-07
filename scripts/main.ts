@@ -125,7 +125,8 @@ export function init()
     Game.addElement( BULLETS );
     Game.addElement( UNITS );
 
-    Game.Sound.play( Game.Preload.get( 'music' ), true );
+    var sourceNode = Game.Sound.play( Game.Preload.get( 'music' ) );
+    sourceNode.loop = true;
 
     start();
     }
@@ -275,6 +276,17 @@ function initMenu()
             preText: 'Speed: ',
             value: 0
         });
+    var volumeRange = new Game.Html.Range({
+            preText: 'Volume: ',
+            min: 0,
+            max: 1,
+            value: Game.Sound.getGlobalGain(),
+            step: 0.1,
+            onChange: function( button )
+                {
+                Game.Sound.setGlobalGain( button.getValue() );
+                }
+        });
     var restartButton = new Game.Html.Button({
             value: 'Restart',
             callback: restart
@@ -282,6 +294,7 @@ function initMenu()
     menu.addChild( HEALTH_MENU );
     menu.addChild( DAMAGE_MENU );
     menu.addChild( SPEED_MENU );
+    menu.addChild( volumeRange );
     menu.addChild( restartButton );
 
     document.body.appendChild( menu.container );
@@ -329,8 +342,6 @@ function restart()
 
 function gameOver()
     {
-        // this might get called in the middle of a logic function, so can't start clearing the elements just yet
-        // do it at the start of the next game loop
-    Game.addToGameLoop( restart, 0, false );
+    restart();
     }
 }

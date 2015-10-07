@@ -246,7 +246,9 @@ declare module Game {
     module Sound {
         function init(): void;
         function decodeAudio(data: ArrayBuffer, successCallback: (decodedData: AudioBuffer) => any, errorCallback: any): void;
-        function play(audioBuffer: AudioBuffer, loop?: boolean): boolean;
+        function play(audioBuffer: AudioBuffer): AudioBufferSourceNode;
+        function setGlobalGain(gain: number): boolean;
+        function getGlobalGain(): number;
     }
 }
 declare module Game {
