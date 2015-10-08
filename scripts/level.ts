@@ -18,6 +18,8 @@ var NEXT_SPAWN: SpawnInfo;  // has the next info
 
 var COUNT = 0;          // count the time passed (in seconds) since the level started, useful to know when to spawn the next enemies/etc
 var FINISHED_SPAWNING = false;
+var ENEMIES_COUNT = 0;  // keeps track of the number of enemies in the game
+var LEVEL_ENDED = false;
 
 
 export function start( level: number )
@@ -33,6 +35,8 @@ export function start( level: number )
     COUNT = 0;
     SPAWN_POSITION = 0;
     FINISHED_SPAWNING = false;
+    ENEMIES_COUNT = 0;
+    LEVEL_ENDED = false;
     NEXT_SPAWN = info.spawn[ SPAWN_POSITION ];
 
         // update every second
@@ -60,7 +64,72 @@ function spawnEnemy( info: SpawnInfo )
                 y: 0
             });
         Main.addEnemy( enemy );
+        ENEMIES_COUNT++;
         }
+    }
+
+
+export function enemyRemoved()
+    {
+    ENEMIES_COUNT--;
+
+    if ( FINISHED_SPAWNING && ENEMIES_COUNT === 0 )
+        {
+        gameWon();
+        }
+    }
+
+
+function gameWon()
+    {
+    if ( LEVEL_ENDED )
+        {
+        return;
+        }
+
+    LEVEL_ENDED = true;
+
+    gameOver( 'You Won!', 2 );
+    }
+
+
+export function gameLost()
+    {
+    if ( LEVEL_ENDED )
+        {
+        return;
+        }
+
+    LEVEL_ENDED = true;
+
+    gameOver( 'You Lost!' );
+    }
+
+
+/**
+ * Only add the score at the end (to let time to count all the score from enemy kills and power-up pickups).
+ */
+function addScoreAndRestart()
+    {
+    HighScore.addCurrentScore();
+    Main.restart();
+    }
+
+
+function gameOver( text: string, restartDelay?: number )
+    {
+    new Game.Message({
+            body: text,
+            container: Game.getCanvasContainer(),
+            timeout: 2
+        });
+
+    if ( typeof restartDelay === 'undefined' )
+        {
+        restartDelay = 0;
+        }
+
+    Game.addToGameLoop( addScoreAndRestart, restartDelay, false );
     }
 
 

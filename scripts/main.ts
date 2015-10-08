@@ -103,7 +103,6 @@ var BULLETS: Game.Container;
 var POWER_UPS: Game.Container;
 
 var PLAYER: Player;
-var ENEMIES_COUNT = 0;      // keeps track of the number of enemies in the game
 
 export const CATEGORIES = {
     player: 1,
@@ -255,7 +254,7 @@ function playerCollisions( data )
 
             if ( !survived )
                 {
-                gameLost();
+                Level.gameLost();
                 }
             }
         }
@@ -274,7 +273,6 @@ function playerCollisions( data )
                 spawnPowerUp( collidedWith.x, collidedWith.y );
 
                 HighScore.addToScore( HighScore.SCORE_VALUE.enemyKill );
-                isLevelOver();
                 }
             }
 
@@ -293,12 +291,7 @@ function playerCollisions( data )
 
             if ( !survived )
                 {
-                gameLost();
-                }
-
-            else
-                {
-                isLevelOver();
+                Level.gameLost();
                 }
             }
         }
@@ -324,8 +317,6 @@ function clear()
     PLAYER = null;
 
     HighScore.setScore( 0 );
-
-    ENEMIES_COUNT = 0;
 
     ENEMIES.removeAllChildren();
     BULLETS.removeAllChildren();
@@ -370,13 +361,6 @@ function initGameInfo()
 export function addEnemy( element: Game.Element )
     {
     ENEMIES.addChild( element );
-    ENEMIES_COUNT++;
-    }
-
-
-export function enemyRemoved()
-    {
-    ENEMIES_COUNT--;
     }
 
 
@@ -396,50 +380,5 @@ export function restart()
     {
     clear();
     start();
-    }
-
-
-/**
- * The level is over when there's no more enemies to spawn, and all active enemies were killed.
- */
-function isLevelOver()
-    {
-    if ( Level.isDone() && ENEMIES_COUNT === 0 )
-        {
-        gameWon();
-        }
-    }
-
-
-function gameWon()
-    {
-    gameOver( 'You Won!', 2 );
-    }
-
-
-function gameLost()
-    {
-    gameOver( 'You Lost!' );
-    }
-
-
-function gameOver( text: string, restartDelay?: number )
-    {
-    var message = new Game.Message({
-            body: text,
-            container: Game.getCanvasContainer(),
-            timeout: 2
-        });
-    HighScore.addCurrentScore();
-
-    if ( typeof restartDelay === 'undefined' )
-        {
-        restart();
-        }
-
-    else
-        {
-        Game.addToGameLoop( restart, restartDelay, false );
-        }
     }
 }

@@ -93,7 +93,7 @@ class Enemy extends Game.Bitmap
         {
         if ( !this._removed )
             {
-            Main.enemyRemoved();
+            Level.enemyRemoved();
             }
 
         super.remove();
