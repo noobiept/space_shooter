@@ -57,7 +57,7 @@ class PowerUp extends Game.Bitmap
         this._blink_count = 0;
         this._blink_interval = 0.5;
 
-        this.movement.moveTo( args.x, Main.CANVAS_HEIGHT );
+        this.movement.moveTo( args.x, Main.CANVAS_HEIGHT + this.half_height );
         }
 
     logic( deltaTime: number )

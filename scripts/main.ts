@@ -100,15 +100,25 @@ var POWER_UPS: Game.Container;
 var HEALTH_MENU: Game.Html.Value;
 var DAMAGE_MENU: Game.Html.Value;
 var SPEED_MENU: Game.Html.Value;
+var HIGH_SCORE_MENU: Game.Html.Value;
 
 var PLAYER: Player;
 var POWER_UP_SPAWN_COUNT = 0;
 var POWER_UP_SPAWN_RATE = 1;    // spawn a power up for every 'value' enemy kills
+var SCORE = 0;      // current score
+var SCORE_TEXT: Game.Text;
 
 export const CATEGORIES = {
     player: 1,
     enemy: 2,
     powerUp: 4
+};
+
+const SCORE_VALUE = {
+    enemyKill: 20,
+    pickedPowerUp: 10,
+    bulletDamage: -2,
+    enemyDamage: -5
 };
 
 
@@ -121,6 +131,7 @@ export function init()
         });
 
     Game.init( document.body, CANVAS_WIDTH, CANVAS_HEIGHT, collision );
+    Game.HighScore.init( 1, 'space_shooter_highscore', false );
     Input.init();
     initMenu();
     initGameInfo();
@@ -133,7 +144,17 @@ export function init()
             step: 1,
         interval: 0.1
         });
-    Game.addElement( background );
+
+    SCORE_TEXT = new Game.Text({
+            x: CANVAS_WIDTH,
+            y: 0,
+            text: 'Score: 0',
+            fontFamily: 'monospace',
+            fontSize: 20,
+            textAlign: 'end',
+            textBaseline: 'top',
+            color: 'white'
+        });
 
 
         // will contain all the units/bullets/etc
@@ -141,9 +162,11 @@ export function init()
     BULLETS = new Game.Container();
     POWER_UPS = new Game.Container();
 
+    Game.addElement( background );
     Game.addElement( POWER_UPS );
     Game.addElement( BULLETS );
     Game.addElement( UNITS );
+    Game.addElement( SCORE_TEXT );
 
     var sourceNode = Game.Sound.play( Game.Preload.get( 'music' ) );
     sourceNode.loop = true;
@@ -185,6 +208,8 @@ function playerCollisions( data )
             {
             player.addPowerUp( collidedWith.power_up );
             collidedWith.remove();
+
+            addToScore( SCORE_VALUE.pickedPowerUp );
             }
         }
 
@@ -205,6 +230,8 @@ function playerCollisions( data )
             survived = player.tookDamage( collidedWith.damage );
             collidedWith.remove();
 
+            addToScore( SCORE_VALUE.bulletDamage );
+
             if ( !survived )
                 {
                 gameOver();
@@ -224,6 +251,8 @@ function playerCollisions( data )
             if ( !survived )
                 {
                 spawnPowerUp( collidedWith.x, collidedWith.y );
+
+                addToScore( SCORE_VALUE.enemyKill );
                 }
             }
 
@@ -237,6 +266,8 @@ function playerCollisions( data )
 
                 // enemy is removed regardless of what health he may have
             collidedWith.remove();
+
+            addToScore( SCORE_VALUE.enemyDamage );
 
             if ( !survived )
                 {
@@ -272,6 +303,8 @@ function clear()
     PLAYER.remove();
     PLAYER = null;
 
+    setScore( 0 );
+
     UNITS.removeAllChildren();
     BULLETS.removeAllChildren();
     POWER_UPS.removeAllChildren();
@@ -296,6 +329,10 @@ function initMenu()
             preText: 'Speed: ',
             value: 0
         });
+    HIGH_SCORE_MENU = new Game.Html.Value({
+            preText: 'High-score: ',
+            value: getCurrentHighScore()
+        });
     var volumeRange = new Game.Html.Range({
             preText: 'Volume: ',
             min: 0,
@@ -314,10 +351,58 @@ function initMenu()
     menu.addChild( HEALTH_MENU );
     menu.addChild( DAMAGE_MENU );
     menu.addChild( SPEED_MENU );
+    menu.addChild( HIGH_SCORE_MENU );
     menu.addChild( volumeRange );
     menu.addChild( restartButton );
 
     document.body.appendChild( menu.container );
+    }
+
+
+/**
+ * Add to the current score (also updates the text element).
+ */
+function addToScore( score: number )
+    {
+    SCORE += score;
+    SCORE_TEXT.text = 'Score: ' + SCORE;
+    }
+
+
+/**
+ * Sets the score to the given value.
+ */
+function setScore( score: number )
+    {
+    SCORE = score;
+    SCORE_TEXT.text = 'Score: ' + SCORE;
+    }
+
+
+/**
+ * Compare the final score with previous scores. Saved it if it happens to be higher than previously.
+ */
+function addHighScore( score: number )
+    {
+    Game.HighScore.add( 'score', score );
+
+    HIGH_SCORE_MENU.setValue( getCurrentHighScore() )
+    }
+
+
+/**
+ * Get the current high-score.
+ */
+function getCurrentHighScore()
+    {
+    var score = Game.HighScore.get( 'score' );
+
+    if ( score )
+        {
+        return score[ 0 ];
+        }
+
+    return 0;
     }
 
 
@@ -396,6 +481,13 @@ function restart()
 
 function gameOver()
     {
+    var message = new Game.Message({
+            body: 'Game Over!',
+            container: Game.getCanvasContainer(),
+            timeout: 2
+        });
+    addHighScore( SCORE );
+
     restart();
     }
 }
