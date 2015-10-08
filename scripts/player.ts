@@ -79,7 +79,7 @@ class Player extends Game.Bitmap
     tookDamage( damage: number )
         {
         this.health -= damage;
-        this.dispatchEvent( 'health_change' );
+        this.dispatchEvent( 'health_change', this );
 
         if ( this.health > 0 )
             {
@@ -265,13 +265,13 @@ class Player extends Game.Bitmap
         if ( powerUp.damage )
             {
             this.setDamage( this.damage + powerUp.damage );
-            this.dispatchEvent( 'damage_change' );
+            this.dispatchEvent( 'damage_change', this );
             }
 
         if ( powerUp.speed )
             {
             this.movement_speed += powerUp.speed;
-            this.dispatchEvent( 'speed_change' );
+            this.dispatchEvent( 'speed_change', this );
             }
 
         if ( powerUp.weaponClass )
@@ -288,7 +288,7 @@ class Player extends Game.Bitmap
         if ( powerUp.health )
             {
             this.health += powerUp.health;
-            this.dispatchEvent( 'health_change' );
+            this.dispatchEvent( 'health_change', this );
             }
 
             // the power up will be removed after the duration has passed
@@ -305,13 +305,13 @@ class Player extends Game.Bitmap
         if ( powerUp.damage )
             {
             this.setDamage( this.damage - powerUp.damage );
-            this.dispatchEvent( 'damage_change' );
+            this.dispatchEvent( 'damage_change', this );
             }
 
         if ( powerUp.speed )
             {
             this.movement_speed -= powerUp.speed;
-            this.dispatchEvent( 'speed_change' );
+            this.dispatchEvent( 'speed_change', this );
             }
 
         if ( powerUp.weapon )

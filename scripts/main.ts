@@ -97,16 +97,10 @@ var UNITS: Game.Container;
 var BULLETS: Game.Container;
 var POWER_UPS: Game.Container;
 
-var HEALTH_MENU: Game.Html.Value;
-var DAMAGE_MENU: Game.Html.Value;
-var SPEED_MENU: Game.Html.Value;
-var HIGH_SCORE_MENU: Game.Html.Value;
-
 var PLAYER: Player;
 var POWER_UP_SPAWN_COUNT = 0;
 var POWER_UP_SPAWN_RATE = 1;    // spawn a power up for every 'value' enemy kills
-var SCORE = 0;      // current score
-var SCORE_TEXT: Game.Text;
+
 
 export const CATEGORIES = {
     player: 1,
@@ -114,12 +108,6 @@ export const CATEGORIES = {
     powerUp: 4
 };
 
-const SCORE_VALUE = {
-    enemyKill: 20,
-    pickedPowerUp: 10,
-    bulletDamage: -2,
-    enemyDamage: -5
-};
 
 
 export function init()
@@ -131,9 +119,9 @@ export function init()
         });
 
     Game.init( document.body, CANVAS_WIDTH, CANVAS_HEIGHT, collision );
-    Game.HighScore.init( 1, 'space_shooter_highscore', false );
+    HighScore.init();
     Input.init();
-    initMenu();
+    GameMenu.init();
     initGameInfo();
 
     var background = new Game.ScrollingBitmap({
@@ -143,17 +131,6 @@ export function init()
             direction: Game.ScrollingBitmapArgs.Direction.bottom,
             step: 1,
         interval: 0.1
-        });
-
-    SCORE_TEXT = new Game.Text({
-            x: CANVAS_WIDTH,
-            y: 0,
-            text: 'Score: 0',
-            fontFamily: 'monospace',
-            fontSize: 20,
-            textAlign: 'end',
-            textBaseline: 'top',
-            color: 'white'
         });
 
 
@@ -166,7 +143,7 @@ export function init()
     Game.addElement( POWER_UPS );
     Game.addElement( BULLETS );
     Game.addElement( UNITS );
-    Game.addElement( SCORE_TEXT );
+    Game.addElement( HighScore.getTextElement() );
 
     var sourceNode = Game.Sound.play( Game.Preload.get( 'music' ) );
     sourceNode.loop = true;
@@ -182,14 +159,14 @@ export function start()
             y: CANVAS_HEIGHT - 100
         });
     PLAYER.addEventListener( 'collision', playerCollisions );
-    PLAYER.addEventListener( 'health_change', updateStatusBar );
-    PLAYER.addEventListener( 'damage_change', updateStatusBar );
-    PLAYER.addEventListener( 'speed_change', updateStatusBar );
+    PLAYER.addEventListener( 'health_change', GameMenu.updateStatusBar );
+    PLAYER.addEventListener( 'damage_change', GameMenu.updateStatusBar );
+    PLAYER.addEventListener( 'speed_change', GameMenu.updateStatusBar );
 
     Main.addUnit( PLAYER );
 
     Level.start( 0 );
-    updateStatusBar();
+    GameMenu.updateStatusBar( PLAYER );
     }
 
 
@@ -209,7 +186,7 @@ function playerCollisions( data )
             player.addPowerUp( collidedWith.power_up );
             collidedWith.remove();
 
-            addToScore( SCORE_VALUE.pickedPowerUp );
+            HighScore.addToScore( HighScore.SCORE_VALUE.pickedPowerUp );
             }
         }
 
@@ -230,7 +207,7 @@ function playerCollisions( data )
             survived = player.tookDamage( collidedWith.damage );
             collidedWith.remove();
 
-            addToScore( SCORE_VALUE.bulletDamage );
+            HighScore.addToScore( HighScore.SCORE_VALUE.bulletDamage );
 
             if ( !survived )
                 {
@@ -252,7 +229,7 @@ function playerCollisions( data )
                 {
                 spawnPowerUp( collidedWith.x, collidedWith.y );
 
-                addToScore( SCORE_VALUE.enemyKill );
+                HighScore.addToScore( HighScore.SCORE_VALUE.enemyKill );
                 }
             }
 
@@ -267,7 +244,7 @@ function playerCollisions( data )
                 // enemy is removed regardless of what health he may have
             collidedWith.remove();
 
-            addToScore( SCORE_VALUE.enemyDamage );
+            HighScore.addToScore( HighScore.SCORE_VALUE.enemyDamage );
 
             if ( !survived )
                 {
@@ -303,106 +280,11 @@ function clear()
     PLAYER.remove();
     PLAYER = null;
 
-    setScore( 0 );
+    HighScore.setScore( 0 );
 
     UNITS.removeAllChildren();
     BULLETS.removeAllChildren();
     POWER_UPS.removeAllChildren();
-    }
-
-
-function initMenu()
-    {
-    var menu = new Game.Html.HtmlContainer({
-            cssId: 'Menu'
-        });
-
-    HEALTH_MENU = new Game.Html.Value({
-            preText: 'Health: ',
-            value: 0
-        });
-    DAMAGE_MENU = new Game.Html.Value({
-            preText: 'Damage: ',
-            value: 0
-        });
-    SPEED_MENU = new Game.Html.Value({
-            preText: 'Speed: ',
-            value: 0
-        });
-    HIGH_SCORE_MENU = new Game.Html.Value({
-            preText: 'High-score: ',
-            value: getCurrentHighScore()
-        });
-    var volumeRange = new Game.Html.Range({
-            preText: 'Volume: ',
-            min: 0,
-            max: 1,
-            value: Game.Sound.getGlobalGain(),
-            step: 0.1,
-            onChange: function( button )
-                {
-                Game.Sound.setGlobalGain( button.getValue() );
-                }
-        });
-    var restartButton = new Game.Html.Button({
-            value: 'Restart',
-            callback: restart
-        });
-    menu.addChild( HEALTH_MENU );
-    menu.addChild( DAMAGE_MENU );
-    menu.addChild( SPEED_MENU );
-    menu.addChild( HIGH_SCORE_MENU );
-    menu.addChild( volumeRange );
-    menu.addChild( restartButton );
-
-    document.body.appendChild( menu.container );
-    }
-
-
-/**
- * Add to the current score (also updates the text element).
- */
-function addToScore( score: number )
-    {
-    SCORE += score;
-    SCORE_TEXT.text = 'Score: ' + SCORE;
-    }
-
-
-/**
- * Sets the score to the given value.
- */
-function setScore( score: number )
-    {
-    SCORE = score;
-    SCORE_TEXT.text = 'Score: ' + SCORE;
-    }
-
-
-/**
- * Compare the final score with previous scores. Saved it if it happens to be higher than previously.
- */
-function addHighScore( score: number )
-    {
-    Game.HighScore.add( 'score', score );
-
-    HIGH_SCORE_MENU.setValue( getCurrentHighScore() )
-    }
-
-
-/**
- * Get the current high-score.
- */
-function getCurrentHighScore()
-    {
-    var score = Game.HighScore.get( 'score' );
-
-    if ( score )
-        {
-        return score[ 0 ];
-        }
-
-    return 0;
     }
 
 
@@ -440,23 +322,9 @@ function initGameInfo()
     }
 
 
-export function updateStatusBar()
-    {
-    HEALTH_MENU.setValue( PLAYER.health );
-    DAMAGE_MENU.setValue( PLAYER.damage );
-    SPEED_MENU.setValue( PLAYER.movement_speed );
-    }
-
-
 export function addUnit( element: Game.Element )
     {
     UNITS.addChild( element );
-    }
-
-
-export function addBullet( bullet: Game.Bullet )
-    {
-    BULLETS.addChild( bullet );
     }
 
 
@@ -472,7 +340,7 @@ export function getPlayer()
     }
 
 
-function restart()
+export function restart()
     {
     clear();
     start();
@@ -486,7 +354,7 @@ function gameOver()
             container: Game.getCanvasContainer(),
             timeout: 2
         });
-    addHighScore( SCORE );
+    HighScore.addCurrentScore();
 
     restart();
     }
