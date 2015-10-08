@@ -16,8 +16,8 @@ export function init()
     Game.HighScore.init( 1, 'space_shooter_highscore', false );
 
     SCORE_TEXT = new Game.Text({
-            x: Main.CANVAS_WIDTH,
-            y: 0,
+            x: Main.GAME_END_X,
+            y: Main.GAME_START_Y,
             text: 'Score: 0',
             fontFamily: 'monospace',
             fontSize: 20,

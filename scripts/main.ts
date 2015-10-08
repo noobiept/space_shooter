@@ -91,6 +91,12 @@ module Main
 {
 export const CANVAS_WIDTH = 768;
 export const CANVAS_HEIGHT = 700;
+const BORDER = 10;        // border around the canvas, so that the enemies can appear/leave the canvas more naturally
+
+export const GAME_START_X = BORDER;
+export const GAME_START_Y = BORDER;
+export const GAME_END_X = CANVAS_WIDTH - BORDER;
+export const GAME_END_Y = CANVAS_HEIGHT - BORDER;
 
 var ENEMIES: Game.Container;
 var BULLETS: Game.Container;
@@ -141,6 +147,45 @@ export function init()
     Game.addElement( ENEMIES );
     Game.addElement( HighScore.getTextElement() );
 
+        // add the borders around
+    var halfWidth = CANVAS_WIDTH / 2;
+    var halfHeight = CANVAS_HEIGHT / 2;
+    var halfBorder = BORDER / 2;
+
+    var left = new Game.Rectangle({
+            x: halfBorder,
+            y: halfHeight,
+            width: BORDER,
+            height: CANVAS_HEIGHT,
+            color: 'black'
+        });
+    var right = new Game.Rectangle({
+            x: CANVAS_WIDTH - halfBorder,
+            y: halfHeight,
+            width: BORDER,
+            height: CANVAS_HEIGHT,
+            color: 'black'
+        });
+    var top = new Game.Rectangle({
+            x: halfWidth,
+            y: halfBorder,
+            width: CANVAS_WIDTH - 2 * BORDER,
+            height: BORDER,
+            color: 'black'
+        });
+    var bottom = new Game.Rectangle({
+            x: halfWidth,
+            y: CANVAS_HEIGHT - halfBorder,
+            width: CANVAS_WIDTH - 2 / BORDER,
+            height: BORDER,
+            color: 'black'
+        });
+    Game.addElement( left );
+    Game.addElement( right );
+    Game.addElement( top );
+    Game.addElement( bottom );
+
+        // play the background music
     var sourceNode = Game.Sound.play( Game.Preload.get( 'music' ) );
     sourceNode.loop = true;
 

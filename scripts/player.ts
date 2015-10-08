@@ -212,24 +212,24 @@ class Player extends Game.Bitmap
 
 
             // make sure the player doesn't get out of the canvas bounds
-        if ( nextX - this.rotated_half_width < 0 )
+        if ( nextX - this.rotated_half_width < Main.GAME_START_X )
             {
-            nextX = this.rotated_half_width;
+            nextX = Main.GAME_START_X + this.rotated_half_width;
             }
 
-        else if ( nextX + this.rotated_half_width > Main.CANVAS_WIDTH )
+        else if ( nextX + this.rotated_half_width > Main.GAME_END_X )
             {
-            nextX = Main.CANVAS_WIDTH - this.rotated_half_width;
+            nextX = Main.GAME_END_X - this.rotated_half_width;
             }
 
-        if ( nextY - this.rotated_half_height < 0 )
+        if ( nextY - this.rotated_half_height < Main.GAME_START_Y )
             {
-            nextY = this.rotated_half_height;
+            nextY = Main.GAME_START_Y + this.rotated_half_height;
             }
 
-        else if ( nextY + this.rotated_half_height > Main.CANVAS_HEIGHT )
+        else if ( nextY + this.rotated_half_height > Main.GAME_END_Y )
             {
-            nextY = Main.CANVAS_HEIGHT - this.rotated_half_height;
+            nextY = Main.GAME_END_Y - this.rotated_half_height;
             }
 
         this.setPosition( nextX, nextY );
