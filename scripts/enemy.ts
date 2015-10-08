@@ -7,6 +7,7 @@ interface EnemyArgs
     imageId: string;
     }
 
+
 class Enemy extends Game.Bitmap
     {
         // these will be set in the initialization part of the game, and are set independently per derived class (see the 'initGameInfo()' function)
@@ -19,6 +20,7 @@ class Enemy extends Game.Bitmap
     health: number;
     movement: Game.Movement;
     weapon: Game.Weapon;
+
 
     constructor( args: EnemyArgs )
         {
@@ -59,6 +61,11 @@ class Enemy extends Game.Bitmap
         return true;
         }
 
+
+    /**
+     * Run the movement and weapon logic.
+     * Remove the element if it gets out of bounds.
+     */
     logic( deltaTime: number )
         {
         super.logic( deltaTime );
@@ -79,10 +86,16 @@ class Enemy extends Game.Bitmap
         }
 
 
+    /**
+     * Count the enemies that are removed.
+     */
     remove()
         {
-        super.remove();
+        if ( !this._removed )
+            {
+            Main.enemyRemoved();
+            }
 
-        Main.enemyRemoved();
+        super.remove();
         }
     }

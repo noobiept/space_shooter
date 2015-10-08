@@ -17,6 +17,9 @@ class WeaponRandom extends Game.Weapon
         }
 
 
+    /**
+     * Fires some bullets in random directions.
+     */
     firingPattern( refAngle: number )
         {
         var limit = 5;

@@ -1,6 +1,5 @@
 /// <reference path="../libraries/game_engine.d.ts" />
 
-
 window.addEventListener( 'load', function()
 {
 var preload = new Game.Preload({
@@ -167,6 +166,9 @@ export function start()
     }
 
 
+/**
+ * Handle all the player collisions with the enemies/bullets/power-ups.
+ */
 function playerCollisions( data )
     {
     var player = data.element;

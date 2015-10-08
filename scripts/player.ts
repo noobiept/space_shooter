@@ -116,6 +116,9 @@ class Player extends Game.Bitmap
         }
 
 
+    /**
+     * Fire all the weapons (that are ready) when the 'space' key is pressed.
+     */
     _fire_logic( deltaTime: number )
         {
         var keysHeld = Input.KEYS_HELD;
@@ -233,6 +236,9 @@ class Player extends Game.Bitmap
         }
 
 
+    /**
+     * The power-ups have a duration. When that duration ends need to remove the power-up.
+     */
     _power_up_logic( deltaTime: number )
         {
         for (var a = this._power_ups.length - 1 ; a >= 0 ; a--)

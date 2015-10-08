@@ -19,6 +19,9 @@ class WeaponSide extends Game.Weapon
         }
 
 
+    /**
+     * Fire a bullet to each side of the element.
+     */
     firingPattern( angle: number )
         {
         var fired = this._fire( angle - Math.PI / 4, 1 );

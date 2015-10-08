@@ -17,6 +17,9 @@ class WeaponAround extends Game.Weapon
         }
 
 
+    /**
+     * Fire bullets in all directions around the element.
+     */
     firingPattern( refAngle: number )
         {
         var end = 2 * Math.PI;

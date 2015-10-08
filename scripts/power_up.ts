@@ -23,6 +23,7 @@ interface PowerUpArgs
     powerUp: PowerUpInfo;
     }
 
+
 class PowerUp extends Game.Bitmap
     {
     movement: Game.Movement;
@@ -33,6 +34,7 @@ class PowerUp extends Game.Bitmap
     _duration: number;          // remove the element after this duration has passed
     _blink_count: number;
     _blink_interval: number;     // blink the shape in the last seconds (to tell its close to being removed)
+
 
     constructor( args: PowerUpArgs )
         {
@@ -60,6 +62,11 @@ class PowerUp extends Game.Bitmap
         this.movement.moveTo( args.x, Main.CANVAS_HEIGHT + this.half_height );
         }
 
+
+    /**
+     * Moves downward, until it reaches the bottom of the canvas, rotating around itself.
+     * Has a duration before it is removed. It blinks in the last 3 seconds.
+     */
     logic( deltaTime: number )
         {
         super.logic( deltaTime );

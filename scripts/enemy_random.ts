@@ -32,6 +32,9 @@ class EnemyRandom extends Enemy
         }
 
 
+    /**
+     * Move in a downward arc.
+     */
     logic( deltaTime: number )
         {
         super.logic( deltaTime );

@@ -29,6 +29,10 @@ class EnemyAround extends Enemy
         }
 
 
+    /**
+     * Have the movement angle alternate between a clockwise or counter-clockwise direction.
+     * The angle is applied only to the 'x' axis.
+     */
     logic( deltaTime: number )
         {
         super.logic( deltaTime );

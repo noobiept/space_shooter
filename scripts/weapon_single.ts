@@ -19,6 +19,9 @@ class WeaponSingle extends Game.Weapon
         }
 
 
+    /**
+     * Fire a single bullet in the element's direction.
+     */
     firingPattern( angle: number )
         {
         return this._fire( angle, 1 );

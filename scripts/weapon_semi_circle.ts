@@ -32,6 +32,10 @@ class WeaponSemiCircle extends Game.Weapon
         }
 
 
+    /**
+     * Fires several bullets per angle, in a semi-circle in front of the element.
+     * There's a delay between the bullets that are fired per angle, and between each angle.
+     */
     firingPattern( refAngle: number )
         {
         var angle = refAngle - Math.PI / 2;
