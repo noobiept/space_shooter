@@ -54,7 +54,7 @@ class Player extends Game.Bitmap
         var singleWeapon = new WeaponSingle({
                 element: this,
                 bulletContainer: Main.getBulletContainer(),
-                fireInterval: 0.5,
+                fireInterval: 0.4,
                 imageId: 'laser1-blue'
             });
         this._weapons.push( singleWeapon );
@@ -350,8 +350,6 @@ class Player extends Game.Bitmap
 
     remove()
         {
-        super.remove();
-
         var a;
 
             // remove all weapons
@@ -373,5 +371,7 @@ class Player extends Game.Bitmap
                 }
             }
         this._power_ups.length = 0;
+
+        super.remove();
         }
     }

@@ -77,4 +77,12 @@ class Enemy extends Game.Bitmap
             this.remove();
             }
         }
+
+
+    remove()
+        {
+        super.remove();
+
+        Main.enemyRemoved();
+        }
     }

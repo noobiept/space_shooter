@@ -93,21 +93,18 @@ module Main
 export const CANVAS_WIDTH = 768;
 export const CANVAS_HEIGHT = 700;
 
-var UNITS: Game.Container;
+var ENEMIES: Game.Container;
 var BULLETS: Game.Container;
 var POWER_UPS: Game.Container;
 
 var PLAYER: Player;
-var POWER_UP_SPAWN_COUNT = 0;
-var POWER_UP_SPAWN_RATE = 1;    // spawn a power up for every 'value' enemy kills
-
+var ENEMIES_COUNT = 0;      // keeps track of the number of enemies in the game
 
 export const CATEGORIES = {
     player: 1,
     enemy: 2,
     powerUp: 4
 };
-
 
 
 export function init()
@@ -134,15 +131,15 @@ export function init()
         });
 
 
-        // will contain all the units/bullets/etc
-    UNITS = new Game.Container();
+        // will contain all the enemies/bullets/power-ups
+    ENEMIES = new Game.Container();
     BULLETS = new Game.Container();
     POWER_UPS = new Game.Container();
 
     Game.addElement( background );
     Game.addElement( POWER_UPS );
     Game.addElement( BULLETS );
-    Game.addElement( UNITS );
+    Game.addElement( ENEMIES );
     Game.addElement( HighScore.getTextElement() );
 
     var sourceNode = Game.Sound.play( Game.Preload.get( 'music' ) );
@@ -163,7 +160,7 @@ export function start()
     PLAYER.addEventListener( 'damage_change', GameMenu.updateStatusBar );
     PLAYER.addEventListener( 'speed_change', GameMenu.updateStatusBar );
 
-    Main.addUnit( PLAYER );
+    Game.addElement( PLAYER );
 
     Level.start( 0 );
     GameMenu.updateStatusBar( PLAYER );
@@ -211,7 +208,7 @@ function playerCollisions( data )
 
             if ( !survived )
                 {
-                gameOver();
+                gameLost();
                 }
             }
         }
@@ -230,6 +227,7 @@ function playerCollisions( data )
                 spawnPowerUp( collidedWith.x, collidedWith.y );
 
                 HighScore.addToScore( HighScore.SCORE_VALUE.enemyKill );
+                isLevelOver();
                 }
             }
 
@@ -248,7 +246,12 @@ function playerCollisions( data )
 
             if ( !survived )
                 {
-                gameOver();
+                gameLost();
+                }
+
+            else
+                {
+                isLevelOver();
                 }
             }
         }
@@ -256,20 +259,13 @@ function playerCollisions( data )
 
 
 /**
- * Add a power-up after a certain number of enemy kills.
+ * Add a power-up after an enemy has been killed.
  * It spawns where the enemy died.
  */
 function spawnPowerUp( x, y )
     {
-    POWER_UP_SPAWN_COUNT++;
-
-    if ( POWER_UP_SPAWN_COUNT >= POWER_UP_SPAWN_RATE )
-        {
-        POWER_UP_SPAWN_COUNT = 0;
-
-        var powerUp = PowerUp.createRandom( x, y );
-        POWER_UPS.addChild( powerUp );
-        }
+    var powerUp = PowerUp.createRandom( x, y );
+    POWER_UPS.addChild( powerUp );
     }
 
 
@@ -282,7 +278,9 @@ function clear()
 
     HighScore.setScore( 0 );
 
-    UNITS.removeAllChildren();
+    ENEMIES_COUNT = 0;
+
+    ENEMIES.removeAllChildren();
     BULLETS.removeAllChildren();
     POWER_UPS.removeAllChildren();
     }
@@ -322,9 +320,16 @@ function initGameInfo()
     }
 
 
-export function addUnit( element: Game.Element )
+export function addEnemy( element: Game.Element )
     {
-    UNITS.addChild( element );
+    ENEMIES.addChild( element );
+    ENEMIES_COUNT++;
+    }
+
+
+export function enemyRemoved()
+    {
+    ENEMIES_COUNT--;
     }
 
 
@@ -347,15 +352,47 @@ export function restart()
     }
 
 
-function gameOver()
+/**
+ * The level is over when there's no more enemies to spawn, and all active enemies were killed.
+ */
+function isLevelOver()
+    {
+    if ( Level.isDone() && ENEMIES_COUNT === 0 )
+        {
+        gameWon();
+        }
+    }
+
+
+function gameWon()
+    {
+    gameOver( 'You Won!', 2 );
+    }
+
+
+function gameLost()
+    {
+    gameOver( 'You Lost!' );
+    }
+
+
+function gameOver( text: string, restartDelay?: number )
     {
     var message = new Game.Message({
-            body: 'Game Over!',
+            body: text,
             container: Game.getCanvasContainer(),
             timeout: 2
         });
     HighScore.addCurrentScore();
 
-    restart();
+    if ( typeof restartDelay === 'undefined' )
+        {
+        restart();
+        }
+
+    else
+        {
+        Game.addToGameLoop( restart, restartDelay, false );
+        }
     }
 }

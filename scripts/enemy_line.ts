@@ -12,7 +12,7 @@ class EnemyLine extends Enemy
                 imageId: 'laser1-red'
             });
         this.weapon.damage = this.damage;
-        this.weapon.forceFire( Math.PI / 2, 1, 2 );
+        this.weapon.forceFire( Math.PI / 2, 1, 1.5 );
 
         this.movement.moveTo( args.x, Main.CANVAS_HEIGHT + this.half_height );
         }

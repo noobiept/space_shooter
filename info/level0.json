@@ -6,35 +6,35 @@
         },
         {
             "className": "EnemyMeteor",
-            "time": 2
-        },
-        {
-            "className": "EnemyLine",
             "time": 3
         },
         {
-            "className": "EnemyAround",
-            "time": 4
-        },
-        {
-            "className": "EnemyFollow",
+            "className": "EnemyLine",
             "time": 5
         },
         {
-            "className": "EnemyLine",
-            "time": 6
-        },
-        {
-            "className": "EnemyMeteor",
+            "className": "EnemyAround",
             "time": 7
         },
         {
+            "className": "EnemyFollow",
+            "time": 9
+        },
+        {
+            "className": "EnemyLine",
+            "time": 11
+        },
+        {
+            "className": "EnemyMeteor",
+            "time": 13
+        },
+        {
             "className": "EnemyTop",
-            "time": 8
+            "time": 15
         },
         {
             "className": "EnemyRandom",
-            "time": 9
+            "time": 17
         }
     ]
 }

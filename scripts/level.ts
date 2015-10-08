@@ -17,6 +17,7 @@ var SPAWN_POSITION = 0; // the info on the 'spawn' array is ordered by time, thi
 var NEXT_SPAWN: SpawnInfo;  // has the next info
 
 var COUNT = 0;          // count the time passed (in seconds) since the level started, useful to know when to spawn the next enemies/etc
+var FINISHED_SPAWNING = false;
 
 
 export function start( level: number )
@@ -31,6 +32,7 @@ export function start( level: number )
     INFO = info;
     COUNT = 0;
     SPAWN_POSITION = 0;
+    FINISHED_SPAWNING = false;
     NEXT_SPAWN = info.spawn[ SPAWN_POSITION ];
 
         // update every second
@@ -57,8 +59,17 @@ function spawnEnemy( info: SpawnInfo )
                 x: Game.Utilities.getRandomInt( 0, Main.CANVAS_WIDTH ),
                 y: 0
             });
-        Main.addUnit( enemy );
+        Main.addEnemy( enemy );
         }
+    }
+
+
+/**
+ * Says if the level has finished spawning all the enemies.
+ */
+export function isDone()
+    {
+    return FINISHED_SPAWNING;
     }
 
 
@@ -77,7 +88,7 @@ function update()
             // need to wait until there's no more enemies alive
         if ( SPAWN_POSITION >= INFO.spawn.length )
             {
-            //HERE
+            FINISHED_SPAWNING = true;
             clear();
             }
 
