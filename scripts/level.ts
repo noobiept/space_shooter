@@ -137,7 +137,6 @@ function gameOver( text: string, restartDelay?: number )
         restartDelay = 0;
         }
 
-    Level.clear();
     Game.addToGameLoop( addScoreAndRestart, restartDelay, false );
     }
 
