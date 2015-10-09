@@ -20,6 +20,7 @@ var COUNT = 0;          // count the time passed (in seconds) since the level st
 var FINISHED_SPAWNING = false;
 var ENEMIES_COUNT = 0;  // keeps track of the number of enemies in the game
 var LEVEL_ENDED = false;
+var CURRENT_LEVEL = 0;
 
 
 export function start( level: number )
@@ -31,6 +32,9 @@ export function start( level: number )
         throw new Error( "Invalid level number." );
         }
 
+    Main.showMessage( 'Level ' + (level + 1) );
+
+    CURRENT_LEVEL = level;
     INFO = info;
     COUNT = 0;
     SPAWN_POSITION = 0;
@@ -75,12 +79,12 @@ export function enemyRemoved()
 
     if ( FINISHED_SPAWNING && ENEMIES_COUNT === 0 )
         {
-        gameWon();
+        getNextLevel();
         }
     }
 
 
-function gameWon()
+function getNextLevel()
     {
     if ( LEVEL_ENDED )
         {
@@ -89,7 +93,15 @@ function gameWon()
 
     LEVEL_ENDED = true;
 
-    gameOver( 'You Won!', 2 );
+    try {
+        start( CURRENT_LEVEL + 1 );
+        }
+
+        // no more levels
+    catch( error )
+        {
+        gameOver( 'You Won!', 2 );
+        }
     }
 
 
@@ -118,17 +130,14 @@ function addScoreAndRestart()
 
 function gameOver( text: string, restartDelay?: number )
     {
-    new Game.Message({
-            body: text,
-            container: Game.getCanvasContainer(),
-            timeout: 2
-        });
+    Main.showMessage( text );
 
     if ( typeof restartDelay === 'undefined' )
         {
         restartDelay = 0;
         }
 
+    Level.clear();
     Game.addToGameLoop( addScoreAndRestart, restartDelay, false );
     }
 

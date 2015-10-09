@@ -33,6 +33,7 @@ var assetsManifest = [
     ];
 var info = [
         { id: 'level0', path: 'level0.json' },
+        { id: 'level1', path: 'level1.json' },
         { id: 'game_info', path: 'game_info.json' }
     ];
 
@@ -110,6 +111,8 @@ export const CATEGORIES = {
     powerUp: 4
 };
 
+var MESSAGE_CONTAINER: HTMLElement;
+
 
 export function init()
     {
@@ -131,7 +134,7 @@ export function init()
             image: Game.Preload.get( 'background' ),
             direction: Game.ScrollingBitmapArgs.Direction.bottom,
             step: 1,
-        interval: 0.1
+        interval: 0.05
         });
 
 
@@ -183,6 +186,13 @@ export function init()
     Game.addElement( right );
     Game.addElement( top );
     Game.addElement( bottom );
+
+
+    MESSAGE_CONTAINER = document.createElement( 'div' );
+    MESSAGE_CONTAINER.id = 'MessageContainer';
+
+    Game.getCanvasContainer().appendChild( MESSAGE_CONTAINER );
+
 
         // play the background music
     var sourceNode = Game.Sound.play( Game.Preload.get( 'music' ) );
@@ -380,5 +390,15 @@ export function restart()
     {
     clear();
     start();
+    }
+
+
+export function showMessage( text: string )
+    {
+    new Game.Message({
+            body: text,
+            container: MESSAGE_CONTAINER,
+            timeout: 2
+        });
     }
 }

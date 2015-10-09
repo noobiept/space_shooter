@@ -1,0 +1,24 @@
+{
+    "spawn": [
+        {
+            "className": "EnemyRandom",
+            "time": 1
+        },
+        {
+            "className": "EnemyRandom",
+            "time": 2
+        },
+        {
+            "className": "EnemyRandom",
+            "time": 3
+        },
+        {
+            "className": "EnemyRandom",
+            "time": 4
+        },
+        {
+            "className": "EnemyRandom",
+            "time": 5
+        }
+    ]
+}
