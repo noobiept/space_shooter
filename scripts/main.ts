@@ -128,6 +128,7 @@ export function init()
     Input.init();
     GameMenu.init();
     initGameInfo();
+    Level.init();
 
     var background = new Game.ScrollingBitmap({
             x: CANVAS_WIDTH / 2,
@@ -285,8 +286,6 @@ function playerCollisions( data )
 
             if ( !survived )
                 {
-                spawnPowerUp( collidedWith.x, collidedWith.y );
-
                 HighScore.addToScore( HighScore.SCORE_VALUE.enemyKill );
                 }
             }
@@ -296,8 +295,6 @@ function playerCollisions( data )
             {
                 // takes double damage if collided directly with the enemy
             survived = PLAYER.tookDamage( collidedWith.damage * 2 );
-
-            spawnPowerUp( collidedWith.x, collidedWith.y );
 
                 // enemy is removed regardless of what health he may have
             collidedWith.remove();
@@ -313,26 +310,8 @@ function playerCollisions( data )
     }
 
 
-/**
- * Has a chance to add a power-up after an enemy has been killed.
- * It spawns where the enemy died.
- */
-function spawnPowerUp( x, y )
-    {
-    var random = Game.Utilities.getRandomInt( 0, 100 );
-
-    if ( random < 50 )
-        {
-        var powerUp = PowerUp.createRandom( x, y );
-        POWER_UPS.addChild( powerUp );
-        }
-    }
-
-
 function clear()
     {
-    Level.clear();
-
     PLAYER.remove();
     PLAYER = null;
 
@@ -381,6 +360,12 @@ function initGameInfo()
 export function addEnemy( element: Game.Element )
     {
     ENEMIES.addChild( element );
+    }
+
+
+export function addPowerUp( powerUp: PowerUp )
+    {
+    POWER_UPS.addChild( powerUp );
     }
 
 

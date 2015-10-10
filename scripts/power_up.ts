@@ -113,13 +113,26 @@ class PowerUp extends Game.Bitmap
 
 module PowerUp
     {
-    var ALL = [ damage, speed, health, sideWeapon, aroundWeapon, semiCircleWeapon, randomWeapon ];
+    var ALL_STATS = [ damage, speed, health ];
+    var ALL_WEAPONS = [ sideWeapon, aroundWeapon, semiCircleWeapon, randomWeapon ];
 
 
-    export function createRandom( x: number, y: number )
+    export function createRandom( x: number, y: number, statsPowerUp: boolean )
         {
-        var index = Game.Utilities.getRandomInt( 0, ALL.length - 1 );
-        var powerUp = ALL[ index ]();
+        var all;
+
+        if ( statsPowerUp )
+            {
+            all = ALL_STATS;
+            }
+
+        else
+            {
+            all = ALL_WEAPONS;
+            }
+
+        var index = Game.Utilities.getRandomInt( 0, all.length - 1 );
+        var powerUp = all[ index ]();
 
         return new PowerUp({
                 x: x,

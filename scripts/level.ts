@@ -3,6 +3,7 @@ module Level
 export interface LevelInfo
     {
     spawnCount: number;
+    powerUpInterval: number;
     spawn: SpawnInfo[];
     }
 
@@ -17,12 +18,20 @@ var INFO: LevelInfo;    // information about the level (what enemies spawn, and 
 var SPAWN_POSITION = 0; // the info on the 'spawn' array is ordered by time, this tell us what is the next position to look for
 var NEXT_SPAWN: SpawnInfo;  // has the next info
 
-var COUNT = 0;          // count the time passed (in seconds) since the level started, useful to know when to spawn the next enemies/etc
+var SPAWN_COUNT = 0;          // count the time passed (in seconds) since the level started, useful to know when to spawn the next enemies/etc
 var FINISHED_SPAWNING = false;
 var ENEMIES_COUNT = 0;  // keeps track of the number of enemies in the game
 var LEVEL_ENDED = false;
 var CURRENT_LEVEL = 0;
-var SPAWN_COUNT = 0;    // how many enemies it spawns each time
+var POWER_UP_COUNT = 0;
+var DELTA_TIME = 1;     // time between each update
+var STATS_POWER_UP = true;      // whether to spawn a stats power-up or a weapon power-up
+
+
+export function init()
+    {
+    Game.addToGameLoop( update, DELTA_TIME );
+    }
 
 
 export function start( level: number )
@@ -36,18 +45,16 @@ export function start( level: number )
 
     Main.showMessage( 'Level ' + (level + 1) );
 
-    SPAWN_COUNT = info.spawnCount;
     CURRENT_LEVEL = level;
     INFO = info;
-    COUNT = 0;
+    SPAWN_COUNT = 0;
+    POWER_UP_COUNT = 0;
     SPAWN_POSITION = 0;
     FINISHED_SPAWNING = false;
     ENEMIES_COUNT = 0;
     LEVEL_ENDED = false;
     NEXT_SPAWN = info.spawn[ SPAWN_POSITION ];
-
-        // update every second
-    Game.addToGameLoop( update, 1 );
+    STATS_POWER_UP = true;
     }
 
 
@@ -62,7 +69,7 @@ function spawnEnemy( info: SpawnInfo )
         // get the class constructor/function
     var classFunc = window[ info.className ];
 
-    for (var a = 0 ; a < SPAWN_COUNT ; a++)
+    for (var a = 0 ; a < INFO.spawnCount ; a++)
         {
             // add the unit to the game
         var enemy = new classFunc({
@@ -72,6 +79,22 @@ function spawnEnemy( info: SpawnInfo )
         Main.addEnemy( enemy );
         ENEMIES_COUNT++;
         }
+    }
+
+
+/**
+ * Spawns a power-up in a random position in the upper part of the canvas.
+ * Alternates between spawning a stats power-up, or a weapon power-up.
+ */
+function spawnPowerUp()
+    {
+    var x = Game.Utilities.getRandomInt( Main.GAME_START_X, Main.GAME_END_X );
+    var y = Game.Utilities.getRandomInt( Main.GAME_START_Y, Main.GAME_END_Y / 2 );
+
+    STATS_POWER_UP = !STATS_POWER_UP;
+
+    var powerUp = PowerUp.createRandom( x, y, STATS_POWER_UP );
+    Main.addPowerUp( powerUp );
     }
 
 
@@ -143,37 +166,42 @@ function gameOver( text: string, restartDelay?: number )
     }
 
 
-/**
- * Says if the level has finished spawning all the enemies.
- */
-export function isDone()
-    {
-    return FINISHED_SPAWNING;
-    }
-
-
 function update()
     {
-    COUNT++;
-
-        // time to spawn some new element
-    if ( COUNT >= NEXT_SPAWN.time )
+    if ( !FINISHED_SPAWNING )
         {
-        spawnEnemy( NEXT_SPAWN );
+            // spawn of power-ups
+        POWER_UP_COUNT += DELTA_TIME;
 
-        SPAWN_POSITION++;
-
-            // no more elements to spawn
-            // need to wait until there's no more enemies alive
-        if ( SPAWN_POSITION >= INFO.spawn.length )
+        if ( POWER_UP_COUNT >= INFO.powerUpInterval )
             {
-            FINISHED_SPAWNING = true;
-            clear();
+            POWER_UP_COUNT = 0;
+
+            spawnPowerUp();
             }
 
-        else
+
+            // spawn of enemies
+        SPAWN_COUNT += DELTA_TIME;
+
+            // time to spawn some new element
+        if ( SPAWN_COUNT >= NEXT_SPAWN.time )
             {
-            NEXT_SPAWN = INFO.spawn[ SPAWN_POSITION ];
+            spawnEnemy( NEXT_SPAWN );
+
+            SPAWN_POSITION++;
+
+                // no more elements to spawn
+                // need to wait until there's no more enemies alive
+            if ( SPAWN_POSITION >= INFO.spawn.length )
+                {
+                FINISHED_SPAWNING = true;
+                }
+
+            else
+                {
+                NEXT_SPAWN = INFO.spawn[ SPAWN_POSITION ];
+                }
             }
         }
     }
