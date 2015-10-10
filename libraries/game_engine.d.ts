@@ -244,11 +244,12 @@ declare module Game {
 }
 declare module Game {
     module Sound {
-        function init(): void;
-        function decodeAudio(data: ArrayBuffer, successCallback: (decodedData: AudioBuffer) => any, errorCallback: any): void;
+        function init(): boolean;
+        function decodeAudio(data: ArrayBuffer, successCallback: (decodedData: AudioBuffer) => any, errorCallback: any): boolean;
         function play(audioBuffer: AudioBuffer): AudioBufferSourceNode;
         function setGlobalGain(gain: number): boolean;
         function getGlobalGain(): number;
+        function isAvailable(): boolean;
     }
 }
 declare module Game {

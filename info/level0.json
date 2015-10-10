@@ -1,5 +1,5 @@
 {
-    "spawnCount": 2,
+    "spawnCount": 3,
     "spawn": [
         {
             "className": "EnemyMeteor",

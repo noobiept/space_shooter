@@ -34,6 +34,7 @@ var assetsManifest = [
 var info = [
         { id: 'level0', path: 'level0.json' },
         { id: 'level1', path: 'level1.json' },
+        { id: 'level2', path: 'level2.json' },
         { id: 'game_info', path: 'game_info.json' }
     ];
 
@@ -196,7 +197,11 @@ export function init()
 
         // play the background music
     var sourceNode = Game.Sound.play( Game.Preload.get( 'music' ) );
-    sourceNode.loop = true;
+
+    if ( sourceNode )
+        {
+        sourceNode.loop = true;
+        }
 
     start();
     }

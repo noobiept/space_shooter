@@ -27,7 +27,7 @@ class WeaponSide extends Game.Weapon
         var left = angle - Math.PI / 4;
         var right = angle + Math.PI / 4;
 
-        var diff = Math.PI / 16;
+        var diff = Math.PI / 32;
 
         this._fire( left - diff, 1 );
         this._fire( left + diff, 1 );
