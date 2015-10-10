@@ -2,6 +2,7 @@ module Level
 {
 export interface LevelInfo
     {
+    spawnCount: number;
     spawn: SpawnInfo[];
     }
 
@@ -21,11 +22,12 @@ var FINISHED_SPAWNING = false;
 var ENEMIES_COUNT = 0;  // keeps track of the number of enemies in the game
 var LEVEL_ENDED = false;
 var CURRENT_LEVEL = 0;
+var SPAWN_COUNT = 0;    // how many enemies it spawns each time
 
 
 export function start( level: number )
     {
-    var info = Game.Preload.get( 'level' + level );
+    var info: LevelInfo = Game.Preload.get( 'level' + level );
 
     if ( !info )
         {
@@ -34,6 +36,7 @@ export function start( level: number )
 
     Main.showMessage( 'Level ' + (level + 1) );
 
+    SPAWN_COUNT = info.spawnCount;
     CURRENT_LEVEL = level;
     INFO = info;
     COUNT = 0;
@@ -58,9 +61,8 @@ function spawnEnemy( info: SpawnInfo )
     {
         // get the class constructor/function
     var classFunc = window[ info.className ];
-    var spawnCount = 2;
 
-    for (var a = 0 ; a < spawnCount ; a++)
+    for (var a = 0 ; a < SPAWN_COUNT ; a++)
         {
             // add the unit to the game
         var enemy = new classFunc({

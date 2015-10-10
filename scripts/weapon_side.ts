@@ -24,13 +24,17 @@ class WeaponSide extends Game.Weapon
      */
     firingPattern( angle: number )
         {
-        var fired = this._fire( angle - Math.PI / 4, 1 );
+        var left = angle - Math.PI / 4;
+        var right = angle + Math.PI / 4;
 
-        if ( !fired )
-            {
-            return fired;
-            }
+        var diff = Math.PI / 16;
 
-        return this._fire( angle + Math.PI / 4, 1 );
+        this._fire( left - diff, 1 );
+        this._fire( left + diff, 1 );
+
+        this._fire( right - diff, 1 );
+        this._fire( right + diff, 1 );
+
+        return true;
         }
     }

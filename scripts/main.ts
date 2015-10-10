@@ -309,13 +309,18 @@ function playerCollisions( data )
 
 
 /**
- * Add a power-up after an enemy has been killed.
+ * Has a chance to add a power-up after an enemy has been killed.
  * It spawns where the enemy died.
  */
 function spawnPowerUp( x, y )
     {
-    var powerUp = PowerUp.createRandom( x, y );
-    POWER_UPS.addChild( powerUp );
+    var random = Game.Utilities.getRandomInt( 0, 100 );
+
+    if ( random < 50 )
+        {
+        var powerUp = PowerUp.createRandom( x, y );
+        POWER_UPS.addChild( powerUp );
+        }
     }
 
 

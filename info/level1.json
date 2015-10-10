@@ -1,24 +1,125 @@
 {
+    "spawnCount": 3,
     "spawn": [
         {
-            "className": "EnemyRandom",
+            "className": "EnemyFollow",
             "time": 1
         },
         {
-            "className": "EnemyRandom",
+            "className": "EnemyMeteor",
             "time": 2
         },
         {
-            "className": "EnemyRandom",
+            "className": "EnemyAround",
             "time": 3
         },
         {
-            "className": "EnemyRandom",
+            "className": "EnemyLine",
             "time": 4
         },
         {
-            "className": "EnemyRandom",
+            "className": "EnemyLine",
             "time": 5
+        },
+        {
+            "className": "EnemyFollow",
+            "time": 6
+        },
+        {
+            "className": "EnemyAround",
+            "time": 7
+        },
+        {
+            "className": "EnemyLine",
+            "time": 8
+        },
+        {
+            "className": "EnemyFollow",
+            "time": 9
+        },
+        {
+            "className": "EnemyAround",
+            "time": 10
+        },
+        {
+            "className": "EnemyLine",
+            "time": 11
+        },
+        {
+            "className": "EnemyMeteor",
+            "time": 12
+        },
+        {
+            "className": "EnemyFollow",
+            "time": 13
+        },
+        {
+            "className": "EnemyLine",
+            "time": 14
+        },
+        {
+            "className": "EnemyAround",
+            "time": 15
+        },
+        {
+            "className": "EnemyFollow",
+            "time": 16
+        },
+        {
+            "className": "EnemyMeteor",
+            "time": 17
+        },
+        {
+            "className": "EnemyAround",
+            "time": 18
+        },
+        {
+            "className": "EnemyFollow",
+            "time": 19
+        },
+        {
+            "className": "EnemyLine",
+            "time": 20
+        },
+        {
+            "className": "EnemyMeteor",
+            "time": 21
+        },
+        {
+            "className": "EnemyFollow",
+            "time": 22
+        },
+        {
+            "className": "EnemyAround",
+            "time": 23
+        },
+        {
+            "className": "EnemyLine",
+            "time": 24
+        },
+        {
+            "className": "EnemyFollow",
+            "time": 25
+        },
+        {
+            "className": "EnemyMeteor",
+            "time": 26
+        },
+        {
+            "className": "EnemyAround",
+            "time": 27
+        },
+        {
+            "className": "EnemyLine",
+            "time": 28
+        },
+        {
+            "className": "EnemyFollow",
+            "time": 29
+        },
+        {
+            "className": "EnemyLine",
+            "time": 30
         }
     ]
 }

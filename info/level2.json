@@ -1,16 +1,16 @@
 {
-    "spawnCount": 2,
+    "spawnCount": 4,
     "spawn": [
         {
-            "className": "EnemyMeteor",
+            "className": "EnemyRandom",
             "time": 1
         },
         {
-            "className": "EnemyMeteor",
+            "className": "EnemyAround",
             "time": 2
         },
         {
-            "className": "EnemyMeteor",
+            "className": "EnemyFollow",
             "time": 3
         },
         {
@@ -18,19 +18,19 @@
             "time": 4
         },
         {
-            "className": "EnemyLine",
+            "className": "EnemyRandom",
             "time": 5
         },
         {
-            "className": "EnemyMeteor",
+            "className": "EnemyTop",
             "time": 6
         },
         {
-            "className": "EnemyLine",
+            "className": "EnemyAround",
             "time": 7
         },
         {
-            "className": "EnemyLine",
+            "className": "EnemyFollow",
             "time": 8
         },
         {
@@ -38,23 +38,23 @@
             "time": 9
         },
         {
-            "className": "EnemyLine",
+            "className": "EnemyTop",
             "time": 10
         },
         {
-            "className": "EnemyLine",
+            "className": "EnemyAround",
             "time": 11
         },
         {
-            "className": "EnemyMeteor",
+            "className": "EnemyFollow",
             "time": 12
         },
         {
-            "className": "EnemyMeteor",
+            "className": "EnemyRandom",
             "time": 13
         },
         {
-            "className": "EnemyLine",
+            "className": "EnemyAround",
             "time": 14
         },
         {
@@ -62,15 +62,15 @@
             "time": 15
         },
         {
-            "className": "EnemyMeteor",
+            "className": "EnemyFollow",
             "time": 16
         },
         {
-            "className": "EnemyMeteor",
+            "className": "EnemyAround",
             "time": 17
         },
         {
-            "className": "EnemyMeteor",
+            "className": "EnemyTop",
             "time": 18
         },
         {
@@ -78,19 +78,19 @@
             "time": 19
         },
         {
-            "className": "EnemyLine",
+            "className": "EnemyTop",
             "time": 20
         },
         {
-            "className": "EnemyMeteor",
+            "className": "EnemyAround",
             "time": 21
         },
         {
-            "className": "EnemyMeteor",
+            "className": "EnemyFollow",
             "time": 22
         },
         {
-            "className": "EnemyLine",
+            "className": "EnemyRandom",
             "time": 23
         },
         {
@@ -98,27 +98,27 @@
             "time": 24
         },
         {
-            "className": "EnemyLine",
+            "className": "EnemyTop",
             "time": 25
         },
         {
-            "className": "EnemyMeteor",
+            "className": "EnemyAround",
             "time": 26
         },
         {
-            "className": "EnemyMeteor",
+            "className": "EnemyFollow",
             "time": 27
         },
         {
-            "className": "EnemyLine",
+            "className": "EnemyRandom",
             "time": 28
         },
         {
-            "className": "EnemyLine",
+            "className": "EnemyTop",
             "time": 29
         },
         {
-            "className": "EnemyLine",
+            "className": "EnemyTop",
             "time": 30
         }
     ]

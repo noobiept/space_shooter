@@ -133,8 +133,8 @@ module PowerUp
         return {
                 type: PowerUpType.damage,
                 imageId: 'power_up_damage',
-                duration: 10,
-                damage: 20
+                duration: 7,
+                damage: 10
             };
         }
 
@@ -143,7 +143,7 @@ module PowerUp
         return {
                 type: PowerUpType.speed,
                 imageId: 'power_up_speed',
-                duration: 10,
+                duration: 7,
                 speed: 100
             };
         }
@@ -162,7 +162,7 @@ module PowerUp
         return {
                 type: PowerUpType.sideWeapon,
                 imageId: 'power_up_weapon',
-                duration: 10,
+                duration: 7,
                 weaponClass: WeaponSide,
                 weaponArgs: {
                     element: null,
@@ -178,12 +178,12 @@ module PowerUp
         return {
                 type: PowerUpType.aroundWeapon,
                 imageId: 'power_up_weapon',
-                duration: 10,
+                duration: 7,
                 weaponClass: WeaponAround,
                 weaponArgs: {
                     element: null,
                     bulletContainer: Main.getBulletContainer(),
-                    fireInterval: 1,
+                    fireInterval: 2,
                     imageId: 'laser3-blue'
                 }
             };
@@ -194,12 +194,12 @@ module PowerUp
         return {
                 type: PowerUpType.semiCircleWeapon,
                 imageId: 'power_up_weapon',
-                duration: 10,
+                duration: 7,
                 weaponClass: WeaponSemiCircle,
                 weaponArgs: {
                     element: null,
                     bulletContainer: Main.getBulletContainer(),
-                    fireInterval: 1.5,
+                    fireInterval: 2.5,
                     imageId: 'laser2-blue'
                 }
             };
@@ -210,12 +210,12 @@ module PowerUp
         return {
                 type: PowerUpType.randomWeapon,
                 imageId: 'power_up_weapon',
-                duration: 10,
+                duration: 7,
                 weaponClass: WeaponRandom,
                 weaponArgs: {
                     element: null,
                     bulletContainer: Main.getBulletContainer(),
-                    fireInterval: 0.5,
+                    fireInterval: 1.5,
                     imageId: 'laser3-blue'
                 }
             };
