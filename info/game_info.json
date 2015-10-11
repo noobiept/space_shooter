@@ -3,32 +3,32 @@
         "EnemyAround": {
             "movementSpeed": 90,
             "damage": 5,
-            "health": 20
+            "health": 25
         },
         "EnemyFollow": {
             "movementSpeed": 110,
             "damage": 7,
-            "health": 20
+            "health": 25
         },
         "EnemyLine": {
             "movementSpeed": 70,
             "damage": 9,
-            "health": 20
+            "health": 25
         },
         "EnemyMeteor": {
             "movementSpeed": 60,
             "damage": 14,
-            "health": 30
+            "health": 35
         },
         "EnemyRandom": {
             "movementSpeed": 120,
             "damage": 6,
-            "health": 20
+            "health": 25
         },
         "EnemyTop": {
             "movementSpeed": 60,
             "damage": 4,
-            "health": 10
+            "health": 15
         }
     },
 
