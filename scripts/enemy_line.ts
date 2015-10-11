@@ -9,7 +9,8 @@ class EnemyLine extends Enemy
         this.weapon = new WeaponSingle({
                 element: this,
                 bulletContainer: Main.getBulletContainer(),
-                imageId: 'laser1-red'
+                imageId: 'laser1-red',
+                category: Main.CATEGORIES.enemyBullets
             });
         this.weapon.damage = this.damage;
         this.weapon.forceFire( Math.PI / 2, 1, 1.5 );

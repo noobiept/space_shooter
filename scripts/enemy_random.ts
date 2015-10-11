@@ -13,10 +13,11 @@ class EnemyRandom extends Enemy
         this.weapon = new WeaponRandom({
                 element: this,
                 bulletContainer: Main.getBulletContainer(),
-                imageId: 'laser3-red'
+                imageId: 'laser3-red',
+                category: Main.CATEGORIES.enemyBullets
             });
         this.weapon.damage = this.damage;
-        this.weapon.forceFire( 0, 1, 0.5 );
+        this.weapon.forceFire( 0, 1, 1 );
 
         this.angle = Math.PI / 2;
 

@@ -40,7 +40,7 @@ class Player extends Game.Bitmap
                 x: args.x,
                 y: args.y,
                 category: Main.CATEGORIES.player,
-                collidesWith: Main.CATEGORIES.enemy | Main.CATEGORIES.powerUp,
+                collidesWith: Main.CATEGORIES.enemy | Main.CATEGORIES.enemyBullets | Main.CATEGORIES.powerUp,
                 image: Game.Preload.get( 'player' )
             });
 
@@ -49,13 +49,14 @@ class Player extends Game.Bitmap
         this.rotation = -Math.PI / 2;
         this._power_ups = [];
         this._weapons = [];
-        this.movement_speed = 200;
+        this.movement_speed = 250;
 
         var singleWeapon = new WeaponSingle({
                 element: this,
                 bulletContainer: Main.getBulletContainer(),
                 fireInterval: 0.4,
-                imageId: 'laser1-blue'
+                imageId: 'laser1-blue',
+                collidesWith: Main.CATEGORIES.enemy
             });
         this._weapons.push( singleWeapon );
 
@@ -287,6 +288,7 @@ class Player extends Game.Bitmap
             var weapon = new powerUp.weaponClass( powerUp.weaponArgs );
             powerUp.weapon = weapon;
             weapon.damage = this.damage;
+            weapon.collidesWith = Main.CATEGORIES.enemy;
 
             this._weapons.push( weapon );
             }

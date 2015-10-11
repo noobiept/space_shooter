@@ -9,10 +9,11 @@ class EnemyTop extends Enemy
         this.weapon = new WeaponSemiCircle({
                 element: this,
                 bulletContainer: Main.getBulletContainer(),
-                imageId: 'laser2-red'
+                imageId: 'laser2-red',
+                category: Main.CATEGORIES.enemyBullets
             });
         this.weapon.damage = this.damage;
-        this.weapon.forceFire( Math.PI / 2, 1, 1.5 );
+        this.weapon.forceFire( Math.PI / 2, 1, 2 );
         this.movement.moveTo( args.x, 100 );
         }
     }

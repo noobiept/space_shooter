@@ -35,6 +35,8 @@ var info = [
         { id: 'level0', path: 'level0.json' },
         { id: 'level1', path: 'level1.json' },
         { id: 'level2', path: 'level2.json' },
+        { id: 'level3', path: 'level3.json' },
+        { id: 'level4', path: 'level4.json' },
         { id: 'game_info', path: 'game_info.json' }
     ];
 
@@ -109,7 +111,8 @@ var PLAYER: Player;
 export const CATEGORIES = {
     player: 1,
     enemy: 2,
-    powerUp: 4
+    enemyBullets: 4,
+    powerUp: 8
 };
 
 var MESSAGE_CONTAINER: HTMLElement;
@@ -239,39 +242,23 @@ function playerCollisions( data )
         // collided with a power up
     if ( collidedWith instanceof PowerUp )
         {
-            // can't pick up power up with bullets
-        if ( !bullet )
-            {
-            player.addPowerUp( collidedWith.power_up );
-            collidedWith.remove();
+        player.addPowerUp( collidedWith.power_up );
+        collidedWith.remove();
 
-            HighScore.addToScore( HighScore.SCORE_VALUE.pickedPowerUp );
-            }
+        HighScore.addToScore( HighScore.SCORE_VALUE.pickedPowerUp );
         }
 
-        // collided with an enemy bullet
+        // take damage from enemy bullet
     else if ( collidedWith instanceof Game.Bullet )
         {
-            // hit with a bullet
-            // just remove both bullets
-        if ( bullet )
+        survived = player.tookDamage( collidedWith.damage );
+        collidedWith.remove();
+
+        HighScore.addToScore( HighScore.SCORE_VALUE.bulletDamage );
+
+        if ( !survived )
             {
-            collidedWith.remove();
-            bullet.remove();
-            }
-
-            // take damage from enemy bullet
-        else
-            {
-            survived = player.tookDamage( collidedWith.damage );
-            collidedWith.remove();
-
-            HighScore.addToScore( HighScore.SCORE_VALUE.bulletDamage );
-
-            if ( !survived )
-                {
-                Level.gameLost();
-                }
+            Level.gameLost();
             }
         }
 
@@ -279,9 +266,9 @@ function playerCollisions( data )
     else
         {
             // hit an enemy with a bullet
-        if ( data.bullet )
+        if ( bullet )
             {
-            data.bullet.remove();
+            bullet.remove();
             survived = collidedWith.tookDamage( player.damage );
 
             if ( !survived )

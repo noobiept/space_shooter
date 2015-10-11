@@ -933,11 +933,15 @@ declare module Game {
         bulletContainer: Container | Canvas;
         fireInterval?: number;
         damage?: number;
+        category?: number;
+        collidesWith?: number;
     }
     class Weapon {
         element: Element;
         damage: number;
         fire_interval: number;
+        category: number;
+        collidesWith: number;
         protected _is_ready: boolean;
         protected _fire_count: number;
         protected _bullet_types: Bullet[];

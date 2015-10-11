@@ -89,7 +89,7 @@ function spawnEnemy( info: SpawnInfo )
 function spawnPowerUp()
     {
     var x = Game.Utilities.getRandomInt( Main.GAME_START_X, Main.GAME_END_X );
-    var y = Game.Utilities.getRandomInt( Main.GAME_START_Y, Main.GAME_END_Y / 2 );
+    var y = Game.Utilities.getRandomInt( Main.GAME_START_Y, Main.GAME_END_Y * 2 / 3 );
 
     STATS_POWER_UP = !STATS_POWER_UP;
 

@@ -55,7 +55,7 @@ class PowerUp extends Game.Bitmap
         this._rotate_count = 0;
         this._rotate_interval = 0.8;
         this._duration_count = 0;
-        this._duration = 6;
+        this._duration = 10;
         this._blink_count = 0;
         this._blink_interval = 0.5;
 
@@ -146,7 +146,7 @@ module PowerUp
         return {
                 type: PowerUpType.damage,
                 imageId: 'power_up_damage',
-                duration: 7,
+                duration: 10,
                 damage: 10
             };
         }
@@ -156,7 +156,7 @@ module PowerUp
         return {
                 type: PowerUpType.speed,
                 imageId: 'power_up_speed',
-                duration: 7,
+                duration: 10,
                 speed: 100
             };
         }
@@ -166,7 +166,7 @@ module PowerUp
         return {
                 type: PowerUpType.health,
                 imageId: 'power_up_health',
-                health: 25
+                health: 30
             };
         }
 
@@ -175,7 +175,7 @@ module PowerUp
         return {
                 type: PowerUpType.sideWeapon,
                 imageId: 'power_up_weapon',
-                duration: 7,
+                duration: 10,
                 weaponClass: WeaponSide,
                 weaponArgs: {
                     element: null,
@@ -191,7 +191,7 @@ module PowerUp
         return {
                 type: PowerUpType.aroundWeapon,
                 imageId: 'power_up_weapon',
-                duration: 7,
+                duration: 10,
                 weaponClass: WeaponAround,
                 weaponArgs: {
                     element: null,
@@ -207,7 +207,7 @@ module PowerUp
         return {
                 type: PowerUpType.semiCircleWeapon,
                 imageId: 'power_up_weapon',
-                duration: 7,
+                duration: 10,
                 weaponClass: WeaponSemiCircle,
                 weaponArgs: {
                     element: null,
@@ -223,7 +223,7 @@ module PowerUp
         return {
                 type: PowerUpType.randomWeapon,
                 imageId: 'power_up_weapon',
-                duration: 7,
+                duration: 10,
                 weaponClass: WeaponRandom,
                 weaponArgs: {
                     element: null,

@@ -11,7 +11,7 @@
             "time": 2
         },
         {
-            "className": "EnemyMeteor",
+            "className": "EnemyLine",
             "time": 3
         },
         {
@@ -19,7 +19,7 @@
             "time": 4
         },
         {
-            "className": "EnemyLine",
+            "className": "EnemyMeteor",
             "time": 5
         },
         {
@@ -39,7 +39,7 @@
             "time": 9
         },
         {
-            "className": "EnemyLine",
+            "className": "EnemyMeteor",
             "time": 10
         },
         {
@@ -47,7 +47,7 @@
             "time": 11
         },
         {
-            "className": "EnemyMeteor",
+            "className": "EnemyLine",
             "time": 12
         },
         {
@@ -55,7 +55,7 @@
             "time": 13
         },
         {
-            "className": "EnemyLine",
+            "className": "EnemyMeteor",
             "time": 14
         },
         {
@@ -63,7 +63,7 @@
             "time": 15
         },
         {
-            "className": "EnemyMeteor",
+            "className": "EnemyLine",
             "time": 16
         },
         {
@@ -99,7 +99,7 @@
             "time": 24
         },
         {
-            "className": "EnemyLine",
+            "className": "EnemyMeteor",
             "time": 25
         },
         {
@@ -107,7 +107,7 @@
             "time": 26
         },
         {
-            "className": "EnemyMeteor",
+            "className": "EnemyLine",
             "time": 27
         },
         {
@@ -115,11 +115,11 @@
             "time": 28
         },
         {
-            "className": "EnemyLine",
+            "className": "EnemyMeteor",
             "time": 29
         },
         {
-            "className": "EnemyLine",
+            "className": "EnemyMeteor",
             "time": 30
         }
     ]

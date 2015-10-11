@@ -16,10 +16,11 @@ class EnemyAround extends Enemy
         this.weapon = new WeaponAround({
                 element: this,
                 bulletContainer: Main.getBulletContainer(),
-                imageId: 'laser3-red'
+                imageId: 'laser3-red',
+                category: Main.CATEGORIES.enemyBullets
             });
         this.weapon.damage = this.damage;
-        this.weapon.forceFire( 0, 1, 1 );
+        this.weapon.forceFire( 0, 1, 2 );
 
         this.left_limit = 3 / 4 * Math.PI;
         this.right_limit = Math.PI / 4;
