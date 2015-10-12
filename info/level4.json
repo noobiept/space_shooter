@@ -1,6 +1,6 @@
 {
-    "spawnCount": 3,
-    "powerUpInterval": 3,
+    "spawnCount": 4,
+    "powerUpInterval": 2,
     "spawn": [
         {
             "className": "EnemyRandom",

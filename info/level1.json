@@ -1,6 +1,6 @@
 {
     "spawnCount": 3,
-    "powerUpInterval": 2,
+    "powerUpInterval": 1,
     "spawn": [
         {
             "className": "EnemyMeteor",

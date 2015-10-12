@@ -196,7 +196,7 @@ module PowerUp
                 weaponArgs: {
                     element: null,
                     bulletContainer: Main.getBulletContainer(),
-                    fireInterval: 2,
+                    fireInterval: 1.7,
                     imageId: 'laser3-blue'
                 }
             };
@@ -212,7 +212,7 @@ module PowerUp
                 weaponArgs: {
                     element: null,
                     bulletContainer: Main.getBulletContainer(),
-                    fireInterval: 2.5,
+                    fireInterval: 2.2,
                     imageId: 'laser2-blue'
                 }
             };
@@ -228,7 +228,7 @@ module PowerUp
                 weaponArgs: {
                     element: null,
                     bulletContainer: Main.getBulletContainer(),
-                    fireInterval: 1.5,
+                    fireInterval: 1,
                     imageId: 'laser3-blue'
                 }
             };

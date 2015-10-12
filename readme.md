@@ -1,3 +1,7 @@
+[Try it out here!](http://nbpt.eu/games/space_shooter/)
+=======================================================
+
+
 Controls
 ========
 

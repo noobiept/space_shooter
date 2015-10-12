@@ -300,6 +300,7 @@ declare module Game {
     function stopGameLoop(): void;
     function activateMouseMoveEvents(interval: number): void;
     function disableMouseMoveEvents(): void;
+    function setFps(fps: number): void;
     function getCanvas(id?: number): Canvas;
     function addCanvas(canvas: Game.Canvas, position?: number): number;
     function addElement(element: Element | Element[], id?: number): void;
@@ -340,7 +341,7 @@ declare module Game {
         protected _rotation: number;
         _container: Container;
         _has_logic: boolean;
-        protected _removed: boolean;
+        _removed: boolean;
         constructor(args?: ElementArgs);
         abstract drawElement(ctx: CanvasRenderingContext2D): any;
         draw(ctx: CanvasRenderingContext2D): void;
