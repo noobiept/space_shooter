@@ -146,7 +146,7 @@ module PowerUp
         return {
                 type: PowerUpType.damage,
                 imageId: 'power_up_damage',
-                duration: 10,
+                duration: 12,
                 damage: 10
             };
         }
@@ -156,7 +156,7 @@ module PowerUp
         return {
                 type: PowerUpType.speed,
                 imageId: 'power_up_speed',
-                duration: 10,
+                duration: 12,
                 speed: 100
             };
         }
@@ -175,7 +175,7 @@ module PowerUp
         return {
                 type: PowerUpType.sideWeapon,
                 imageId: 'power_up_weapon',
-                duration: 10,
+                duration: 12,
                 weaponClass: WeaponSide,
                 weaponArgs: {
                     element: null,
@@ -191,7 +191,7 @@ module PowerUp
         return {
                 type: PowerUpType.aroundWeapon,
                 imageId: 'power_up_weapon',
-                duration: 10,
+                duration: 12,
                 weaponClass: WeaponAround,
                 weaponArgs: {
                     element: null,
@@ -207,7 +207,7 @@ module PowerUp
         return {
                 type: PowerUpType.semiCircleWeapon,
                 imageId: 'power_up_weapon',
-                duration: 10,
+                duration: 12,
                 weaponClass: WeaponSemiCircle,
                 weaponArgs: {
                     element: null,
@@ -223,7 +223,7 @@ module PowerUp
         return {
                 type: PowerUpType.randomWeapon,
                 imageId: 'power_up_weapon',
-                duration: 10,
+                duration: 12,
                 weaponClass: WeaponRandom,
                 weaponArgs: {
                     element: null,

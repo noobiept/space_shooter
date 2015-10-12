@@ -1,5 +1,3 @@
-/// <reference path="../libraries/game_engine.d.ts" />
-
 interface PlayerArgs
     {
     x: number;

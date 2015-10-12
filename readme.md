@@ -2,6 +2,9 @@
 =======================================================
 
 
+A top-down fast paced space shooter.
+
+
 Controls
 ========
 

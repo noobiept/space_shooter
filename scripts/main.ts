@@ -1,4 +1,4 @@
-/// <reference path="../libraries/game_engine.d.ts" />
+/// <reference path="../libraries/game_engine.1.3.0.d.ts" />
 
 window.addEventListener( 'load', function()
 {
@@ -62,8 +62,8 @@ preload.addEventListener( 'complete', function()
 
     Main.init();
     });
-preload.loadManifest( assetsManifest, '../assets/' );
-preload.loadManifest( info, '../info/' );
+preload.loadManifest( assetsManifest, 'assets/' );
+preload.loadManifest( info, 'info/' );
 });
 
 
